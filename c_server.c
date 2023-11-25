@@ -52,10 +52,9 @@ void receiveAndPrintIncomingDataOnSeparateThread(struct AcceptedSocket *pSocket)
     pthread_create(&id,NULL,receiveAndPrintIncomingData,pSocket->acceptedSocketFD);
 }
 
+
 void receiveAndPrintIncomingData(int socketFD) {
-    char buffer[1024];
-
-
+     char buffer[1024];
 
     while (true)
     {
@@ -65,7 +64,6 @@ void receiveAndPrintIncomingData(int socketFD) {
         {
             buffer[amountReceived] = 0;
             printf("%s\n",buffer);
-            printf("1. Size of buffer : %d\n",sizeof(buffer));
 
             sendResponseToTheClient(buffer,socketFD);
         }
@@ -75,75 +73,45 @@ void receiveAndPrintIncomingData(int socketFD) {
     }
 
     close(socketFD);
-}
-
-void sendResponseToTheClient(char *buffer,int socketFD) {
-
-    int cSharpServerSocket;
-
-    printf("2. Size of buffer : %d", sizeof(buffer));
-
-    cSharpServerSocket = socket(AF_INET, SOCK_STREAM, 0);
-
+}void sendResponseToTheClient(char *buffer, int socketFD) {
+    int cSharpServerSocket = socket(AF_INET, SOCK_STREAM, 0);
     if (cSharpServerSocket < 0) {
         perror("Error in socket creation");
         exit(1);
     }
 
-    // Configure C# server address structure
     struct sockaddr_in cSharpServerAddr;
     cSharpServerAddr.sin_family = AF_INET;
     cSharpServerAddr.sin_port = htons(8887); // Assuming C# server is running on port 8887
-    cSharpServerAddr.sin_addr.s_addr = inet_addr("127.0.0.1"); // Assuming C# server is running on the same machine
+    cSharpServerAddr.sin_addr.s_addr = inet_addr("127.0.0.1");
 
-    // Connect to the C# server
     if (connect(cSharpServerSocket, (struct sockaddr*)&cSharpServerAddr, sizeof(cSharpServerAddr)) < 0) {
         perror("Error in connection to C# server");
         exit(1);
     }
 
-    // Bidirectional communication loop
-        ssize_t bytesRead = recv(socketFD, buffer, sizeof(buffer), 0);
-        if (bytesRead <= 0) {
-            if (bytesRead == 0) {
-                // Connection closed by C client
-                printf("Connection closed by C client.\n");
-            } else {
-                perror("Error receiving data from C client");
-            }
-            return;
+    // Send data received from the C client to the C# server
+    send(cSharpServerSocket, buffer, strlen(buffer), 0);
+
+    // Receive response from the C# server
+    ssize_t bytesRead = recv(cSharpServerSocket, buffer, 1024, 0);
+    if (bytesRead <= 0) {
+        if (bytesRead == 0) {
+            printf("Connection closed by C# server.\n");
+        } else {
+            perror("Error receiving data from C# server");
         }
-        buffer[bytesRead] = '\0'; // Null-terminate the received data
-        printf("Data received from C client: %s\n", buffer);
+        close(cSharpServerSocket);
+        return;
+    }
+    buffer[bytesRead] = '\0';
+    printf("Data received from C# server: %s\n", buffer);
 
-        // Forward the data to C# server
-        send(cSharpServerSocket, buffer, strlen(buffer), 0);
-        memset(buffer, 0, sizeof(buffer));
+    // Send the received response from the C# server back to the C client
+    send(socketFD, buffer, strlen(buffer), 0);
 
-        // Receive data from C# server
-        bytesRead = recv(cSharpServerSocket, buffer, sizeof(buffer), 0);
-        if (bytesRead <= 0) {
-            if (bytesRead == 0) {
-                // Connection closed by C# server
-                printf("Connection closed by C# server.\n");
-            } else {
-                perror("Error receiving data from C# server");
-            }
-            return;
-        }
-        buffer[bytesRead] = '\0'; // Null-terminate the received data
-        printf("Data received from C# server: %s\n", buffer);
-
-    // Forward the data to C client
-    send(socketFD, buffer, strlen(buffer),0);
-    memset(buffer, 0, sizeof(buffer));
-
-    // Close the sockets
     close(cSharpServerSocket);
-
-
 }
-
 
 
 

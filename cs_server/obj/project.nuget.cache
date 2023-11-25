@@ -1,8 +1,8 @@
 {
   "version": 2,
-  "dgSpecHash": "0CDoQNW7STlKqSZPAn74JTRgtTstxvxUbDMQJtkPaYekmxQoNuFPMG5jE2PQ2T8SsCDs1t9MwhryBykubcws+w==",
+  "dgSpecHash": "BcQ07scFdlvQdKy6rmY2x4TSHpODu+sRPmrhfLWw64fseq7yAs36Ha2FEDwDeRL7vv4z/WO6J8IQfLElzgh7HQ==",
   "success": true,
-  "projectFilePath": "/home/zero/university/OS/osdll/sockets/cs_server/cs_server.csproj",
+  "projectFilePath": "/home/zero/university/OS/osdll/os_project_crypto_currency/cs_server/cs_server.csproj",
   "expectedPackageFiles": [
     "/home/zero/.nuget/packages/newtonsoft.json/13.0.3/newtonsoft.json.13.0.3.nupkg.sha512"
   ],
