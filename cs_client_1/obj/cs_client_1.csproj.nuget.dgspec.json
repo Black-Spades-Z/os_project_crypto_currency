@@ -1,17 +1,17 @@
 {
   "format": 1,
   "restore": {
-    "/home/zero/university/OS/osdll/sockets/cs_client_1/cs_client_1.csproj": {}
+    "/home/zero/university/OS/osdll/os_project_crypto_currency/cs_client_1/cs_client_1.csproj": {}
   },
   "projects": {
-    "/home/zero/university/OS/osdll/sockets/cs_client_1/cs_client_1.csproj": {
+    "/home/zero/university/OS/osdll/os_project_crypto_currency/cs_client_1/cs_client_1.csproj": {
       "version": "1.0.0",
       "restore": {
-        "projectUniqueName": "/home/zero/university/OS/osdll/sockets/cs_client_1/cs_client_1.csproj",
+        "projectUniqueName": "/home/zero/university/OS/osdll/os_project_crypto_currency/cs_client_1/cs_client_1.csproj",
         "projectName": "cs_client_1",
-        "projectPath": "/home/zero/university/OS/osdll/sockets/cs_client_1/cs_client_1.csproj",
+        "projectPath": "/home/zero/university/OS/osdll/os_project_crypto_currency/cs_client_1/cs_client_1.csproj",
         "packagesPath": "/home/zero/.nuget/packages/",
-        "outputPath": "/home/zero/university/OS/osdll/sockets/cs_client_1/obj/",
+        "outputPath": "/home/zero/university/OS/osdll/os_project_crypto_currency/cs_client_1/obj/",
         "projectStyle": "PackageReference",
         "configFilePaths": [
           "/home/zero/.nuget/NuGet/NuGet.Config"

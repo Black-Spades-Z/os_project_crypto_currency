@@ -168,7 +168,7 @@ class CSharpClient
             {
                 while (true)
                 {
-                    byte[] buffer = new byte[256];
+                    byte[] buffer = new byte[1024];
                     int bytesRead = stream.Read(buffer, 0, buffer.Length);
 
                     if (bytesRead <= 0)
@@ -251,7 +251,7 @@ class CSharpClient
 static void WaitForResponse(NetworkStream stream)
 {
 
-        byte[] buffer = new byte[256];
+        byte[] buffer = new byte[1024];
         int bytesRead = stream.Read(buffer, 0, buffer.Length);
 
         if (bytesRead <= 0)

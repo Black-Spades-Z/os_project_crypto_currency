@@ -89,7 +89,7 @@ class CSharpClient
         {
             // Connect to the C client (acting as a server)
             string cClientIpAddress = "127.0.0.1";
-            int cClientPort = 8889;
+            int cClientPort = 8890;
 
             ConnectToCServer(cClientIpAddress, cClientPort);
 
@@ -168,7 +168,7 @@ class CSharpClient
             {
                 while (true)
                 {
-                    byte[] buffer = new byte[256];
+                    byte[] buffer = new byte[1024];
                     int bytesRead = stream.Read(buffer, 0, buffer.Length);
 
                     if (bytesRead <= 0)
@@ -251,7 +251,7 @@ class CSharpClient
 static void WaitForResponse(NetworkStream stream)
 {
 
-        byte[] buffer = new byte[256];
+        byte[] buffer = new byte[1024];
         int bytesRead = stream.Read(buffer, 0, buffer.Length);
 
         if (bytesRead <= 0)

@@ -7,7 +7,7 @@
 #include <arpa/inet.h>
 
 #define PORT_C_SERVER 8888
-#define PORT_C_SHARP_CLIENT 8889
+#define PORT_C_SHARP_CLIENT 8890
 
 int main() {
     int cSharpClientSocket, cServerSocket;
