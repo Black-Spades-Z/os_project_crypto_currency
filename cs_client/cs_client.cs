@@ -192,55 +192,52 @@ class CSharpClient
 {
     try
     {
-
-
         using (NetworkStream stream = client.GetStream())
         {
-            Menu:
-
-            Console.WriteLine("Choose what to send:");
-            Console.WriteLine("1. User");
-            Console.WriteLine("2. Transaction");
-            Console.WriteLine("3. Quit.");
-
-            int choice = Convert.ToInt32(Console.ReadLine());
-
-            switch (choice)
+            while (true)
             {
-                case 1:
-                    // Create a User object and serialize it
-                    User user = GetUserDetails();
-                    string serializedUser = user.Serialize();
+                Console.WriteLine("Choose what to send:");
+                Console.WriteLine("1. User");
+                Console.WriteLine("2. Transaction");
+                Console.WriteLine("Type 'exit' to quit.");
 
-                    // Send the serialized User object to C client
-                    SendMessage(stream, serializedUser);
+                string choice = Console.ReadLine();
 
-                    // Wait for a response from the server
-                    WaitForResponse(stream);
-                    goto Menu;
+                switch (choice.ToLower())
+                {
+                    case "1":
+                    case "user":
+                        // Create a User object and serialize it
+                        User user = GetUserDetails();
+                        string serializedUser = user.Serialize();
 
-                    break;
+                        // Send the serialized User object to C client
+                        SendMessage(stream, serializedUser);
 
-                case 2:
+                        // Wait for a response from the server
+                        Console.WriteLine("Getting response");
+                        WaitForResponse(stream);
+                        Console.WriteLine("Got response");
+                        break;
 
-                    // Create a Transaction object and serialize it
-                    Transaction transaction = GetTransaction();
-                    string serializedTransaction = transaction.Serialize();
+                    case "2":
+                    case "transaction":
+                        // Create a Transaction object and serialize it
+                        Transaction transaction = GetTransaction();
+                        string serializedTransaction = transaction.Serialize();
 
-                    // Send the serialized Transaction object to C client
-                    SendMessage(stream, serializedTransaction);
+                        // Send the serialized Transaction object to C client
+                        SendMessage(stream, serializedTransaction);
 
-                    // Wait for a response from the server
-                    WaitForResponse(stream);
-                    break;
+                        // Wait for a response from the server
+                        WaitForResponse(stream);
+                        break;
 
-                case 3:
-                    return;
-                    break;// Exit the method and close the client
+                    case "exit":
+                        return; // Exit the method and close the client
+                }
             }
-
         }
-
     }
     catch (Exception e)
     {
@@ -250,7 +247,8 @@ class CSharpClient
 
 static void WaitForResponse(NetworkStream stream)
 {
-
+    try
+    {
         byte[] buffer = new byte[1024];
         int bytesRead = stream.Read(buffer, 0, buffer.Length);
 
@@ -262,8 +260,11 @@ static void WaitForResponse(NetworkStream stream)
 
         string response = Encoding.ASCII.GetString(buffer, 0, bytesRead);
         Console.WriteLine($"Response from server: {response}");
-
-
+    }
+    catch (Exception e)
+    {
+        Console.WriteLine($"Error in waiting for response: {e}");
+    }
 }
 
     static User GetUserDetails()

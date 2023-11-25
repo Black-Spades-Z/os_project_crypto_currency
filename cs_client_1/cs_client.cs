@@ -168,7 +168,7 @@ class CSharpClient
             {
                 while (true)
                 {
-                    byte[] buffer = new byte[1024];
+                    byte[] buffer = new byte[1];
                     int bytesRead = stream.Read(buffer, 0, buffer.Length);
 
                     if (bytesRead <= 0)
