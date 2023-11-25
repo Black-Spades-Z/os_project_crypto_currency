@@ -1,0 +1,10 @@
+{
+  "version": 2,
+  "dgSpecHash": "MhEsDm6bcNRbSyCbnfMpFmZaNd2iDxhUzWJ0SYjWcQqgovSEtD/8P3j1y40S/065kYsEWHJMYJc+u1dc4GR+dQ==",
+  "success": true,
+  "projectFilePath": "/home/zero/university/OS/osdll/sockets/cs_client/cs_client.csproj",
+  "expectedPackageFiles": [
+    "/home/zero/.nuget/packages/newtonsoft.json/13.0.3/newtonsoft.json.13.0.3.nupkg.sha512"
+  ],
+  "logs": []
+}

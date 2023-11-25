@@ -1,0 +1,17 @@
+/home/zero/university/OS/osdll/sockets/cs_client/bin/Debug/net7.0/cs_client
+/home/zero/university/OS/osdll/sockets/cs_client/bin/Debug/net7.0/cs_client.deps.json
+/home/zero/university/OS/osdll/sockets/cs_client/bin/Debug/net7.0/cs_client.runtimeconfig.json
+/home/zero/university/OS/osdll/sockets/cs_client/bin/Debug/net7.0/cs_client.dll
+/home/zero/university/OS/osdll/sockets/cs_client/bin/Debug/net7.0/cs_client.pdb
+/home/zero/university/OS/osdll/sockets/cs_client/bin/Debug/net7.0/Newtonsoft.Json.dll
+/home/zero/university/OS/osdll/sockets/cs_client/obj/Debug/net7.0/cs_client.csproj.AssemblyReference.cache
+/home/zero/university/OS/osdll/sockets/cs_client/obj/Debug/net7.0/cs_client.GeneratedMSBuildEditorConfig.editorconfig
+/home/zero/university/OS/osdll/sockets/cs_client/obj/Debug/net7.0/cs_client.AssemblyInfoInputs.cache
+/home/zero/university/OS/osdll/sockets/cs_client/obj/Debug/net7.0/cs_client.AssemblyInfo.cs
+/home/zero/university/OS/osdll/sockets/cs_client/obj/Debug/net7.0/cs_client.csproj.CoreCompileInputs.cache
+/home/zero/university/OS/osdll/sockets/cs_client/obj/Debug/net7.0/cs_client.csproj.CopyComplete
+/home/zero/university/OS/osdll/sockets/cs_client/obj/Debug/net7.0/cs_client.dll
+/home/zero/university/OS/osdll/sockets/cs_client/obj/Debug/net7.0/refint/cs_client.dll
+/home/zero/university/OS/osdll/sockets/cs_client/obj/Debug/net7.0/cs_client.pdb
+/home/zero/university/OS/osdll/sockets/cs_client/obj/Debug/net7.0/cs_client.genruntimeconfig.cache
+/home/zero/university/OS/osdll/sockets/cs_client/obj/Debug/net7.0/ref/cs_client.dll
