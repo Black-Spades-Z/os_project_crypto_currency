@@ -4,35 +4,16 @@ using System.Text;
 using System.Threading;
 using Newtonsoft.Json;
 
-class User
-{
-    public string ObjectType => "User";
-    public string Username { get; set; }
-    public string Email { get; set; }
-    public string PasswordHash { get; set; }
-    public string FullName { get; set; }
-    public DateTime DateOfBirth { get; set; }
-    public string Address { get; set; }
-    public string PhoneNumber { get; set; }
-    public string Nationality { get; set; }
 
-    public string Serialize()
-    {
-        return JsonConvert.SerializeObject(this);
-    }
-
-    public static User Deserialize(string json)
-    {
-        return JsonConvert.DeserializeObject<User>(json);
-    }
-}
+using static User;
 
 public class Transaction
 {
     public string ObjectType => "Transaction";
     public string FromAddress { get; init; }
     public string ToAddress { get; init; }
-    public int Value { get; init; }
+    public int CryptoValue { get; init; }
+    public int CashValue { get; init; }
     public Cryptocurrency Cryptocurrency { get; init; }
     public DateTime DateTime { get; init; }
     public string TransactionsHash { get; set; }
@@ -89,7 +70,7 @@ class CSharpClient
         {
             // Connect to the C client (acting as a server)
             string cClientIpAddress = "127.0.0.1";
-            int cClientPort = 8890;
+            int cClientPort = 8889;
 
             ConnectToCServer(cClientIpAddress, cClientPort);
 
@@ -168,17 +149,17 @@ class CSharpClient
             {
                 while (true)
                 {
-                    byte[] buffer = new byte[1];
-                    int bytesRead = stream.Read(buffer, 0, buffer.Length);
+                    //byte[] buffer = new byte[1];
+                    //int bytesRead = stream.Read(buffer, 0, buffer.Length);
 
-                    if (bytesRead <= 0)
+                    /*if (bytesRead <= 0)
                     {
                         Console.WriteLine("Connection closed by C server.");
                         break;
-                    }
+                    }*/
 
-                    string receivedMessage = Encoding.ASCII.GetString(buffer, 0, bytesRead);
-                    Console.WriteLine($"Received from C server: {receivedMessage}");
+                    //string receivedMessage = Encoding.ASCII.GetString(buffer, 0, bytesRead);
+                    //Console.WriteLine($"Received from C server: {receivedMessage}");
                 }
             }
         }
@@ -187,60 +168,57 @@ class CSharpClient
             Console.WriteLine($"Error in listening to C server: {e}");
         }
     }
-
+    
     static void StartMessaging()
 {
     try
     {
-
-
         using (NetworkStream stream = client.GetStream())
         {
-            Menu:
-
-            Console.WriteLine("Choose what to send:");
-            Console.WriteLine("1. User");
-            Console.WriteLine("2. Transaction");
-            Console.WriteLine("3. Quit.");
-
-            int choice = Convert.ToInt32(Console.ReadLine());
-
-            switch (choice)
+            while (true)
             {
-                case 1:
-                    // Create a User object and serialize it
-                    User user = GetUserDetails();
-                    string serializedUser = user.Serialize();
+                Console.WriteLine("Choose what to send:");
+                Console.WriteLine("1. User");
+                Console.WriteLine("2. Transaction");
+                Console.WriteLine("Type 'exit' to quit.");
 
-                    // Send the serialized User object to C client
-                    SendMessage(stream, serializedUser);
+                string choice = Console.ReadLine();
 
-                    // Wait for a response from the server
-                    WaitForResponse(stream);
-                    goto Menu;
+                switch (choice.ToLower())
+                {
+                    case "1":
+                    case "user":
+                        // Create a User object and serialize it
+                        User user = GetUserDetails();
+                        string serializedUser = user.Serialize();
 
-                    break;
+                        // Send the serialized User object to C client
+                        SendMessage(stream, serializedUser);
 
-                case 2:
+                        // Wait for a response from the server
+                        Console.WriteLine("Getting response");
+                        WaitForResponse(stream);
+                        Console.WriteLine("Got response");
+                        break;
 
-                    // Create a Transaction object and serialize it
-                    Transaction transaction = GetTransaction();
-                    string serializedTransaction = transaction.Serialize();
+                    case "2":
+                    case "transaction":
+                        // Create a Transaction object and serialize it
+                        Transaction transaction = GetTransaction();
+                        string serializedTransaction = transaction.Serialize();
 
-                    // Send the serialized Transaction object to C client
-                    SendMessage(stream, serializedTransaction);
+                        // Send the serialized Transaction object to C client
+                        SendMessage(stream, serializedTransaction);
 
-                    // Wait for a response from the server
-                    WaitForResponse(stream);
-                    break;
+                        // Wait for a response from the server
+                        WaitForResponse(stream);
+                        break;
 
-                case 3:
-                    return;
-                    break;// Exit the method and close the client
+                    case "exit":
+                        return; // Exit the method and close the client
+                }
             }
-
         }
-
     }
     catch (Exception e)
     {
@@ -250,7 +228,8 @@ class CSharpClient
 
 static void WaitForResponse(NetworkStream stream)
 {
-
+    try
+    {
         byte[] buffer = new byte[1024];
         int bytesRead = stream.Read(buffer, 0, buffer.Length);
 
@@ -262,52 +241,15 @@ static void WaitForResponse(NetworkStream stream)
 
         string response = Encoding.ASCII.GetString(buffer, 0, bytesRead);
         Console.WriteLine($"Response from server: {response}");
-
-
+    }
+    catch (Exception e)
+    {
+        Console.WriteLine($"Error in waiting for response: {e}");
+    }
 }
 
-    static User GetUserDetails()
-    {
-        Console.WriteLine("Enter user details:");
-
-        Console.Write("Username: ");
-        string username = Console.ReadLine();
-
-        Console.Write("Email: ");
-        string email = Console.ReadLine();
-
-        Console.Write("Password Hash: ");
-        string passwordHash = Console.ReadLine();
-
-        Console.Write("Full Name: ");
-        string fullName = Console.ReadLine();
-
-        Console.Write("Date of Birth (YYYY-MM-DD): ");
-        DateTime dateOfBirth;
-        DateTime.TryParse(Console.ReadLine(), out dateOfBirth);
-
-        Console.Write("Address: ");
-        string address = Console.ReadLine();
-
-        Console.Write("Phone Number: ");
-        string phoneNumber = Console.ReadLine();
-
-        Console.Write("Nationality: ");
-        string nationality = Console.ReadLine();
-
-        return new User
-        {
-            Username = username,
-            Email = email,
-            PasswordHash = passwordHash,
-            FullName = fullName,
-            DateOfBirth = dateOfBirth,
-            Address = address,
-            PhoneNumber = phoneNumber,
-            Nationality = nationality
-        };
-    }
-
+    
+    
     static Transaction GetTransaction()
 {
     Console.WriteLine("Enter transaction details:");
@@ -318,9 +260,18 @@ static void WaitForResponse(NetworkStream stream)
     Console.Write("To Address: ");
     string toAddress = Console.ReadLine();
 
+    Console.Write("Cash Value: ");
+    int cashValue;
+    while (!int.TryParse(Console.ReadLine(), out cashValue))
+    {
+        Console.Clear(); // Clear the console to ensure a clean input prompt
+        Console.WriteLine("Invalid input. Please enter a valid integer for Value.");
+        Console.Write("Value: ");
+    }
+    
     Console.Write("Value: ");
-    int value;
-    while (!int.TryParse(Console.ReadLine(), out value))
+    int cryptoValue;
+    while (!int.TryParse(Console.ReadLine(), out cryptoValue))
     {
         Console.Clear(); // Clear the console to ensure a clean input prompt
         Console.WriteLine("Invalid input. Please enter a valid integer for Value.");
@@ -347,7 +298,8 @@ static void WaitForResponse(NetworkStream stream)
     {
         FromAddress = fromAddress,
         ToAddress = toAddress,
-        Value = value,
+        CashValue = cashValue,
+        CryptoValue = cryptoValue,
         Cryptocurrency = cryptocurrency,
         DateTime = dateTime,
         TransactionsHash = transactionsHash

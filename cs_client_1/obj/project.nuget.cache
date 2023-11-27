@@ -1,10 +1,10 @@
 {
   "version": 2,
-  "dgSpecHash": "/JCCBNQXMQ8LrAt8W/mlxqy4yD53sHVY5MpeiHuvr48Ng5L18Gl/v4qLyyY/fEG8ZlDSj8+oK0jhLwFLHgYYaw==",
+  "dgSpecHash": "fJw80dNvkMpi5W0HBnbsN7o1Qk/pv/UwjJuOg8zODnXOaNjWZloDbslclMBhkcOt24nAkuvYioX/BedMOidBSQ==",
   "success": true,
-  "projectFilePath": "/home/zero/university/OS/osdll/os_project_crypto_currency/cs_client_1/cs_client_1.csproj",
+  "projectFilePath": "/home/lennnovo_owner/Desktop/IPCFinal/1/cs_client_1/cs_client_1.csproj",
   "expectedPackageFiles": [
-    "/home/zero/.nuget/packages/newtonsoft.json/13.0.3/newtonsoft.json.13.0.3.nupkg.sha512"
+    "/home/lennnovo_owner/.nuget/packages/newtonsoft.json/13.0.3/newtonsoft.json.13.0.3.nupkg.sha512"
   ],
   "logs": []
 }
