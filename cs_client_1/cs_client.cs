@@ -149,17 +149,7 @@ class CSharpClient
             {
                 while (true)
                 {
-                    //byte[] buffer = new byte[1];
-                    //int bytesRead = stream.Read(buffer, 0, buffer.Length);
 
-                    /*if (bytesRead <= 0)
-                    {
-                        Console.WriteLine("Connection closed by C server.");
-                        break;
-                    }*/
-
-                    //string receivedMessage = Encoding.ASCII.GetString(buffer, 0, bytesRead);
-                    //Console.WriteLine($"Received from C server: {receivedMessage}");
                 }
             }
         }
@@ -178,7 +168,8 @@ class CSharpClient
             while (true)
             {
                 Console.WriteLine("Choose what to send:");
-                Console.WriteLine("1. User");
+                Console.WriteLine("1. User register");
+                Console.WriteLine("2. User login");
                 Console.WriteLine("2. Transaction");
                 Console.WriteLine("Type 'exit' to quit.");
 
@@ -187,9 +178,9 @@ class CSharpClient
                 switch (choice.ToLower())
                 {
                     case "1":
-                    case "user":
                         // Create a User object and serialize it
-                        User user = GetUserDetails();
+                        User user = GetUserRegsitrationDetails();
+                        user.Purpose = "Register";
                         string serializedUser = user.Serialize();
 
                         // Send the serialized User object to C client
@@ -200,8 +191,23 @@ class CSharpClient
                         WaitForResponse(stream);
                         Console.WriteLine("Got response");
                         break;
-
+                        
                     case "2":
+                        // Create a User object and serialize it
+                        User logUser = GetUserLoginDetails();
+                        logUser.Purpose = "Login";
+                        serializedUser = logUser.Serialize();
+
+                        // Send the serialized User object to C client
+                        SendMessage(stream, serializedUser);
+
+                        // Wait for a response from the server
+                        Console.WriteLine("Getting response");
+                        WaitForResponse(stream);
+                        Console.WriteLine("Got response");
+                        break;
+
+                    case "3":
                     case "transaction":
                         // Create a Transaction object and serialize it
                         Transaction transaction = GetTransaction();

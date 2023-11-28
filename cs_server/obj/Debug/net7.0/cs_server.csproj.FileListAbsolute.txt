@@ -83,3 +83,4 @@
 /home/lennnovo_owner/Desktop/IPCFinal/1/cs_server/bin/Debug/net7.0/runtimes/win/lib/netcoreapp3.0/System.Drawing.Common.dll
 /home/lennnovo_owner/Desktop/IPCFinal/1/cs_server/bin/Debug/net7.0/runtimes/win/lib/netstandard2.0/System.Security.Cryptography.ProtectedData.dll
 /home/lennnovo_owner/Desktop/IPCFinal/1/cs_server/bin/Debug/net7.0/runtimes/win/lib/netcoreapp3.0/System.Windows.Extensions.dll
+/home/lennnovo_owner/Desktop/IPCFinal/1/cs_server/bin/Debug/net7.0/BCrypt.Net-Next.dll

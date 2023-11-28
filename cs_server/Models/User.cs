@@ -3,10 +3,17 @@ using System.Net;
 using System.Net.Sockets;
 using System.Text;
 using Newtonsoft.Json;
+using System.ComponentModel.DataAnnotations.Schema;
+
+using static Authentication; 
 
 public class User
 {
+    [NotMapped]
     public string ObjectType => "User";
+    [NotMapped]
+    public string Purpose {get; set;}
+    
     public int UserId {get; set;}
     public string Email { get; set; }
     public string PasswordHash { get; set; }
@@ -39,7 +46,7 @@ public class User
                 	.FirstOrDefault();
                 	
                 if(emailVar==null){
-                	Console.WriteLine("Adding user!");
+                this.PasswordHash = HashPassword(this.PasswordHash);
                 context.Users.Add(this);
                 Console.WriteLine("User added!");
                 context.SaveChanges();
@@ -61,7 +68,7 @@ public class User
         return true;
     }
     
-    public static bool HandleReceivedUser(string data, out string message)
+    public static bool HandleRegisteredUser(string data, out string message)
     {
     	// Deserialize the User object
     	User receivedUser = JsonConvert.DeserializeObject<User>(data);
@@ -81,6 +88,26 @@ public class User
     	return true;
     }
     
+    public static bool HandleLoggedUser(string data, out string message)
+    {
+    	// Deserialize the User object
+    	User receivedUser = JsonConvert.DeserializeObject<User>(data);
+    	
+    	using (var context = new AppDbContext()) // Replace YourDbContext with your actual DbContext class
+        {
+    	User user = context.Users.FirstOrDefault(u => u.Email == receivedUser.Email);
+        
+        if(user is not null && VerifyPassword(receivedUser.PasswordHash, user.PasswordHash)){
+        	Wallet wallet = context.Wallets
+            .FirstOrDefault(w => w.UserId == user.UserId);
+        	message = wallet.Serialize();
+        	return true;
+        }
+        message = "Password or Email not verified ! ";
+        return false;
+    	}
+    }
+    
     public static int GetUserIdFromEmail(string userEmail)
     {
         try
@@ -91,9 +118,6 @@ public class User
                 	.Where(user => user.Email == userEmail)
                 	.Select(user => user.UserId)
                 	.FirstOrDefault();
-                	
-                 
-            
 
             if (userId != 0)
             {

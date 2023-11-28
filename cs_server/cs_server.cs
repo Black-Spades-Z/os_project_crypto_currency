@@ -72,31 +72,48 @@ class CSharpServer
             string data = Encoding.ASCII.GetString(bytes, 0, bytesRead);
             Console.WriteLine($"Received from client: {data}");
             
-            string message="";
+            string message = "";
 
-            // Check for the presence of specific properties to determine the type
-            if (data.Contains("\"ObjectType\":\"User\""))
-            {
-                if(HandleReceivedUser(data, out message)){
-                   SendMessageToClient(stream, message);
-                }
-                else{
-                   SendMessageToClient(stream, message);
-                }
-            }
-            else if (data.Contains("\"ObjectType\":\"Transaction\""))
-            {
-            	if(HandleReceivedTransaction(data)){
-                   SendMessageToClient(stream, message);
-                }
-                else{
-                   SendMessageToClient(stream, message);
-                }
-            }
-            else
-            {
-                Console.WriteLine("Unknown object type or missing ObjectType property.");
-            }
+            switch (data)
+	    {
+    		case string _ when data.Contains("\"ObjectType\":\"User\"") && data.Contains("\"Purpose\":\"Register\""):
+        		if (HandleRegisteredUser(data, out message))
+        		{
+            			SendMessageToClient(stream, message);
+       	 		}	
+        		else
+        		{		
+            			SendMessageToClient(stream, message);
+        		}
+        	break;
+        	
+        	case string _ when data.Contains("\"ObjectType\":\"User\"") && data.Contains("\"Purpose\":\"Login\""):
+        		if (HandleLoggedUser(data, out message))
+        		{
+            			SendMessageToClient(stream, message);
+       	 		}	
+        		else
+        		{		
+            			SendMessageToClient(stream, message);
+        		}
+        	break;
+
+    		case string _ when data.Contains("\"ObjectType\":\"Transaction\""):
+        		if (HandleReceivedTransaction(data))
+        		{
+        	    		SendMessageToClient(stream, message);
+        		}
+        		else
+        		{
+            			SendMessageToClient(stream, message);
+        		}
+        		break;
+
+    		default:
+        		Console.WriteLine("Unknown object type or missing ObjectType property.");
+        		break;
+	     }
+
         }
     }
     catch (Exception e)

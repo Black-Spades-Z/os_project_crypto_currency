@@ -1,8 +1,12 @@
 using Newtonsoft.Json;
+using System.ComponentModel.DataAnnotations.Schema;
 
 public class User
 {
+    [NotMapped]
     public string ObjectType => "User";
+    [NotMapped]
+    public string Purpose {get; set;}
     public int UserId { get; set; }
     public string Email { get; set; }
     public string PasswordHash { get; set; }
@@ -32,7 +36,7 @@ public class User
     	Console.WriteLine($"Deserialized User: {receivedUser.Email}, {receivedUser.PasswordHash}, {receivedUser.Address}, {receivedUser.FullName}, {receivedUser.PhoneNumber}, {receivedUser.Nationality}");
     }
     
-    public static User GetUserDetails()
+    public static User GetUserRegsitrationDetails()
     {
         Console.WriteLine("Enter user details:");
 
@@ -72,6 +76,23 @@ public class User
             PhoneNumber = phoneNumber,
             Nationality = nationality,
             JoinDate = joinDate
+        };
+    }
+    
+    public static User GetUserLoginDetails()
+    {
+        Console.WriteLine("Enter user details:");
+
+        Console.Write("Email: ");
+        string email = Console.ReadLine();
+
+        Console.Write("Password: ");
+        string passwordHash = Console.ReadLine();
+
+        return new User
+        {
+            Email = email,
+            PasswordHash = passwordHash,
         };
     }
 }

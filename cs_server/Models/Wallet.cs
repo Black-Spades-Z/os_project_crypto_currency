@@ -1,4 +1,8 @@
-
+using System;
+using System.Net;
+using System.Net.Sockets;
+using System.Text;
+using Newtonsoft.Json;
 
 public class Wallet 
 {
@@ -28,6 +32,16 @@ public class Wallet
             return false;          
         }
         return true;
+    }
+    
+    public string Serialize()
+    {
+        return JsonConvert.SerializeObject(this);
+    }
+    
+    public static Wallet Deserialize(string json)
+    {
+        return JsonConvert.DeserializeObject<Wallet>(json);
     }
 }
 
