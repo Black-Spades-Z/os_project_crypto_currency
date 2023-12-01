@@ -3,9 +3,14 @@ using System.Net;
 using System.Net.Sockets;
 using System.Text;
 using Newtonsoft.Json;
+using System.ComponentModel.DataAnnotations.Schema;
+using System.Security.Cryptography;
+using System.ComponentModel.DataAnnotations;
 
+[Table("Wallets")]
 public class Wallet 
 {
+    [Key]
     public int WalletId { get; set; }
 
     public string WalletAddress { get; set; }
@@ -14,7 +19,7 @@ public class Wallet
 
     public decimal Balance { get; set; }
     
-    public bool InsertWallet()
+    public bool InsertWallet(out string message)
     {
         try
         {
@@ -24,11 +29,12 @@ public class Wallet
                 context.Wallets.Add(this);
                 Console.WriteLine("Wallet added!");
                 context.SaveChanges();
+                message = "Success";
             }
         }
         catch (Exception ex)
         {
-            Console.WriteLine($"Error: {ex.Message}");
+            message = ex.Message;
             return false;          
         }
         return true;

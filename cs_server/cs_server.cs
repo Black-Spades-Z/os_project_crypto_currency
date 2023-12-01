@@ -5,6 +5,8 @@ using System.Text;
 
 using static User;
 using static Transaction;
+using static Cryptocurrency;
+using static UserPortfolio;
 
 class CSharpServer
 {
@@ -57,7 +59,7 @@ class CSharpServer
 {
     try
     {
-        byte[] bytes = new byte[1024];
+        byte[] bytes = new byte[16384];
 
         while (true)
         {
@@ -98,8 +100,30 @@ class CSharpServer
         		}
         	break;
 
-    		case string _ when data.Contains("\"ObjectType\":\"Transaction\""):
-        		if (HandleReceivedTransaction(data))
+    		case string _ when data.Contains("\"ObjectType\":\"Transaction\"") && data.Contains("\"Purpose\":\"Publish\"") :
+        		if (HandleReceivedTransaction(data, out message))
+        		{
+        	    		SendMessageToClient(stream, message);
+        		}
+        		else
+        		{
+            			SendMessageToClient(stream, message);
+        		}
+        		break;
+        		
+        	case string _ when data.Contains("GetServerAssetsList") :
+        		if (HandleServerAssetsRequest(data, out message))
+        		{
+        	    		SendMessageToClient(stream, message);
+        		}
+        		else
+        		{
+            			SendMessageToClient(stream, message);
+        		}
+        		break;
+        	
+        	case string _ when data.Contains("\"ObjectType\":\"User\"") && data.Contains("\"Purpose\":\"GetPortfolio\"") :
+        		if (HandleUserPortfolioRequest(data, out message))
         		{
         	    		SendMessageToClient(stream, message);
         		}

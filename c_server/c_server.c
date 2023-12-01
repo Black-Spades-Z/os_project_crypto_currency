@@ -54,11 +54,11 @@ void receiveAndPrintIncomingDataOnSeparateThread(struct AcceptedSocket *pSocket)
 
 
 void receiveAndPrintIncomingData(int socketFD) {
-     char buffer[1024];
+     char buffer[16384];
 
     while (true)
     {
-        ssize_t  amountReceived = recv(socketFD,buffer,1024,0);
+        ssize_t  amountReceived = recv(socketFD,buffer,16384,0);
 
         if(amountReceived>0)
         {
@@ -94,7 +94,7 @@ void receiveAndPrintIncomingData(int socketFD) {
     send(cSharpServerSocket, buffer, strlen(buffer), 0);
 
     // Receive response from the C# server
-    ssize_t bytesRead = recv(cSharpServerSocket, buffer, 1024, 0);
+    ssize_t bytesRead = recv(cSharpServerSocket, buffer, 16384, 0);
     if (bytesRead <= 0) {
         if (bytesRead == 0) {
             printf("Connection closed by C# server.\n");

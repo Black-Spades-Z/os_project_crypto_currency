@@ -1,0 +1,17 @@
+/home/lennnovo_owner/Desktop/IPCFinal/1/cs_client/bin/Debug/net7.0/cs_client
+/home/lennnovo_owner/Desktop/IPCFinal/1/cs_client/bin/Debug/net7.0/cs_client.deps.json
+/home/lennnovo_owner/Desktop/IPCFinal/1/cs_client/bin/Debug/net7.0/cs_client.runtimeconfig.json
+/home/lennnovo_owner/Desktop/IPCFinal/1/cs_client/bin/Debug/net7.0/cs_client.dll
+/home/lennnovo_owner/Desktop/IPCFinal/1/cs_client/bin/Debug/net7.0/cs_client.pdb
+/home/lennnovo_owner/Desktop/IPCFinal/1/cs_client/bin/Debug/net7.0/Newtonsoft.Json.dll
+/home/lennnovo_owner/Desktop/IPCFinal/1/cs_client/obj/Debug/net7.0/cs_client.csproj.AssemblyReference.cache
+/home/lennnovo_owner/Desktop/IPCFinal/1/cs_client/obj/Debug/net7.0/cs_client.GeneratedMSBuildEditorConfig.editorconfig
+/home/lennnovo_owner/Desktop/IPCFinal/1/cs_client/obj/Debug/net7.0/cs_client.AssemblyInfoInputs.cache
+/home/lennnovo_owner/Desktop/IPCFinal/1/cs_client/obj/Debug/net7.0/cs_client.AssemblyInfo.cs
+/home/lennnovo_owner/Desktop/IPCFinal/1/cs_client/obj/Debug/net7.0/cs_client.csproj.CoreCompileInputs.cache
+/home/lennnovo_owner/Desktop/IPCFinal/1/cs_client/obj/Debug/net7.0/cs_client.csproj.CopyComplete
+/home/lennnovo_owner/Desktop/IPCFinal/1/cs_client/obj/Debug/net7.0/cs_client.dll
+/home/lennnovo_owner/Desktop/IPCFinal/1/cs_client/obj/Debug/net7.0/refint/cs_client.dll
+/home/lennnovo_owner/Desktop/IPCFinal/1/cs_client/obj/Debug/net7.0/cs_client.pdb
+/home/lennnovo_owner/Desktop/IPCFinal/1/cs_client/obj/Debug/net7.0/cs_client.genruntimeconfig.cache
+/home/lennnovo_owner/Desktop/IPCFinal/1/cs_client/obj/Debug/net7.0/ref/cs_client.dll

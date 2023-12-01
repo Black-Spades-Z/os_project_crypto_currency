@@ -12,7 +12,7 @@
 int main() {
     int cSharpClientSocket, cServerSocket;
 
-    char buffer[1024];
+    char buffer[16384];
 
     struct sockaddr_in cSharpClientAddr, cServerAddr;
 

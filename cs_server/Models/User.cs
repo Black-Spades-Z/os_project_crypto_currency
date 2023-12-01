@@ -4,9 +4,11 @@ using System.Net.Sockets;
 using System.Text;
 using Newtonsoft.Json;
 using System.ComponentModel.DataAnnotations.Schema;
+using System.ComponentModel.DataAnnotations;
 
 using static Authentication; 
 
+[Table("Users")]
 public class User
 {
     [NotMapped]
@@ -14,6 +16,7 @@ public class User
     [NotMapped]
     public string Purpose {get; set;}
     
+    [Key]
     public int UserId {get; set;}
     public string Email { get; set; }
     public string PasswordHash { get; set; }
@@ -47,6 +50,7 @@ public class User
                 	
                 if(emailVar==null){
                 this.PasswordHash = HashPassword(this.PasswordHash);
+                this.JoinDate = DateTime.Now;
                 context.Users.Add(this);
                 Console.WriteLine("User added!");
                 context.SaveChanges();
@@ -62,7 +66,7 @@ public class User
         }
         catch (Exception ex)
         {
-            message = "Error: {ex.Message}";
+            message = ex.Message;
             return false;          
         }
         return true;
@@ -80,8 +84,7 @@ public class User
     	WalletUtil w = new();
     	wallet.WalletAddress = w.GenerateAddress();
     	wallet.UserId = GetUserIdFromEmail(receivedUser.Email);
-    	if(!wallet.InsertWallet()){
-    		message = "Failure";
+    	if(!wallet.InsertWallet(out message)){
     		return false;
     	}
 	message = "Success";
