@@ -188,7 +188,7 @@ class CSharpClient
         }
     }
     
-    static void StartMessaging()
+   static void StartMessaging()
 {
     try
     {
@@ -207,34 +207,30 @@ class CSharpClient
                 {
                     case "1":
                     case "user":
-                        // Create a User object and serialize it
                         User user = GetUserDetails();
                         string serializedUser = user.Serialize();
-
-                        // Send the serialized User object to C client
                         SendMessage(stream, serializedUser);
-
-                        // Wait for a response from the server
-                        Console.WriteLine("Getting response");
                         WaitForResponse(stream);
-                        Console.WriteLine("Got response");
+                        // Close the client after receiving the response
+                        client.Close();
+                        // Reconnect if needed
+                        ConnectToCServer("127.0.0.1", 8889);
                         break;
 
                     case "2":
                     case "transaction":
-                        // Create a Transaction object and serialize it
                         Transaction transaction = GetTransaction();
                         string serializedTransaction = transaction.Serialize();
-
-                        // Send the serialized Transaction object to C client
                         SendMessage(stream, serializedTransaction);
-
-                        // Wait for a response from the server
                         WaitForResponse(stream);
+                        // Close the client after receiving the response
+                        client.Close();
+                        // Reconnect if needed
+                        ConnectToCServer("127.0.0.1", 8889);
                         break;
 
                     case "exit":
-                        return; // Exit the method and close the client
+                        return;
                 }
             }
         }
@@ -244,6 +240,7 @@ class CSharpClient
         Console.WriteLine($"Error in messaging: {e}");
     }
 }
+
 
 static void WaitForResponse(NetworkStream stream)
 {

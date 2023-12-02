@@ -81,7 +81,7 @@ int main() {
             } else {
                 perror("Error receiving data from C# client");
             }
-            break;
+           // break;
         }
         buffer[bytesRead] = '\0'; // Null-terminate the received data
         printf("Data received from C# client: %s\n", buffer);
