@@ -1,0 +1,85 @@
+.submit-button-login-window2{
+	background-image: none;
+	background-color: #87CEEB; /* Blue color */
+	color: black;
+	font-size: 18px;
+	font-weight: 800;
+	transition-duration: 0.4s;
+
+}
+
+.submit-button-login-window2:hover{
+	background-color: #3464e0; /* deep sky blue */
+	padding: 10px 20px;
+	font-size: 16px;
+	border: 2px solid #3498db;
+	color: #3498db;
+	border-radius: 5px;
+	transition: all 0.3s ease-in-out;
+	box-shadow: 0 12px 16px 0 rgba(0,0,0,0.4), 0 17px 50px 0 rgba(0,0,0,0.3);
+}
+
+.name-entry-login-window2{
+	border: 2px solid #8892a4;
+  	border-radius: 12px;
+  	padding: 5px;
+
+}
+.name-entry-login-window2:focus{
+	border: 2px solid #00BFFF;
+	outline : 2px solid #00BFFF;
+	box-shadow:0 0 10px rgba(0, 0, 0, 0.5);
+
+}
+
+
+.email-entry-login-window2{
+	border: 2px solid #8892a4;
+  	border-radius: 12px;
+  	padding: 5px;
+}
+.email-entry-login-window2:focus{
+	border: 2px solid #00BFFF;
+	outline : 2px solid #00BFFF;
+	box-shadow:0 0 10px rgba(0, 0, 0, 0.5);
+}
+
+
+.password-entry-login-window2{
+	border: 2px solid #8892a4;
+  	border-radius: 12px;
+  	padding: 5px;
+}
+.password-entry-login-window2:focus{
+	border: 2px solid #00BFFF;
+	outline : 2px solid #00BFFF;
+	box-shadow:0 0 10px rgba(0, 0, 0, 0.5);
+}
+
+
+.password-confirm-entry-login-window2{
+	border: 2px solid #8892a4;
+  	border-radius: 12px;
+  	padding: 5px;
+}
+.password-confirm-entry-login-window2:focus{
+	border: 2px solid #00BFFF;
+	outline : 2px solid #00BFFF;
+	box-shadow:0 0 10px rgba(0, 0, 0, 0.5);
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

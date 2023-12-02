@@ -9,5 +9,10 @@
     <ItemGroup>
     <PackageReference Include="Newtonsoft.Json" Version="13.0.3" />
   </ItemGroup>
+   <ItemGroup>
+        <!-- Reference GTK# assemblies -->
+        <PackageReference Include="GtkSharp" Version="3.24.24.95" />
+    </ItemGroup>
+
 
 </Project>

@@ -32,3 +32,10 @@
 /home/zero/university/OS/osdll/os_project_crypto_currency/cs_client/obj/Debug/net7.0/cs_client.pdb
 /home/zero/university/OS/osdll/os_project_crypto_currency/cs_client/obj/Debug/net7.0/cs_client.genruntimeconfig.cache
 /home/zero/university/OS/osdll/os_project_crypto_currency/cs_client/obj/Debug/net7.0/ref/cs_client.dll
+/home/zero/university/OS/osdll/os_project_crypto_currency/cs_client/bin/Debug/net7.0/AtkSharp.dll
+/home/zero/university/OS/osdll/os_project_crypto_currency/cs_client/bin/Debug/net7.0/CairoSharp.dll
+/home/zero/university/OS/osdll/os_project_crypto_currency/cs_client/bin/Debug/net7.0/GdkSharp.dll
+/home/zero/university/OS/osdll/os_project_crypto_currency/cs_client/bin/Debug/net7.0/GioSharp.dll
+/home/zero/university/OS/osdll/os_project_crypto_currency/cs_client/bin/Debug/net7.0/GLibSharp.dll
+/home/zero/university/OS/osdll/os_project_crypto_currency/cs_client/bin/Debug/net7.0/GtkSharp.dll
+/home/zero/university/OS/osdll/os_project_crypto_currency/cs_client/bin/Debug/net7.0/PangoSharp.dll

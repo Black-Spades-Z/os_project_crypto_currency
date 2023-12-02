@@ -7,6 +7,7 @@ using static Transaction;
 using static User;
 using static Cryptocurrency;
 using static UserPortfolio;
+using  GladeFunctions;
 
 class CSharpClient
 {
@@ -16,6 +17,9 @@ class CSharpClient
     {
         try
         {
+
+            Thread openGuiThread = new Thread(openGuiFunction);
+            openGuiThread.Start();
             // Connect to the C client (acting as a server)
             string cClientIpAddress = "127.0.0.1";
             int cClientPort = 8889;
@@ -40,6 +44,9 @@ class CSharpClient
         }
 
         Console.WriteLine("Client closing...");
+    }
+    static void openGuiFunction(){
+           CCTPSApp glade = new CCTPSApp();
     }
 
     static void ConnectToCServer(string ipAddress, int port)
