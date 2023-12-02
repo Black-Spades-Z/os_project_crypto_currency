@@ -1,20 +1,20 @@
 {
   "format": 1,
   "restore": {
-    "/home/lennnovo_owner/Desktop/IPCFinal/1/cs_client/cs_client.csproj": {}
+    "/home/zero/university/OS/osdll/os_project_crypto_currency/cs_client/cs_client.csproj": {}
   },
   "projects": {
-    "/home/lennnovo_owner/Desktop/IPCFinal/1/cs_client/cs_client.csproj": {
+    "/home/zero/university/OS/osdll/os_project_crypto_currency/cs_client/cs_client.csproj": {
       "version": "1.0.0",
       "restore": {
-        "projectUniqueName": "/home/lennnovo_owner/Desktop/IPCFinal/1/cs_client/cs_client.csproj",
+        "projectUniqueName": "/home/zero/university/OS/osdll/os_project_crypto_currency/cs_client/cs_client.csproj",
         "projectName": "cs_client",
-        "projectPath": "/home/lennnovo_owner/Desktop/IPCFinal/1/cs_client/cs_client.csproj",
-        "packagesPath": "/home/lennnovo_owner/.nuget/packages/",
-        "outputPath": "/home/lennnovo_owner/Desktop/IPCFinal/1/cs_client/obj/",
+        "projectPath": "/home/zero/university/OS/osdll/os_project_crypto_currency/cs_client/cs_client.csproj",
+        "packagesPath": "/home/zero/.nuget/packages/",
+        "outputPath": "/home/zero/university/OS/osdll/os_project_crypto_currency/cs_client/obj/",
         "projectStyle": "PackageReference",
         "configFilePaths": [
-          "/home/lennnovo_owner/.nuget/NuGet/NuGet.Config"
+          "/home/zero/.nuget/NuGet/NuGet.Config"
         ],
         "originalTargetFrameworks": [
           "net7.0"
@@ -59,7 +59,7 @@
               "privateAssets": "all"
             }
           },
-          "runtimeIdentifierGraphPath": "/usr/lib/dotnet/sdk/7.0.114/RuntimeIdentifierGraph.json"
+          "runtimeIdentifierGraphPath": "/usr/share/dotnet/sdk/7.0.404/RuntimeIdentifierGraph.json"
         }
       }
     }
