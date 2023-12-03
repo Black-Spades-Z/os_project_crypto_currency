@@ -1,6 +1,8 @@
 ﻿using System;
 using System.Linq;
+using System.Net.Sockets;
 using Gtk;
+using static CSharpClient;
 
 
 namespace GladeFunctions
@@ -9,6 +11,10 @@ namespace GladeFunctions
 
     public class CCTPSApp
     {
+
+        // Socket variables
+
+        static TcpClient client = null;
 
         //Global variables
 
@@ -86,7 +92,7 @@ namespace GladeFunctions
             login_window3 = (Window)builder.GetObject("login_window3");
             login_window3.DefaultSize = new Gdk.Size(1440, 968);
 
-            // Retrieve objects from Glade for login_window1
+            // Retrieve objects from Glade for main_window
             card = (Frame)builder.GetObject("card");
             market_values_box = (Box)builder.GetObject("market_values_box");
             exchange_button_main_window = (Button)builder.GetObject("exchange_button_main_window");
@@ -190,8 +196,8 @@ namespace GladeFunctions
 
         private void exchange_button_main_window_clicked(object sender, EventArgs e){
 
-
-            AddFrameToMarketValuesMainWindow(0);
+            client = getClient();
+            SendMessage(client.GetStream(), "Working he he");
         }
 
         private void AddFrameToMarketValuesMainWindow(int index)
@@ -323,6 +329,13 @@ namespace GladeFunctions
             if (IsValidEmail(email))
             {
                 Console.WriteLine($"Login successful. Email: {email}, Password: {password}");
+                  // Close login_window1
+                login_window1.Hide();
+                Thread clientThread = new Thread(clientMain);
+                clientThread.Start();
+
+                main_window.ShowAll();
+
             }
             else
             {
@@ -464,6 +477,9 @@ namespace GladeFunctions
 
             // Show login_window2
             login_window2.ShowAll();
+        }
+         static void Main(){
+             new CCTPSApp();
         }
 
     }

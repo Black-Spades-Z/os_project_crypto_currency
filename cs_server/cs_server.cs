@@ -79,25 +79,28 @@ class CSharpServer
             switch (data)
 	    {
     		case string _ when data.Contains("\"ObjectType\":\"User\"") && data.Contains("\"Purpose\":\"Register\""):
-        		if (HandleRegisteredUser(data, out message))
-        		{
-            			SendMessageToClient(stream, message);
-       	 		}	
-        		else
-        		{		
-            			SendMessageToClient(stream, message);
-        		}
+				SendMessageToClient(stream, "Got");
+        		// if (HandleRegisteredUser(data, out message))
+        		// {
+          //   			SendMessageToClient(stream, message);
+       	 	// 	}
+        		// else
+        		// {
+          //   			SendMessageToClient(stream, message);
+        		// }
         	break;
         	
         	case string _ when data.Contains("\"ObjectType\":\"User\"") && data.Contains("\"Purpose\":\"Login\""):
-        		if (HandleLoggedUser(data, out message))
-        		{
-            			SendMessageToClient(stream, message);
-       	 		}	
-        		else
-        		{		
-            			SendMessageToClient(stream, message);
-        		}
+
+				SendMessageToClient(stream, "Got");
+        		// if (HandleLoggedUser(data, out message))
+        		// {
+          //   			SendMessageToClient(stream, message);
+       	 	// 	}
+        		// else
+        		// {
+          //   			SendMessageToClient(stream, message);
+        		// }
         	break;
 
     		case string _ when data.Contains("\"ObjectType\":\"Transaction\"") && data.Contains("\"Purpose\":\"Publish\"") :
