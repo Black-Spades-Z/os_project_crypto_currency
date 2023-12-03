@@ -3,6 +3,7 @@ using System.Linq;
 using System.Net.Sockets;
 using Gtk;
 using static CSharpClient;
+using static User;
 
 
 namespace GladeFunctions
@@ -15,6 +16,7 @@ namespace GladeFunctions
         // Socket variables
 
         static TcpClient client = null;
+
 
         //Global variables
 
@@ -33,6 +35,9 @@ namespace GladeFunctions
 
 
         // Window 1
+        private string loginEmail;
+        private string loginPassword;
+
         private Window login_window1;
         private Entry email_entry_login_window1;
         private Entry password_entry_login_window1;
@@ -40,8 +45,15 @@ namespace GladeFunctions
         private Button authorization_button_login_window1;
 
         // Window 2
-        private Window login_window2;
+        private string registerEmail;
+        private string registerPassword;
+        private string registerFullName;
+        private string registerDateOfBirth;
+        private string registerAddress;
+        private string registerPhoneNumber;
+        private string registerNationality;
 
+        private Window login_window2;
         private Entry name_entry_login_window2;
         private Entry email_entry_login_window2;
         private Entry password_entry_login_window2;
@@ -67,10 +79,73 @@ namespace GladeFunctions
         // private Button help_button_gtkwindow1;
 
 
+        // ServerSocket functions
+
+        private void startServerAndListenToIt(){
+             // Connect to the C client (acting as a server)
+            string cClientIpAddress = "127.0.0.1";
+            int cClientPort = 8889;
+
+            ConnectToCServer(cClientIpAddress, cClientPort);
+
+            // Start a thread for listening to C server
+            Thread listenerThread = new Thread(ListenToCServer);
+            listenerThread.Start();
+        }
+
+        private void startServerOnThread(){
+            Thread clientThread = new Thread(startServerAndListenToIt);
+            clientThread.Start();
+        }
+
+        private void sendUserLoginDetails(){
+
+            client = getClient();
+
+
+
+            User user = SetUserLoginDetails(loginEmail, loginPassword);
+            user.Purpose = "Login";
+            string serializedUser = user.Serialize();
+
+            // Send the serialized User object to C client
+            SendMessage(client.GetStream(), serializedUser);
+
+            // Wait for a response from the server
+            Console.WriteLine("Getting response");
+            WaitForResponse(client.GetStream());
+            Console.WriteLine("Got response");
+        }
+        private void sendUserRegisterDetails(){
+
+            client = getClient();
+
+
+
+            User user = SetUserRegsitrationDetails(  registerEmail,  registerPassword,  registerFullName,  registerDateOfBirth, registerAddress,  registerPhoneNumber,  registerNationality);
+            user.Purpose = "Register";
+            string serializedUser = user.Serialize();
+
+            // Send the serialized User object to C client
+            SendMessage(client.GetStream(), serializedUser);
+
+            // Wait for a response from the server
+            Console.WriteLine("Getting response");
+            WaitForUsername(client.GetStream());
+            //WaitForResponse(client.GetStream());
+            Console.WriteLine("Got response");
+            login_window3.Hide();
+            login_window1.ShowAll();
+        }
+
+
 
 
         public CCTPSApp()
         {
+
+            // Lets connect to C server
+            startServerOnThread();
 
 
             Application.Init();
@@ -136,6 +211,7 @@ namespace GladeFunctions
             // Connect button click events for login_window2
             submit_button_login_window2.Clicked += submit_button_login_window2_clicked;
             back_button_login_window2.Clicked += back_button_login_window2_clicked;
+            submit_button_login_window3.Clicked += submit_button_login_window3_clicked;
 
             // Connect toggle event for agreement CheckButton
             agreement_login_window2.Toggled += agreement_login_window2_toggled;
@@ -196,8 +272,7 @@ namespace GladeFunctions
 
         private void exchange_button_main_window_clicked(object sender, EventArgs e){
 
-            client = getClient();
-            SendMessage(client.GetStream(), "Working he he");
+
         }
 
         private void AddFrameToMarketValuesMainWindow(int index)
@@ -321,18 +396,19 @@ namespace GladeFunctions
             market_values_box.ShowAll();
         }
 
+
         private void login_button_login_window1_clicked(object sender, EventArgs e)
         {
-            string email = email_entry_login_window1.Text;
-            string password = password_entry_login_window1.Text;
+            loginEmail = email_entry_login_window1.Text;
+            loginPassword = password_entry_login_window1.Text;
 
-            if (IsValidEmail(email))
+            if (IsValidEmail(loginEmail))
             {
-                Console.WriteLine($"Login successful. Email: {email}, Password: {password}");
+                Console.WriteLine($"Login successful. Email: {loginEmail}, Password: {loginPassword}");
                   // Close login_window1
                 login_window1.Hide();
-                Thread clientThread = new Thread(clientMain);
-                clientThread.Start();
+
+                sendUserLoginDetails();
 
                 main_window.ShowAll();
 
@@ -359,11 +435,11 @@ namespace GladeFunctions
             // Check if the agreement CheckButton is checked
             if (agreement_login_window2.Active)
             {
-                string name = name_entry_login_window2.Text;
-                string email = email_entry_login_window2.Text;
-                string password = password_entry_login_window2.Text;
+                registerFullName= name_entry_login_window2.Text;
+                registerEmail = email_entry_login_window2.Text;
+                registerPassword = password_entry_login_window2.Text;
     // Validate email
-                if (!IsValidEmail(email))
+                if (!IsValidEmail(registerEmail))
                 {
                     Console.WriteLine("Invalid email address.");
                     // Optionally, you can show an error message or take other actions
@@ -371,7 +447,7 @@ namespace GladeFunctions
                 }
 
                 // Validate password
-                if (password.Length < 7 || !PasswordContainsDigitAndUppercase(password))
+                if (registerPassword.Length < 7 || !PasswordContainsDigitAndUppercase(registerPassword))
                 {
                     Console.WriteLine("Password must be at least 7 characters long and contain at least one digit and one uppercase character.");
                     // Optionally, you can show an error message or take other actions
@@ -421,13 +497,13 @@ namespace GladeFunctions
     // Window 3
             private void submit_button_login_window3_clicked(object sender, EventArgs e)
         {
-            string phoneNumber = phone_number_entry_login_window3.Text;
-            string dob = dob_entry_login_window3.Text;
-            string address = address_entry_login_window3.Text;
-            string comboBoxValue = combo_box_entry_login_window3.Text;
+            registerPhoneNumber = phone_number_entry_login_window3.Text;
+            registerDateOfBirth = dob_entry_login_window3.Text;
+            registerAddress = address_entry_login_window3.Text;
+            registerNationality = combo_box_entry_login_window3.Text;
 
             // Validate phone number (only digits allowed)
-            if (!IsValidPhoneNumber(phoneNumber))
+            if (!IsValidPhoneNumber(registerPhoneNumber))
             {
                 Console.WriteLine("Invalid phone number. Please enter only digits.");
                 // Optionally, you can show an error message or take other actions
@@ -435,15 +511,18 @@ namespace GladeFunctions
             }
 
             // Validate date of birth (in the format 00/00/0000)
-            if (!IsValidDateOfBirth(dob))
+            if (!IsValidDateOfBirth(registerDateOfBirth))
             {
                 Console.WriteLine("Invalid date of birth. Please enter the date in the format 00/00/0000.");
                 // Optionally, you can show an error message or take other actions
                 return;
             }
 
+
             // Optionally, you can perform other actions, for example, submit the data or close the window
-            Console.WriteLine($"Submitted data: Phone Number: {phoneNumber}, Date of Birth: {dob}, Address: {address}, ComboBox Value: {comboBoxValue}");
+            Console.WriteLine($"Submitted data: Phone Number: {registerPhoneNumber}, Date of Birth: {registerDateOfBirth}, Address: {registerAddress}, ComboBox Value: {registerNationality}");
+            sendUserRegisterDetails();
+
         }
 
         private bool IsValidPhoneNumber(string phoneNumber)

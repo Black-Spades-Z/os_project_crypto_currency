@@ -73,6 +73,25 @@ public class User
             Nationality = nationality
         };
     }
+    public static User SetUserRegsitrationDetails(string registerEmail, string registerPassword, string registerFullName, string registerDateOfBirth,string registerAddress, string registerPhoneNumber, string registerNationality)
+    {
+
+        DateTime dateOfBirth;
+        DateTime.TryParse(registerDateOfBirth, out dateOfBirth);
+
+
+
+        return new User
+        {
+            Email = registerEmail,
+            PasswordHash = registerPassword,
+            FullName = registerFullName,
+            DateOfBirth = dateOfBirth,
+            Address = registerAddress,
+            PhoneNumber = registerPhoneNumber,
+            Nationality = registerNationality
+        };
+    }
     
     public static User GetUserPortfolioDetails()
     {
@@ -101,6 +120,16 @@ public class User
         {
             Email = email,
             PasswordHash = passwordHash,
+        };
+    }
+     public static User SetUserLoginDetails(string loginEmail, string loginPassword)
+    {
+
+
+        return new User
+        {
+            Email = loginEmail,
+            PasswordHash = loginPassword,
         };
     }
 }

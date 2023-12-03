@@ -79,7 +79,7 @@ class CSharpServer
             switch (data)
 	    {
     		case string _ when data.Contains("\"ObjectType\":\"User\"") && data.Contains("\"Purpose\":\"Register\""):
-				SendMessageToClient(stream, "Got");
+				SendMessageToClient(stream, "{Registered : yes;}");
         		// if (HandleRegisteredUser(data, out message))
         		// {
           //   			SendMessageToClient(stream, message);
@@ -92,7 +92,7 @@ class CSharpServer
         	
         	case string _ when data.Contains("\"ObjectType\":\"User\"") && data.Contains("\"Purpose\":\"Login\""):
 
-				SendMessageToClient(stream, "Got");
+				SendMessageToClient(stream, "Access");
         		// if (HandleLoggedUser(data, out message))
         		// {
           //   			SendMessageToClient(stream, message);
