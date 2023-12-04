@@ -8,6 +8,7 @@ public class AppDbContext : DbContext
     public DbSet<Transaction> Transactions { get; set; }
     public DbSet<Cryptocurrency> ServerAssets { get; set; }
     public DbSet<UserPortfolio> AccPortfolio { get; set; }
+    public DbSet<UserOffer> UserOffers { get; set; }
     
     protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
     {

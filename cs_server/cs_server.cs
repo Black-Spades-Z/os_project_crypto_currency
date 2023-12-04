@@ -7,6 +7,7 @@ using static User;
 using static Transaction;
 using static Cryptocurrency;
 using static UserPortfolio;
+using static UserOffer;
 
 class CSharpServer
 {
@@ -135,6 +136,28 @@ class CSharpServer
         		
         	case string _ when data.Contains("\"ObjectType\":\"Wallet\"") && data.Contains("\"Purpose\":\"GetTransactionList\"") :
         		if (HandleTransactionListRequest(data, out message))
+        		{
+        	    		SendMessageToClient(stream, message);
+        		}
+        		else
+        		{
+            			SendMessageToClient(stream, message);
+        		}
+        		break;
+        		
+        	case string _ when data.Contains("\"ObjectType\":\"UserOffer\"") && data.Contains("\"Purpose\":\"Publish\"") :
+        		if (HandleReceivedUserOffer(data, out message))
+        		{
+        	    		SendMessageToClient(stream, message);
+        		}
+        		else
+        		{
+            			SendMessageToClient(stream, message);
+        		}
+        		break;
+        		
+        	case string _ when data.Contains("GetUserOffers") :
+        		if (HandleUserOffersRequest(data, out message))
         		{
         	    		SendMessageToClient(stream, message);
         		}

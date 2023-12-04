@@ -31,5 +31,27 @@ public class Wallet
     {
         return JsonConvert.DeserializeObject<Wallet>(json);
     }
+    
+    public static void WaitForWallet(NetworkStream stream)
+	{
+	    try
+	    {
+		byte[] buffer = new byte[16384];
+		int bytesRead = stream.Read(buffer, 0, buffer.Length);
+
+		if (bytesRead <= 0)
+		{
+		    Console.WriteLine("Connection closed by server.");
+		    Environment.Exit(0); 
+		}
+
+		string response = Encoding.ASCII.GetString(buffer, 0, bytesRead);
+		Wallet wallet = JsonConvert.DeserializeObject<Wallet>(response);
+	    }
+	    catch (Exception e)
+	    {
+		Console.WriteLine($"Error in waiting for response: {e}");
+	    }
+	}
 }
 

@@ -45,7 +45,6 @@ public class Transaction
     	}
 
     // Process the received transaction object as needed
-    Console.WriteLine($"Deserialized Transaction: {receivedTransaction.FromAddress}, {receivedTransaction.ToAddress}, {receivedTransaction.CashValue}, {receivedTransaction.CryptoValue}, {receivedTransaction.CryptocurrencyName}, {receivedTransaction.DateTime}");
     return true;
 }
 
@@ -57,9 +56,8 @@ public class Transaction
             {
                 this.TransactionsHash = HashTransaction();
                 this.ValidationStatus = "Not validated";
-                Console.WriteLine($"Deserialized Transaction: {this.FromAddress}, {this.ToAddress}, {this.CashValue}, {this.CryptoValue}, {this.CryptocurrencyName}, {this.DateTime}, {this.ValidationStatus}, {this.TransactionsHash}");
+                this.DateTime = DateTime.Now;
                 context.Transactions.Add(this);
-                Console.WriteLine("Transaction added!");
                 context.SaveChanges();
                 message = "Success";
             }

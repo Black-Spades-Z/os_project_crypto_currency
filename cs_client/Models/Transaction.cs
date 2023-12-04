@@ -72,10 +72,6 @@ public class Transaction
 
 	    Console.Write("Cryptocurrency (Bitcoin, Ethereum, Litecoin, etc.): ");
 	    string cryptocurrency = Console.ReadLine();
-
-	    Console.Write("Date and Time (YYYY-MM-DD HH:mm:ss): ");
-	    DateTime dateTime;
-	    DateTime.TryParse(Console.ReadLine(), out dateTime);
 	    
 	    return new Transaction
 	    {
@@ -83,13 +79,11 @@ public class Transaction
 		ToAddress = toAddress,
 		CashValue = cashValue,
 		CryptoValue = cryptoValue,
-		CryptocurrencyName = cryptocurrency,
-		DateTime = dateTime
+		CryptocurrencyName = cryptocurrency
 	    };
 	}
 	
-	
-	public static void WaitForUserTransaction(NetworkStream stream)
+	public static void WaitForUserTransactionList(NetworkStream stream)
 	{
 	    try
 	    {

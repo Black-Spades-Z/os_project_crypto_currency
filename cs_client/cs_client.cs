@@ -7,6 +7,8 @@ using static Transaction;
 using static User;
 using static Cryptocurrency;
 using static UserPortfolio;
+using static UserOffer;
+using static Wallet;
 
 class CSharpClient
 {
@@ -88,6 +90,8 @@ class CSharpClient
                 Console.WriteLine("4. Server Assets");
                 Console.WriteLine("5. Account Portfolio");
                 Console.WriteLine("6. User transactions");
+                Console.WriteLine("7. Publish User Offer (P2P)");
+                Console.WriteLine("8. Request User Offers");
                 Console.WriteLine("Type 'exit' to quit.");
 
                 string choice = Console.ReadLine();
@@ -104,9 +108,7 @@ class CSharpClient
                         SendMessage(stream, serializedUser);
 
                         // Wait for a response from the server
-                        Console.WriteLine("Getting response");
                         WaitForResponse(stream);
-                        Console.WriteLine("Got response");
                         break;
                         
                     case "2":
@@ -119,9 +121,7 @@ class CSharpClient
                         SendMessage(stream, serializedUser);
 
                         // Wait for a response from the server
-                        Console.WriteLine("Getting response");
-                        WaitForResponse(stream);
-                        Console.WriteLine("Got response");
+                        WaitForWallet(stream);
                         break;
 
                     case "3":
@@ -169,11 +169,30 @@ class CSharpClient
                         SendMessage(stream, serializedWallet);
 
                         // Wait for a response from the server
-                        WaitForUserTransaction(stream);
+                        WaitForUserTransactionList(stream);
+                        break;
+                        
+                   case "7":
+                        UserOffer userOffer = GetUserOffer();
+                        userOffer.Purpose = "Publish";
+                        string serializedUserOffer = userOffer.Serialize();
+
+                        SendMessage(stream, serializedUserOffer);
+
+                        WaitForResponse(stream);
+                        break;
+                        
+                    case "8":
+                        RequestMessage = "GetUserOffers";
+
+                        SendMessage(stream, RequestMessage);
+
+                        WaitForUserOffers(stream);
                         break;
 
                     case "exit":
-                        return; // Exit the method and close the client
+                        Environment.Exit(0);
+                        return; 
                 }
             }
         }
