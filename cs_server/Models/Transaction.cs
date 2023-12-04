@@ -86,5 +86,25 @@ public class Transaction
             }
     }
     
+    public static bool HandleTransactionListRequest(string data, out string message)
+	{
+	    Wallet receivedWallet = JsonConvert.DeserializeObject<Wallet>(data);
+	    try
+	    {
+	    	using (var context = new AppDbContext())
+		{
+			var transactionList = context.Transactions.Where(t => t.FromAddress == receivedWallet.WalletAddress ||  t.ToAddress == receivedWallet.WalletAddress).ToList();
+			message = JsonConvert.SerializeObject(transactionList);
+		}
+	    }
+	    catch (Exception ex)
+	    {
+	    	Console.WriteLine(ex.Message);
+		message = "Failure to send Server Assets";
+		return false;
+	    }
+	    return true;
+	}
+    
     
 }

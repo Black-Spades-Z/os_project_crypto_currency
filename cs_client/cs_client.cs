@@ -87,6 +87,7 @@ class CSharpClient
                 Console.WriteLine("3. Transaction");
                 Console.WriteLine("4. Server Assets");
                 Console.WriteLine("5. Account Portfolio");
+                Console.WriteLine("6. User transactions");
                 Console.WriteLine("Type 'exit' to quit.");
 
                 string choice = Console.ReadLine();
@@ -156,6 +157,19 @@ class CSharpClient
 
                         // Wait for a response from the server
                         WaitForAccountPortfolio(stream);
+                        break;
+                        
+                    case "6":
+                        Wallet userWallet = new();
+                        userWallet.WalletAddress = "qwe";
+                        userWallet.Purpose = "GetTransactionList";
+                        string serializedWallet = userWallet.Serialize();
+
+                        // Send the serialized User object to C client
+                        SendMessage(stream, serializedWallet);
+
+                        // Wait for a response from the server
+                        WaitForUserTransaction(stream);
                         break;
 
                     case "exit":

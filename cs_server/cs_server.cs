@@ -132,6 +132,17 @@ class CSharpServer
             			SendMessageToClient(stream, message);
         		}
         		break;
+        		
+        	case string _ when data.Contains("\"ObjectType\":\"Wallet\"") && data.Contains("\"Purpose\":\"GetTransactionList\"") :
+        		if (HandleTransactionListRequest(data, out message))
+        		{
+        	    		SendMessageToClient(stream, message);
+        		}
+        		else
+        		{
+            			SendMessageToClient(stream, message);
+        		}
+        		break;
 
     		default:
         		Console.WriteLine("Unknown object type or missing ObjectType property.");
