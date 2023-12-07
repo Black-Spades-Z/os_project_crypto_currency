@@ -32,7 +32,7 @@ public class Wallet
         return JsonConvert.DeserializeObject<Wallet>(json);
     }
     
-    public static void WaitForWallet(NetworkStream stream)
+    public static Wallet WaitForWallet(NetworkStream stream)
 	{
 	    try
 	    {
@@ -47,11 +47,13 @@ public class Wallet
 
 		string response = Encoding.ASCII.GetString(buffer, 0, bytesRead);
 		Wallet wallet = JsonConvert.DeserializeObject<Wallet>(response);
+		return wallet;
 	    }
 	    catch (Exception e)
 	    {
 		Console.WriteLine($"Error in waiting for response: {e}");
 	    }
+	    return null;
 	}
 }
 

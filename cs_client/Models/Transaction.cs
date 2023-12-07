@@ -11,6 +11,10 @@ public class Transaction
     public string ObjectType => "Transaction";
     [NotMapped]
     public string Purpose {get; set;}
+    [NotMapped]
+    public int MinerId {get; set;}
+    [NotMapped]
+    public decimal TransactionFee {get; set;}
     
     public int TransactionId { get; init; }
     public string FromAddress { get; init; }
@@ -99,6 +103,7 @@ public class Transaction
 		string response = Encoding.ASCII.GetString(buffer, 0, bytesRead);
 		List<Transaction> userTransactions = JsonConvert.DeserializeObject<List<Transaction>>(response);
 		Console.WriteLine(userTransactions.Count);
+		
 	    }
 	    catch (Exception e)
 	    {

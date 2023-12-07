@@ -14,6 +14,10 @@ public class Transaction
     public string ObjectType => "Transaction";
     [NotMapped]
     public string Purpose {get; set;}
+    [NotMapped]
+    public int MinerId {get; set;}
+    [NotMapped]
+    public decimal TransactionFee {get; set;}
     
     [Key]
     public int TransactionId { get; set; }
@@ -55,7 +59,7 @@ public class Transaction
             using (var context = new AppDbContext()) // Replace YourDbContext with your actual DbContext class
             {
                 this.TransactionsHash = HashTransaction();
-                this.ValidationStatus = "Not validated";
+                this.ValidationStatus = "Pending";
                 this.DateTime = DateTime.Now;
                 context.Transactions.Add(this);
                 context.SaveChanges();

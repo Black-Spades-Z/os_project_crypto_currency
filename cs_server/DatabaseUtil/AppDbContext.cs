@@ -9,6 +9,7 @@ public class AppDbContext : DbContext
     public DbSet<Cryptocurrency> ServerAssets { get; set; }
     public DbSet<UserPortfolio> AccPortfolio { get; set; }
     public DbSet<UserOffer> UserOffers { get; set; }
+    public DbSet<Miner> Miners { get; set; }
     
     protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
     {

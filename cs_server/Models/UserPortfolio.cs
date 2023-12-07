@@ -10,6 +10,9 @@ using System.ComponentModel.DataAnnotations;
 [Table("UserPortfolio")]
 public class UserPortfolio
 {
+    [NotMapped]
+    public string ObjectType => "UserPortfolio";
+
     [Key]
     public int UserId { get; set; }
     
@@ -58,6 +61,81 @@ public class UserPortfolio
 		return false;
 	    }
 	    return true;
+	}
+	
+	public static bool HandleUserPortfolioListRequest(string data, out string message)
+	{
+	    try
+	    {
+	    	using (var context = new AppDbContext())
+		{
+			var userPortList = context.AccPortfolio.ToList();
+			message = JsonConvert.SerializeObject(userPortList);
+		}
+	    }
+	    catch (Exception ex)
+	    {
+	    	Console.WriteLine(ex.Message);
+		message = "Failure to send Wallet List";
+		return false;
+	    }
+	    return true;
+	}
+	
+	public static bool HandleUpdateUserPortfolio(string data, out string message)
+	{
+	    try
+	    {
+	    	using (var context = new AppDbContext())
+		{
+			UserPortfolio user = JsonConvert.DeserializeObject<UserPortfolio>(data);
+			var userPort = context.AccPortfolio.FirstOrDefault(p => p.UserId == user.UserId);
+			
+			if(userPort is not null)
+			{
+				CopyProperties(user, userPort);
+				context.SaveChanges();
+				message = "Success";
+			}
+			else
+			{
+				message = "Failure";
+				return false;
+			}
+		}
+	    }
+	    catch (Exception ex)
+	    {
+	    	Console.WriteLine(ex.Message);
+		message = "Failure";
+		return false;
+	    }
+	    return true;
+	}
+	
+	private static void CopyProperties(object source, object destination)
+	{
+	    var sourceType = source.GetType();
+	    var destinationType = destination.GetType();
+
+	    // Get all properties from the source type
+	    var sourceProperties = sourceType.GetProperties();
+
+	    foreach (var sourceProperty in sourceProperties)
+	    {
+		// Find the corresponding property in the destination type
+		var destinationProperty = destinationType.GetProperty(sourceProperty.Name);
+
+		// Check if the property exists in both types
+		if (destinationProperty != null && destinationProperty.CanWrite)
+		{
+		    // Get the value from the source property
+		    var value = sourceProperty.GetValue(source, null);
+
+		    // Set the value to the destination property
+		    destinationProperty.SetValue(destination, value, null);
+		}
+	    }
 	}
  
 }

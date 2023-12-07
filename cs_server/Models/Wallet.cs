@@ -54,5 +54,55 @@ public class Wallet
     {
         return JsonConvert.DeserializeObject<Wallet>(json);
     }
+    
+    public static bool HandleWalletRequest(string data, out string message)
+	{
+	    try
+	    {
+	    	using (var context = new AppDbContext())
+		{
+			Wallet w = Deserialize(data);
+			Wallet wallet = context.Wallets.Where(wal => wal.WalletAddress == w.WalletAddress).FirstOrDefault();
+			message = wallet.Serialize();
+		}
+	    }
+	    catch (Exception ex)
+	    {
+	    	Console.WriteLine(ex.Message);
+		message = "Failure. Wallet address does not exist !";
+		return false;
+	    }
+	    return true;
+	}
+	
+	public static bool HandleWalletUpdate(string data, out string message)
+	{
+	    try
+	    {
+	    	using (var context = new AppDbContext())
+		{
+			Wallet w = Deserialize(data);
+			Wallet wallet = context.Wallets.Where(wal => wal.WalletAddress == w.WalletAddress).FirstOrDefault();
+			if(wallet is not null)
+			{
+				wallet.Balance = w.Balance;
+				context.SaveChanges();
+				message = "Success";
+			}
+			else
+			{
+				message = "Failure";
+				return false;
+			}
+		}
+	    }
+	    catch (Exception ex)
+	    {
+	    	Console.WriteLine(ex.Message);
+		message = "Failure. Wallet address does not exist !";
+		return false;
+	    }
+	    return true;
+	}
 }
 

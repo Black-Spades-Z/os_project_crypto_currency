@@ -11,9 +11,9 @@ public class Cryptocurrency
 {
 	[Key]
 	public string Name { get; set; }
-	public float Price { get; set; }
-	public float Fee { get; set; }
-	public int Amount { get; set; }
+	public decimal Price { get; set; }
+	public decimal Fee { get; set; }
+	public decimal Amount { get; set; }
 	
 	public static void WaitForServerAssets(NetworkStream stream)
 	{

@@ -9,6 +9,8 @@ using System.Security.Cryptography;
 [Table("UserPortfolio")]
 public class UserPortfolio
 {
+    public string ObjectType => "UserPortfolio";
+
     public int UserId { get; set; }
     public decimal Bitcoin { get; set; }
     public decimal Ethereum { get; set; }
@@ -37,7 +39,17 @@ public class UserPortfolio
     public decimal Uniswap { get; set; }
     public decimal Compound { get; set; }
     
-    public static void WaitForAccountPortfolio(NetworkStream stream)
+    public string Serialize()
+    {
+        return JsonConvert.SerializeObject(this);
+    }
+    
+    public static UserPortfolio Deserialize(string json)
+    {
+        return JsonConvert.DeserializeObject<UserPortfolio>(json);
+    }
+    
+    public static UserPortfolio WaitForAccountPortfolio(NetworkStream stream)
 	{
 	    try
 	    {
@@ -51,13 +63,14 @@ public class UserPortfolio
 		}
 
 		string response = Encoding.ASCII.GetString(buffer, 0, bytesRead);
-		Console.WriteLine(response);
 		UserPortfolio userPortfolio = JsonConvert.DeserializeObject<UserPortfolio>(response);
+		return userPortfolio;
 	    }
 	    catch (Exception e)
 	    {
 		Console.WriteLine($"Error in waiting for response: {e}");
 	    }
+	    return null;
 	}
  
 }
