@@ -10,6 +10,9 @@ using static Transaction;
 using static User;
 using static Cryptocurrency;
 using static UserPortfolio;
+using static UserOffer;
+using static Wallet;
+using static MinerUtil;
 
 
 public class CSharpClient
@@ -80,102 +83,266 @@ public class CSharpClient
         }
     }
 
-    static void StartMessaging()
+  /*
+  static void StartMessaging()
+{
+    try
     {
-        try
+        using (NetworkStream stream = client.GetStream())
         {
-            using (NetworkStream stream = client.GetStream())
+            while (true)
             {
-                while (true)
+                Console.WriteLine("Choose what to send:");
+                Console.WriteLine("1. User register");
+                Console.WriteLine("2. User login");
+                Console.WriteLine("3. Transaction");
+                Console.WriteLine("4. Server Assets");
+                Console.WriteLine("5. Account Portfolio");
+                Console.WriteLine("6. User transactions");
+                Console.WriteLine("7. Publish User Offer (P2P)");
+                Console.WriteLine("8. Request User Offers");
+                Console.WriteLine("9. Check miner");
+                Console.WriteLine("10. Insert miner");
+                Console.WriteLine("11. Start validation");
+                Console.WriteLine("Type 'exit' to quit.");
+
+                string choice = Console.ReadLine();
+
+                switch (choice.ToLower())
                 {
-                    Console.WriteLine("Choose what to send:");
-                    Console.WriteLine("1. User register");
-                    Console.WriteLine("2. User login");
-                    Console.WriteLine("3. Transaction");
-                    Console.WriteLine("4. Server Assets");
-                    Console.WriteLine("5. Account Portfolio");
-                    Console.WriteLine("Type 'exit' to quit.");
+                    case "1":
+                        // Create a User object and serialize it
+                        User user = GetUserRegsitrationDetails();
+                        user.Purpose = "Register";
+                        string serializedUser = user.Serialize();
 
-                    string choice = Console.ReadLine();
+                        // Send the serialized User object to C client
+                        SendMessage(stream, serializedUser);
 
-                    switch (choice.ToLower())
-                    {
-                        case "1":
-                            // Create a User object and serialize it
-                            User user = GetUserRegsitrationDetails();
-                            user.Purpose = "Register";
-                            string serializedUser = user.Serialize();
+                        // Wait for a response from the server
+                        WaitForResponse(stream);
+                        break;
 
-                            // Send the serialized User object to C client
-                            SendMessage(stream, serializedUser);
+                    case "2":
+                        // Create a User object and serialize it
+                        User logUser = GetUserLoginDetails();
+                        logUser.Purpose = "GetWallet";
+                        serializedUser = logUser.Serialize();
 
-                            // Wait for a response from the server
-                            Console.WriteLine("Getting response");
-                            WaitForResponse(stream);
-                            Console.WriteLine("Got response");
-                            break;
+                        // Send the serialized User object to C client
+                        SendMessage(stream, serializedUser);
 
-                        case "2":
-                            // Create a User object and serialize it
-                            User logUser = GetUserLoginDetails();
-                            logUser.Purpose = "Login";
-                            serializedUser = logUser.Serialize();
+                        // Wait for a response from the server
+                        WaitForWallet(stream);
+                        break;
 
-                            // Send the serialized User object to C client
-                            SendMessage(stream, serializedUser);
+                    case "3":
+                        // Create a Transaction object and serialize it
+                        Transaction transaction = GetTransaction();
+                        transaction.Purpose = "Publish";
+                        string serializedTransaction = transaction.Serialize();
 
-                            // Wait for a response from the server
-                            Console.WriteLine("Getting response");
-                            WaitForResponse(stream);
-                            Console.WriteLine("Got response");
-                            break;
+                        // Send the serialized Transaction object to C client
+                        SendMessage(stream, serializedTransaction);
 
-                        case "3":
-                            // Create a Transaction object and serialize it
-                            Transaction transaction = GetTransaction();
-                            transaction.Purpose = "Publish";
-                            string serializedTransaction = transaction.Serialize();
+                        // Wait for a response from the server
+                        WaitForResponse(stream);
+                        break;
 
-                            // Send the serialized Transaction object to C client
-                            SendMessage(stream, serializedTransaction);
+                    case "4":
+                        string RequestMessage = "GetServerAssetsList";
 
-                            // Wait for a response from the server
-                            WaitForResponse(stream);
-                            break;
+                        // Send the serialized Transaction object to C client
+                        SendMessage(stream, RequestMessage);
 
-                        case "4":
-                            string RequestMessage = "GetServerAssetsList";
+                        // Wait for a response from the server
+                        WaitForServerAssets(stream);
+                        break;
 
-                            // Send the serialized Transaction object to C client
+                    case "5":
+                        User portfolioUser = GetUserPortfolioDetails();
+                        portfolioUser.Purpose = "GetPortfolio";
+                        serializedUser = portfolioUser.Serialize();
+
+                        // Send the serialized User object to C client
+                        SendMessage(stream, serializedUser);
+
+                        // Wait for a response from the server
+                        WaitForAccountPortfolio(stream);
+                        break;
+
+                    case "6":
+                        Wallet userWallet = new();
+                        userWallet.WalletAddress = "qwe";
+                        userWallet.Purpose = "GetTransactionList";
+                        string serializedWallet = userWallet.Serialize();
+
+                        // Send the serialized User object to C client
+                        SendMessage(stream, serializedWallet);
+
+                        // Wait for a response from the server
+                        WaitForUserTransactionList(stream);
+                        break;
+
+                   case "7":
+                        UserOffer userOffer = GetUserOffer();
+                        userOffer.Purpose = "Publish";
+                        string serializedUserOffer = userOffer.Serialize();
+
+                        SendMessage(stream, serializedUserOffer);
+
+                        WaitForResponse(stream);
+                        break;
+
+                    case "8":
+                        RequestMessage = "GetUserOffers";
+
+                        SendMessage(stream, RequestMessage);
+
+                        WaitForUserOffers(stream);
+                        break;
+
+                    case "9":
+                        // Create a User object and serialize it
+                        User miningUser = new();
+                        miningUser.Purpose = "MinerCheck";
+                        miningUser.UserId = Convert.ToInt32(Console.ReadLine());
+                        serializedUser = miningUser.Serialize();
+
+                        // Send the serialized User object to C client
+                        SendMessage(stream, serializedUser);
+
+                        // Wait for a response from the server
+                        WaitForResponse(stream);
+                        break;
+
+                    case "10":
+                        // Create a User object and serialize it
+                        miningUser = new();
+                        miningUser.Purpose = "MinerRegister";
+                        miningUser.UserId = Convert.ToInt32(Console.ReadLine());
+                        serializedUser = miningUser.Serialize();
+
+                        // Send the serialized User object to C client
+                        SendMessage(stream, serializedUser);
+
+                        // Wait for a response from the server
+                        WaitForResponse(stream);
+                        break;
+
+                    case "11":
+                    	while(true){
+                    	    Console.ReadLine();
+                            RequestMessage = "ValidationStatusForMiner";
+
                             SendMessage(stream, RequestMessage);
 
-                            // Wait for a response from the server
-                            WaitForServerAssets(stream);
-                            break;
+                            if(WaitForValidationResponse(stream))
+                            {
+                                //Get Transaction List
+                            	RequestMessage = "GetTransactionForValidation";
+                                SendMessage(stream, RequestMessage);
+                                Transaction userTransaction = WaitForTransactionForValidation(stream);
 
-                        case "5":
-                            User portfolioUser = GetUserPortfolioDetails();
-                            portfolioUser.Purpose = "GetPortfolio";
-                            serializedUser = portfolioUser.Serialize();
+                                //Get Wallet of Seller
+                            	Wallet senderWallet = new();
+                            	senderWallet.Purpose = "GetWallet";
+                            	senderWallet.WalletAddress = userTransaction.FromAddress;
+                            	serializedWallet = senderWallet.Serialize();
 
-                            // Send the serialized User object to C client
-                            SendMessage(stream, serializedUser);
+                                SendMessage(stream, serializedWallet);
+                                senderWallet = WaitForWallet(stream);
 
-                            // Wait for a response from the server
-                            WaitForAccountPortfolio(stream);
-                            break;
+                                //Get Portfolio of Seller
+                                User senderUser = new();
+		                senderUser.Purpose = "GetPortfolio";
+		                senderUser.UserId = senderWallet.UserId;
+		                serializedUser = senderUser.Serialize();
 
-                        case "exit":
-                            return; // Exit the method and close the client
-                    }
+		                SendMessage(stream, serializedUser);
+		                UserPortfolio senderPortfolioUser = WaitForAccountPortfolio(stream);
+
+                                //Get Wallet of Buyer
+                                Wallet recipientWallet = new();
+                            	recipientWallet.Purpose = "GetWallet";
+                            	recipientWallet.WalletAddress = userTransaction.ToAddress;
+                            	serializedWallet = recipientWallet.Serialize();
+
+                                SendMessage(stream, serializedWallet);
+                                recipientWallet = WaitForWallet(stream);
+
+                                //Get Portfolio of Buyer
+                                User recipientUser = new();
+		                recipientUser.Purpose = "GetPortfolio";
+		                recipientUser.UserId = recipientWallet.UserId;
+		                serializedUser = recipientUser.Serialize();
+
+		                SendMessage(stream, serializedUser);
+		                UserPortfolio recipientPortfolioUser = WaitForAccountPortfolio(stream);
+
+                            	string message = "";
+                            	if(ValidateTransaction(senderWallet, recipientWallet, senderPortfolioUser, recipientPortfolioUser, userTransaction, out message))
+                            	{
+				        recipientWallet.Purpose = "UpdateWallet";
+				        serializedWallet = recipientWallet.Serialize();
+				        SendMessage(stream, serializedWallet);
+				        WaitForResponse(stream);
+
+				        serializedUser = senderPortfolioUser.Serialize();
+				        SendMessage(stream, serializedUser);
+				        WaitForResponse(stream);
+
+				        senderWallet.Purpose = "UpdateWallet";
+				        serializedWallet = senderWallet.Serialize();
+				        SendMessage(stream, serializedWallet);
+				        WaitForResponse(stream);
+
+				        serializedUser = recipientPortfolioUser.Serialize();
+				        SendMessage(stream, serializedUser);
+				        WaitForResponse(stream);
+
+
+                            		// Create a Transaction object and serialize it
+				        userTransaction.Purpose = "Valid";
+				        userTransaction.MinerId = 11; // this userId
+				        string validatedSerializedTransaction = userTransaction.Serialize();
+
+				        // Send the serialized Transaction object to C client
+				        SendMessage(stream, validatedSerializedTransaction);
+
+				        // Wait for a response from the server
+				        WaitForValidationResponse(stream);
+                            	}
+                            	else
+                            	{
+                            		// Create a Transaction object and serialize it
+				        userTransaction.Purpose = "NotValid";
+				        string validatedSerializedTransaction = userTransaction.Serialize();
+
+				        // Send the serialized Transaction object to C client
+				        SendMessage(stream, validatedSerializedTransaction);
+
+				        // Wait for a response from the server
+				        WaitForResponse(stream);
+                            	}
+                            }
+                        }
+                        break;
+
+                    case "exit":
+                        Environment.Exit(0);
+                        return;
                 }
             }
         }
-        catch (Exception e)
-        {
-            Console.WriteLine($"Error in messaging: {e}");
-        }
     }
+    catch (Exception e)
+    {
+        Console.WriteLine($"Error in messaging: {e}");
+    }
+}
+*/
+
 
     public static void WaitForResponse(NetworkStream stream)
     {

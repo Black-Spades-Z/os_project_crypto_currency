@@ -8,9 +8,11 @@ public class AppDbContext : DbContext
     public DbSet<Transaction> Transactions { get; set; }
     public DbSet<Cryptocurrency> ServerAssets { get; set; }
     public DbSet<UserPortfolio> AccPortfolio { get; set; }
+    public DbSet<UserOffer> UserOffers { get; set; }
+    public DbSet<Miner> Miners { get; set; }
     
     protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
     {
-        optionsBuilder.UseMySql("Server=localhost;Port=3306;Database=Crypto;User Id=root;Password=TAE_spring_60;", ServerVersion.AutoDetect("Server=localhost;Port=3306;Database=Crypto;User Id=root;Password=TAE_spring_60;"));
+        optionsBuilder.UseMySql("Server=localhost;Port=3306;Database=Crypto;User Id=zero;Password=zero;", ServerVersion.AutoDetect("Server=localhost;Port=3306;Database=Crypto;User Id=zero;Password=zero;"));
     }
 }

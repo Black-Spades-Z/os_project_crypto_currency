@@ -14,6 +14,10 @@ public class Transaction
     public string ObjectType => "Transaction";
     [NotMapped]
     public string Purpose {get; set;}
+    [NotMapped]
+    public int MinerId {get; set;}
+    [NotMapped]
+    public decimal TransactionFee {get; set;}
     
     [Key]
     public int TransactionId { get; set; }
@@ -45,7 +49,6 @@ public class Transaction
     	}
 
     // Process the received transaction object as needed
-    Console.WriteLine($"Deserialized Transaction: {receivedTransaction.FromAddress}, {receivedTransaction.ToAddress}, {receivedTransaction.CashValue}, {receivedTransaction.CryptoValue}, {receivedTransaction.CryptocurrencyName}, {receivedTransaction.DateTime}");
     return true;
 }
 
@@ -56,10 +59,9 @@ public class Transaction
             using (var context = new AppDbContext()) // Replace YourDbContext with your actual DbContext class
             {
                 this.TransactionsHash = HashTransaction();
-                this.ValidationStatus = "Not validated";
-                Console.WriteLine($"Deserialized Transaction: {this.FromAddress}, {this.ToAddress}, {this.CashValue}, {this.CryptoValue}, {this.CryptocurrencyName}, {this.DateTime}, {this.ValidationStatus}, {this.TransactionsHash}");
+                this.ValidationStatus = "Pending";
+                this.DateTime = DateTime.Now;
                 context.Transactions.Add(this);
-                Console.WriteLine("Transaction added!");
                 context.SaveChanges();
                 message = "Success";
             }
@@ -85,6 +87,26 @@ public class Transaction
                 return BitConverter.ToString(hashedBytes).Replace("-", "").ToLower();
             }
     }
+    
+    public static bool HandleTransactionListRequest(string data, out string message)
+	{
+	    Wallet receivedWallet = JsonConvert.DeserializeObject<Wallet>(data);
+	    try
+	    {
+	    	using (var context = new AppDbContext())
+		{
+			var transactionList = context.Transactions.Where(t => t.FromAddress == receivedWallet.WalletAddress ||  t.ToAddress == receivedWallet.WalletAddress).ToList();
+			message = JsonConvert.SerializeObject(transactionList);
+		}
+	    }
+	    catch (Exception ex)
+	    {
+	    	Console.WriteLine(ex.Message);
+		message = "Failure to send Server Assets";
+		return false;
+	    }
+	    return true;
+	}
     
     
 }

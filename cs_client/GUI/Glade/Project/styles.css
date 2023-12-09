@@ -1,0 +1,321 @@
+.card{
+    background-image : url("card.png");
+
+}
+.main-window{
+    font-family: "Poppins";
+}
+.submit-button-login-window2{
+	background-image: none;
+	background-color: #87CEEB;  /*Blue color */
+	color: white;
+	font-size: 18px;
+	font-weight: 800;
+	transition-duration: 0.4s;
+
+}
+.authorization-button-login-window1{
+	color: #3464e0;
+}
+.submit-button-login-window2:hover{
+	background-color: #3464e0; /* deep sky blue */
+	padding: 10px 20px;
+	font-size: 16px;
+	border: 2px solid #3498db;
+	color: #3498db;
+	border-radius: 5px;
+	transition: all 0.3s ease-in-out;
+	box-shadow: 0 12px 16px 0 rgba(0,0,0,0.4), 0 17px 50px 0 rgba(0,0,0,0.3);
+}
+
+.name-entry-login-window2{
+	border: 2px solid #8892a4;
+  	border-radius: 12px;
+  	padding: 5px;
+
+}
+.name-entry-login-window2:focus{
+	border: 2px solid #00BFFF;
+	outline : 2px solid #00BFFF;
+	box-shadow:0 0 10px rgba(0, 0, 0, 0.5);
+
+}
+
+
+.email-entry-login-window2{
+	border: 2px solid #8892a4;
+  	border-radius: 12px;
+  	padding: 5px;
+}
+.email-entry-login-window2:focus{
+	border: 2px solid #00BFFF;
+	outline : 2px solid #00BFFF;
+	box-shadow:0 0 10px rgba(0, 0, 0, 0.5);
+}
+
+
+.password-entry-login-window2{
+	border: 2px solid #8892a4;
+  	border-radius: 12px;
+  	padding: 5px;
+}
+.password-entry-login-window2:focus{
+	border: 2px solid #00BFFF;
+	outline : 2px solid #00BFFF;
+	box-shadow:0 0 10px rgba(0, 0, 0, 0.5);
+}
+
+
+.password-confirm-entry-login-window2{
+	border: 2px solid #8892a4;
+  	border-radius: 12px;
+  	padding: 5px;
+}
+.password-confirm-entry-login-window2:focus{
+	border: 2px solid #00BFFF;
+	outline : 2px solid #00BFFF;
+	box-shadow:0 0 10px rgba(0, 0, 0, 0.5);
+}
+.login-button-login-window1{
+	background-image: none;
+	background-color: #87CEEB; /* Blue color */
+	color: white;
+	font-size: 18px;
+	font-weight: 800;
+	transition-duration: 0.4s;
+}
+.login-button-login-window1:hover{
+	background-color: #3464e0; /* deep sky blue */
+	padding: 10px 20px;
+	font-size: 16px;
+	border: 2px solid #3498db;
+	color: #3498db;
+	border-radius: 5px;
+	transition: all 0.3s ease-in-out;
+	box-shadow: 0 12px 16px 0 rgba(0,0,0,0.4), 0 17px 50px 0 rgba(0,0,0,0.3);
+}
+.submit-button-login-window3{
+	background-image: none;
+	background-color: #87CEEB; /* Blue color */
+	color: white;
+	font-size: 18px;
+	font-weight: 800;
+	transition-duration: 0.4s;
+}
+.submit-button-login-window3:hover{
+	background-color: #3464e0; /* deep sky blue */
+	padding: 10px 20px;
+	font-size: 16px;
+	border: 2px solid #3498db;
+	color: #3498db;
+	border-radius: 5px;
+	transition: all 0.3s ease-in-out;
+	box-shadow: 0 12px 16px 0 rgba(0,0,0,0.4), 0 17px 50px 0 rgba(0,0,0,0.3);
+}
+.email-entry-login-window1{
+	border: 2px solid #8892a4;
+  	border-radius: 12px;
+  	padding: 5px;
+}
+.email-entry-login-window1:focus{
+	border: 2px solid #00BFFF;
+	outline : 2px solid #00BFFF;
+	box-shadow:0 0 10px rgba(0, 0, 0, 0.5);
+}
+.password-entry-login-window1{
+	border: 2px solid #8892a4;
+  	border-radius: 12px;
+  	padding: 5px;
+}
+.password-entry-login-window1:focus{
+	border: 2px solid #00BFFF;
+	outline : 2px solid #00BFFF;
+	box-shadow:0 0 10px rgba(0, 0, 0, 0.5);
+}
+.phone-number-entry-login-window3{
+	border: 2px solid #8892a4;
+  	border-radius: 12px;
+  	padding: 5px;
+}
+.phone-number-entry-login-window3:focus{
+	border: 2px solid #00BFFF;
+	outline : 2px solid #00BFFF;
+	box-shadow:0 0 10px rgba(0, 0, 0, 0.5);
+}
+.dob-entry-login-window3{
+	border: 2px solid #8892a4;
+  	border-radius: 12px;
+  	padding: 5px;
+}
+.dob-entry-login-window3:focus{
+	border: 2px solid #00BFFF;
+	outline : 2px solid #00BFFF;
+	box-shadow:0 0 10px rgba(0, 0, 0, 0.5);
+}
+.combo-box-entry-login-window3{
+	border: 2px solid #8892a4;
+  	border-radius: 12px;
+  	padding: 5px;
+}
+.combo-box-entry-login-window3:focus{
+	border: 2px solid #00BFFF;
+	outline : 2px solid #00BFFF;
+	box-shadow:0 0 10px rgba(0, 0, 0, 0.5);
+}
+.address-entry-login-window3{
+	border: 2px solid #8892a4;
+  	border-radius: 12px;
+  	padding: 5px;
+}
+.address-entry-login-window3:focus{
+	border: 2px solid #00BFFF;
+	outline : 2px solid #00BFFF;
+	box-shadow:0 0 10px rgba(0, 0, 0, 0.5);
+}
+.back-button-login-window3{
+	color: #9ac4f2;
+}
+
+.search-portfolio {
+    	border: 2px solid #8892a4;
+  	border-radius: 12px;
+  	padding: 5px;
+}
+.search-portfolio:focus{
+	border: 2px solid #00BFFF;
+	outline : 2px solid #00BFFF;
+	box-shadow:0 0 10px rgba(0, 0, 0, 0.5);
+}
+.protfolio-button-portfolio {
+  background-color: #FFFFFF; 
+  color: #000000; 
+  padding: 10px 20px; 
+  border: 2px solid white;
+  border-radius: 8px;
+  text-decoration: none; 
+  transition: background-color 0.1s ease; 
+}
+.protfolio-button-portfolio:hover {
+  background-color: #DCDCDC; 
+  border: 2px solid #76b2e9;
+}
+
+.dashboard-button-portfolio {
+   background-color: #FFFFFF; 
+  color: #000000; 
+  padding: 10px 20px; 
+  border: 2px solid white;
+  border-radius: 8px;
+  text-decoration: none; 
+  transition: background-color 0.1s ease; 
+}
+
+.dashboard-button-portfolio:hover {
+  	background-color: #DCDCDC; 
+  	  border: 2px solid #76b2e9;
+}
+.p2p-button-portfolio {
+  background-color: #FFFFFF; 
+  color: #000000; 
+  padding: 10px 20px; 
+  border: 2px solid white;
+  border-radius: 8px;
+  text-decoration: none; 
+  transition: background-color 0.1s ease;  
+}
+
+.p2p-button-portfolio:hover {
+  	background-color: #DCDCDC; 
+  	  border: 2px solid #76b2e9;
+}
+.transactions-button-portfolio {
+  background-color: #FFFFFF; 
+  color: #000000; 
+  padding: 10px 20px; 
+  border: 2px solid white;
+  border-radius: 8px;
+  text-decoration: none; 
+  transition: background-color 0.1s ease; 
+}
+
+.transactions-button-portfolio:hover {
+  	background-color: #DCDCDC; 
+  	  border: 2px solid #76b2e9;
+}
+
+.settings-button-portfolio {
+  background-color: #FFFFFF; 
+  color: #000000; 
+  padding: 10px 20px; 
+  border: 2px solid white;
+  border-radius: 8px;
+  text-decoration: none; 
+  transition: background-color 0.1s ease; 
+}
+.settings-button-portfolio:hover {
+  	background-color: #DCDCDC; 
+  	  border: 2px solid #76b2e9;
+}
+.help-button-porftolio {
+  background-color: #FFFFFF; 
+  color: #000000; 
+  padding: 10px 20px; 
+  border: 2px solid white;
+  border-radius: 8px;
+  text-decoration: none; 
+  transition: background-color 0.1s ease;  
+}
+.help-button-porftolio:hover {
+  	background-color: #DCDCDC; 
+  	  border: 2px solid #76b2e9;
+}
+.logout-button-portfolio {
+  background-color: #FFFFFF; 
+  color: #000000; 
+  padding: 10px 20px; 
+  border: 2px solid white;
+  border-radius: 8px;
+  text-decoration: none; 
+  transition: background-color 0.1s ease; 
+}
+.logout-button-portfolio:hover {
+  	background-color: #DCDCDC; 
+  	  border: 2px solid #76b2e9;
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

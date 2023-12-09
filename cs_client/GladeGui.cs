@@ -1,9 +1,16 @@
 ﻿using System;
 using System.Linq;
 using System.Net.Sockets;
+using System.Diagnostics;
 using Gtk;
 using static CSharpClient;
+using static Transaction;
 using static User;
+using static Cryptocurrency;
+using static UserPortfolio;
+using static UserOffer;
+using static Wallet;
+using static MinerUtil;
 
 
 namespace GladeFunctions
@@ -20,17 +27,27 @@ namespace GladeFunctions
 
         //Global variables
 
-        private string[] currencyName =   {"Bitcoin"};
-        private string[] currencyPrice =  {"1800$"};
-        private string[] currencyVolume = {"1k BTC"};
-        private string[] currencyRank =   {"#1"};
-        private string[] currencyIcons = {"/icons/Bitcoin.png"};
+        private string[] currencyName =  new string[50];
+        private float[] currencyPrice =  new float[50];
+        private float[] currencyVolume = new float[50];
+        private string[] currencyRank =   new string[50];
+        private string[] currencyIcons = new string[50];
 
         // Main Window
+        private bool isAscendingOrderPrice = true; // Flag to track sorting order
+        private bool isAscendingOrderRank = true; // Flag to track sorting order
+        private bool isAscendingOrderVolume = true; // Flag to track sorting order
+        private bool isAscendingOrderName = true; // Flag to track sorting order
+
         private Window main_window;
         private Frame card;
         private Box market_values_box;
         private Button exchange_button_main_window;
+        private EventBox rank_event_box;
+        private EventBox price_event_box;
+        private EventBox currency_name_event_box;
+        private EventBox volume_box;
+
 
 
 
@@ -67,9 +84,21 @@ namespace GladeFunctions
         private Entry phone_number_entry_login_window3;
         private Entry dob_entry_login_window3;
         private Entry address_entry_login_window3;
+        private ComboBox combo_box_login_window3;
         private Entry combo_box_entry_login_window3;
         private Button submit_button_login_window3;
         private Button back_button_login_window3;
+
+        //Window portfolio
+        private Window portfolio_window;
+        private Entry search_portfolio;
+        private Button dashboard_button_portfolio;
+        private Button p2p_button_portfolio;
+        private Button protfolio_button_portfolio;
+        private Button transactions_button_portfolio;
+        private Button settings_button_portfolio;
+        private Button help_button_porftolio;
+        private Button logout_button_portfolio;
 
         // main Window 1
         // private Button dashboard_button_gtkwindow1;
@@ -105,7 +134,7 @@ namespace GladeFunctions
 
 
             User user = SetUserLoginDetails(loginEmail, loginPassword);
-            user.Purpose = "Login";
+            user.Purpose = "GetWallet";
             string serializedUser = user.Serialize();
 
             // Send the serialized User object to C client
@@ -113,7 +142,7 @@ namespace GladeFunctions
 
             // Wait for a response from the server
             Console.WriteLine("Getting response");
-            WaitForResponse(client.GetStream());
+            WaitForUsername(client.GetStream());
             Console.WriteLine("Got response");
         }
         private void sendUserRegisterDetails(){
@@ -131,11 +160,39 @@ namespace GladeFunctions
 
             // Wait for a response from the server
             Console.WriteLine("Getting response");
-            WaitForUsername(client.GetStream());
-            //WaitForResponse(client.GetStream());
+
+            WaitForResponse(client.GetStream());
             Console.WriteLine("Got response");
             login_window3.Hide();
             login_window1.ShowAll();
+        }
+
+        private void requestShowServerAssets(){
+
+            int size;
+
+            client = getClient();
+
+
+            string RequestMessage = "GetServerAssetsList";
+
+            // Send the serialized Transaction object to C client
+            SendMessage(client.GetStream(), RequestMessage);
+
+            // Wait for a response from the server
+            size = WaitForServerAssets(client.GetStream(),  currencyName,  currencyPrice,  currencyVolume,  currencyRank,  currencyIcons);
+
+            if (size == 0){
+
+                Console.WriteLine("Size is 0");
+
+                return;
+            }
+
+            for(int i = 0; i < size; i++){
+                AddFrameToMarketValuesMainWindow(i);
+            }
+
         }
 
 
@@ -171,7 +228,10 @@ namespace GladeFunctions
             card = (Frame)builder.GetObject("card");
             market_values_box = (Box)builder.GetObject("market_values_box");
             exchange_button_main_window = (Button)builder.GetObject("exchange_button_main_window");
-
+            rank_event_box = (EventBox)builder.GetObject("rank_event");
+            price_event_box = (EventBox)builder.GetObject("price_event");
+            currency_name_event_box = (EventBox)builder.GetObject("currency_name_event");
+            volume_box = (EventBox)builder.GetObject("volume_event");
 
 
             // Retrieve objects from Glade for login_window1
@@ -192,10 +252,25 @@ namespace GladeFunctions
             // Window 3
             phone_number_entry_login_window3 = (Entry)builder.GetObject("phone_number_entry_login_window3");
             dob_entry_login_window3 = (Entry)builder.GetObject("dob_entry_login_window3");
-            combo_box_entry_login_window3 = (Entry)builder.GetObject("combo_box_entry_login_window3");
+            dob_entry_login_window3.MaxLength = 10;
+            combo_box_login_window3 = (ComboBox)builder.GetObject("combo_box_login_window3");
+            combo_box_entry_login_window3 = combo_box_login_window3.Child as Entry;
+
             address_entry_login_window3 = (Entry)builder.GetObject("address_entry_login_window3");
             submit_button_login_window3 = (Button)builder.GetObject("submit_button_login_window3");
             back_button_login_window3 = (Button)builder.GetObject("back_button_login_window3");
+
+
+            //Window portfolio
+            dashboard_button_portfolio = (Button)builder.GetObject("dashboard_button_portfolio");
+            p2p_button_portfolio = (Button)builder.GetObject("p2p_button_portfolio");
+            protfolio_button_portfolio = (Button)builder.GetObject("protfolio_button_portfolio");
+            transactions_button_portfolio = (Button)builder.GetObject("transactions_button_portfolio");
+            settings_button_portfolio = (Button)builder.GetObject("settings_button_portfolio");
+            help_button_porftolio = (Button)builder.GetObject("help_button_porftolio");
+            logout_button_portfolio = (Button)builder.GetObject("logout_button_portfolio");
+            search_portfolio = (Entry)builder.GetObject("search_portfolio");
+
 
             // Main Window 1
 
@@ -218,13 +293,65 @@ namespace GladeFunctions
 
             //Window 3
             back_button_login_window3.Clicked += back_button_login_window3_clicked;
+            dob_entry_login_window3.Changed += OnEntryChanged;
+
+            // Main window Sorting
+            price_event_box.ButtonPressEvent += OnSortButtonPrice;
+            rank_event_box.ButtonPressEvent += OnSortButtonRank;
+            currency_name_event_box.ButtonPressEvent += OnSortCurrencyName;
+            volume_box.ButtonPressEvent +=OnSortVolume;
+
 
 
             // CSS Button
 
+            var login_button_login_window1_css = login_button_login_window1.StyleContext;
+            login_button_login_window1_css.AddProvider(cssProvider, Gtk.StyleProviderPriority.Application);
+            login_button_login_window1_css.AddClass("login-button-login-window1");
+
+            var authorization_button_login_window1_css = authorization_button_login_window1.StyleContext;
+            authorization_button_login_window1_css.AddProvider(cssProvider, Gtk.StyleProviderPriority.Application);
+            authorization_button_login_window1_css.AddClass("authorization-button-login-window1");
+
             var submit_button_login_window2_css = submit_button_login_window2.StyleContext;
             submit_button_login_window2_css.AddProvider(cssProvider, Gtk.StyleProviderPriority.Application);
             submit_button_login_window2_css.AddClass("submit-button-login-window2");
+
+            var submit_button_login_window3_css = submit_button_login_window3.StyleContext;
+            submit_button_login_window3_css.AddProvider(cssProvider, Gtk.StyleProviderPriority.Application);
+            submit_button_login_window3_css.AddClass("submit-button-login-window3");
+
+            var back_button_login_window3_css = back_button_login_window3.StyleContext;
+            back_button_login_window3_css.AddProvider(cssProvider, Gtk.StyleProviderPriority.Application);
+            back_button_login_window3_css.AddClass("back-button-login-window3");
+
+            var dashboard_button_portfolio_css = dashboard_button_portfolio.StyleContext;
+            dashboard_button_portfolio_css.AddProvider(cssProvider, Gtk.StyleProviderPriority.Application);
+            dashboard_button_portfolio_css.AddClass("dashboard-button-portfolio");
+
+            var p2p_button_portfolio_css = p2p_button_portfolio.StyleContext;
+            p2p_button_portfolio_css.AddProvider(cssProvider, Gtk.StyleProviderPriority.Application);
+            p2p_button_portfolio_css.AddClass("p2p-button-portfolio");
+
+            var protfolio_button_portfolio_css = protfolio_button_portfolio.StyleContext;
+            protfolio_button_portfolio_css.AddProvider(cssProvider, Gtk.StyleProviderPriority.Application);
+            protfolio_button_portfolio_css.AddClass("protfolio-button-portfolio");
+
+            var transactions_button_portfolio_css = transactions_button_portfolio.StyleContext;
+            transactions_button_portfolio_css.AddProvider(cssProvider, Gtk.StyleProviderPriority.Application);
+            transactions_button_portfolio_css.AddClass("transactions-button-portfolio");
+
+            var settings_button_portfolio_css = settings_button_portfolio.StyleContext;
+            settings_button_portfolio_css.AddProvider(cssProvider, Gtk.StyleProviderPriority.Application);
+            settings_button_portfolio_css.AddClass("settings-button-portfolio");
+
+            var help_button_porftolio_css = help_button_porftolio.StyleContext;
+            help_button_porftolio_css.AddProvider(cssProvider, Gtk.StyleProviderPriority.Application);
+            help_button_porftolio_css.AddClass("help-button-porftolio");
+
+            var logout_button_portfolio_css = logout_button_portfolio.StyleContext;
+            logout_button_portfolio_css.AddProvider(cssProvider, Gtk.StyleProviderPriority.Application);
+            logout_button_portfolio_css.AddClass("logout-button-portfolio");
 
 
             // CSS Entries
@@ -245,6 +372,34 @@ namespace GladeFunctions
             password_confirm_entry_login_window2_css.AddProvider(cssProvider, 		   Gtk.StyleProviderPriority.Application);
             password_confirm_entry_login_window2_css.AddClass("password-confirm-entry-login-window2");
 
+            var email_entry_login_window1_css = email_entry_login_window1.StyleContext;
+            email_entry_login_window1_css.AddProvider(cssProvider, 		   Gtk.StyleProviderPriority.Application);
+            email_entry_login_window1_css.AddClass("email-entry-login-window1");
+
+            var password_entry_login_window1_css = password_entry_login_window1.StyleContext;
+            password_entry_login_window1_css.AddProvider(cssProvider, 		   Gtk.StyleProviderPriority.Application);
+            password_entry_login_window1_css.AddClass("password-entry-login-window1");
+
+            var phone_number_entry_login_window3_css = phone_number_entry_login_window3.StyleContext;
+            phone_number_entry_login_window3_css.AddProvider(cssProvider, 		   Gtk.StyleProviderPriority.Application);
+            phone_number_entry_login_window3_css.AddClass("phone-number-entry-login-window3");
+
+            var dob_entry_login_window3_css = dob_entry_login_window3.StyleContext;
+            dob_entry_login_window3_css.AddProvider(cssProvider, 		   Gtk.StyleProviderPriority.Application);
+            dob_entry_login_window3_css.AddClass("dob-entry-login-window3");
+
+            var combo_box_entry_login_window3_css = combo_box_entry_login_window3.StyleContext;
+            combo_box_entry_login_window3_css.AddProvider(cssProvider, 		   Gtk.StyleProviderPriority.Application);
+            combo_box_entry_login_window3_css.AddClass("combo-box-entry-login-window3");
+
+            var address_entry_login_window3_css = address_entry_login_window3.StyleContext;
+            address_entry_login_window3_css.AddProvider(cssProvider, 		   Gtk.StyleProviderPriority.Application);
+            address_entry_login_window3_css.AddClass("address-entry-login-window3");
+
+            var search_portfolio_css = search_portfolio.StyleContext;
+            search_portfolio_css.AddProvider(cssProvider, 		   Gtk.StyleProviderPriority.Application);
+            search_portfolio_css.AddClass("search-portfolio");
+
 
             // CSS Card
 
@@ -259,7 +414,7 @@ namespace GladeFunctions
 
             login_window1.DeleteEvent += delegate { Application.Quit(); };
             login_window2.DeleteEvent += delegate { Application.Quit(); };
-            AddFrameToMarketValuesMainWindow(0);
+
 
 
             main_window.Hide();
@@ -270,132 +425,672 @@ namespace GladeFunctions
             Application.Run();
         }
 
-        private void exchange_button_main_window_clicked(object sender, EventArgs e){
+
+// Main Window
 
 
-        }
+    // Sorting and adding ;
+    //---------Add Market Values in Main---------------
+    	// index counter
+    private void exchange_button_main_window_clicked(object sender, EventArgs e){
 
-        private void AddFrameToMarketValuesMainWindow(int index)
+
+
+
+    }
+
+    private void AddFrameToMarketValuesMainWindow(int index)
+    {
+
+
+
+
+        // Create a new frame
+        Frame currencyFrame = new Frame("");
+
+        // Create the frame
+        currencyFrame.Visible = true;
+        currencyFrame.CanFocus = false;
+        //currencyFrame.MarginTop = 10;
+        //currencyFrame.MarginBottom = 10;
+        currencyFrame.LabelXalign = 0;
+        currencyFrame.ShadowType = ShadowType.None;
+
+        // Create the alignment
+        Alignment alignment = new Alignment(0, 0, 0, 0);
+        alignment.Visible = true;
+        alignment.CanFocus = false;
+        //alignment.LeftPadding = 12;
+
+
+        // Create the inner grid
+    	Grid innerGrid = new Grid();
+    	innerGrid.Visible = false;
+ 	   innerGrid.CanFocus = false;
+ 	   //innerGrid.RowSpacing = 10;
+ 	   //innerGrid.ColumnSpacing = 10;
+ 	   innerGrid.RowHomogeneous = true;
+ 	   innerGrid.ColumnHomogeneous = true;
+
+
+
+
+
+
+
+        // Create the inner grid
+        Grid currencyNameGrid = new Grid();
+        //currencyNameGrid.MarginBottom = 9;
+        //currencyNameGrid.MarginLeft = 30;
+        currencyNameGrid.Visible = true;
+        currencyNameGrid.CanFocus = false;
+        currencyNameGrid.RowSpacing = 0;
+        //currencyNameGrid.ColumnSpacing = 10;
+        currencyNameGrid.RowHomogeneous = true;
+        currencyNameGrid.ColumnHomogeneous = true;
+
+
+        // Add child widgets to the inner grid (similar to your provided XML structure)
+        // Here, you'd create and add GtkImage, GtkLabel, GtkButton, etc., to the innerGrid
+
+
+        // Icon Image
+
+        Image currencyIconImage = new Image(currencyIcons[index]);
+        currencyIconImage.Visible = true;
+        currencyIconImage.CanFocus = false;
+        //currencyIconImage.MarginLeft = 40;
+        currencyNameGrid.Attach(currencyIconImage, 0, 0, 1, 1);
+
+        // Name Label
+
+        Label currencyNameLabel = new Label(currencyName[index]);
+        currencyNameLabel.Name = $"CurrencyName_{index}";
+        currencyNameLabel.Visible = true;
+        currencyNameLabel.CanFocus = false;
+        currencyNameLabel.Halign = Align.Start; // Adjust horizontal alignment
+	currencyNameLabel.Valign = Align.Center; // Adjust vertical alignment
+        //currencyNameLabel.MarginRight = 30;
+
+
+        currencyNameGrid.Attach(currencyNameLabel, 1, 0, 1, 1);
+
+
+	// inner frame for currency name
+        Frame currencyNameFrame= new Frame("");
+        currencyNameFrame.ShadowType = ShadowType.None;
+        currencyNameFrame.Add(currencyNameGrid);
+
+        // Set fixed width for the currency Frame
+        int fixedWidth = 200; // Set your desired fixed width
+        currencyNameFrame.SetSizeRequest(fixedWidth, -1);
+
+        innerGrid.Attach(currencyNameFrame, 0, 0, 1, 1);
+
+
+
+
+        // Price Label
+
+        Label currencyPriceLabel = new Label("$" + currencyPrice[index].ToString());
+        currencyPriceLabel.Name = $"CurrencyPrice_{index}";
+        currencyPriceLabel.Visible = true;
+        currencyPriceLabel.CanFocus = false;
+        //currencyPriceLabel.MarginBottom = 9;
+        //currencyPriceLabel.Halign = Align.End;
+
+        // inner frame for price
+        Frame priceFrame= new Frame("");
+        priceFrame.ShadowType = ShadowType.None;
+        priceFrame.Add(currencyPriceLabel);
+
+        // Set fixed width for the priceFrame
+        //int fixedWidth = 150; // Set your desired fixed width
+        priceFrame.SetSizeRequest(fixedWidth, -1);
+
+        innerGrid.Attach(priceFrame, 1, 0, 1, 1);
+
+        // Volume Label
+
+        Label currencyVolumeLabel = new Label(currencyVolume[index].ToString());
+        currencyVolumeLabel.Name = $"Volume_{index}";
+        currencyVolumeLabel.Visible = true;
+        currencyVolumeLabel.CanFocus = false;
+        //currencyVolumeLabel.MarginBottom = 9;
+        //currencyVolumeLabel.Halign = Align.End;
+
+        // inner frame for volume
+        Frame volumeFrame= new Frame("");
+        volumeFrame.ShadowType = ShadowType.None;
+        volumeFrame.Add(currencyVolumeLabel);
+
+        innerGrid.Attach(volumeFrame, 2, 0, 1, 1);
+
+        // Rank Label
+
+        Label currencyRankLabel = new Label(currencyRank[index]);
+        currencyRankLabel.Name = $"CurrencyRank_{index}";
+        currencyRankLabel.Visible = true;
+        currencyRankLabel.CanFocus = false;
+        //currencyRankLabel.MarginBottom = 9;
+        //currencyRankLabel.Halign = Align.End;
+
+        // inner frame for rank
+        Frame rankFrame= new Frame("");
+        rankFrame.ShadowType = ShadowType.None;
+        rankFrame.Add(currencyRankLabel);
+
+        innerGrid.Attach(rankFrame, 3, 0, 1, 1);
+
+        // Exchange Button
+        Button exchangeButton = new Button("Exchange");
+        exchangeButton.Name = $"ExchangeButton_{index}";
+        //exchangeButton.MarginBottom = 9;
+        //exchangeButton.MarginRight = 10;
+        //exchangeButton.Halign = Align.End;
+
+        // inner frame for echange
+        Frame echangeFrame= new Frame("");
+        echangeFrame.ShadowType = ShadowType.None;
+        echangeFrame.Add(exchangeButton);
+
+        innerGrid.Attach(echangeFrame, 4, 0, 1, 1);
+
+        // Connect button click events for main_window
+        exchangeButton.Clicked += exchange_button_main_window_clicked;
+
+
+
+        // Add the inner grid to the alignment
+        alignment.Add(innerGrid);
+
+        // Add the alignment to the frame
+        currencyFrame.Add(alignment);
+
+        // Align Frame
+
+        currencyFrame.MarginEnd = 20;
+
+
+
+        // Add the frame to the market_values_box
+        market_values_box.Add(currencyFrame);
+        market_values_box.ShowAll();
+    }
+
+//----------------Sort with Labels---------------------------
+
+
+
+// -NAME-
+private void OnSortCurrencyName(object sender, ButtonPressEventArgs args)
+{
+    // Handle the click event
+    //var label = (Label)((EventBox)sender).Child;
+    //label.Text = "Clicked!";
+    isAscendingOrderName = !isAscendingOrderName;
+    SortFramesByCurrencyName();
+}
+
+private void SortFramesByCurrencyName()
+{
+    // Get all child frames in market_values_box
+    var frames = market_values_box.Children
+        .OfType<Frame>()
+        .ToList();
+
+    // Sort frames based on the currency name
+    frames.Sort((frame1, frame2) =>
+    {
+        // Extract currency names from the frames
+        string currencyName1 = GetCurrencyNameFromFrame(frame1);
+        string currencyName2 = GetCurrencyNameFromFrame(frame2);
+
+        // Compare currency names
+        int result = currencyName1.CompareTo(currencyName2);
+        return isAscendingOrderName? result: -result;
+    });
+
+    // Clear existing components in the box
+    foreach (var child in market_values_box.Children.ToList())
+    {
+        market_values_box.Remove(child);
+    }
+
+    // Add the frames back to the box in the sorted order
+    foreach (var frame in frames)
+    {
+        market_values_box.Add(frame);
+    }
+
+    // Show all widgets in the box
+    market_values_box.ShowAll();
+}
+
+private string GetCurrencyNameFromFrame(Frame frame)
+{
+    // Assuming the currencyNameLabel is nested within another container within the frame
+    Container container = frame.Children.FirstOrDefault() as Container;
+
+    if (container != null)
+    {
+        Label currencyNameLabel = FindCurrencyNameLabelInGrid(container);
+        //Console.WriteLine(currencyNameLabel);
+
+        // Return the text of the label, or a default value if not found
+        return currencyNameLabel?.Text ?? "Unknown";
+    }
+
+    // No suitable container found in the children
+    return "Unknown";
+}
+
+// Helper method to find a Label widget for currency name in the children of a container
+private Label FindCurrencyNameLabelInGrid(Container container)
+{
+    foreach (var child in container.Children)
+    {
+        if (child is Label label && IsCurrencyNameLabel(label))
         {
-
-
-
-
-            // Create a new frame
-            Frame currencyFrame = new Frame("");
-
-            // Create the frame
-            currencyFrame.Visible = true;
-            currencyFrame.CanFocus = false;
-            currencyFrame.MarginTop = 10;
-            currencyFrame.MarginBottom = 10;
-            currencyFrame.LabelXalign = 0;
-            currencyFrame.ShadowType = ShadowType.Out;
-
-            // Create the alignment
-            Alignment alignment = new Alignment(0, 0, 0, 0);
-            alignment.Visible = true;
-            alignment.CanFocus = false;
-            alignment.LeftPadding = 12;
-
-            // Create the inner grid
-            Grid innerGrid = new Grid();
-            innerGrid.Visible = true;
-            innerGrid.CanFocus = false;
-            innerGrid.RowSpacing = 0;
-            innerGrid.ColumnSpacing = 10;
-            innerGrid.RowHomogeneous = true;
-            innerGrid.ColumnHomogeneous = true;
-
-            // Create the inner grid
-            Grid currencyNameGrid = new Grid();
-            currencyNameGrid.MarginBottom = 9;
-            currencyNameGrid.MarginLeft = 30;
-            currencyNameGrid.Visible = true;
-            currencyNameGrid.CanFocus = false;
-            currencyNameGrid.RowSpacing = 0;
-            currencyNameGrid.ColumnSpacing = 0;
-            currencyNameGrid.RowHomogeneous = true;
-            currencyNameGrid.ColumnHomogeneous = true;
-
-
-            // Add child widgets to the inner grid (similar to your provided XML structure)
-            // Here, you'd create and add GtkImage, GtkLabel, GtkButton, etc., to the innerGrid
-
-
-            // Icon Image
-
-            Image currencyIconImage = new Image("icons/Bitcoin.png");
-            currencyIconImage.Visible = true;
-            currencyIconImage.CanFocus = false;
-            currencyIconImage.MarginLeft = 40;
-            currencyNameGrid.Attach(currencyIconImage, 0, 0, 1, 1);
-
-            // Name Label
-
-            Label currencyNameLabel = new Label(currencyName[index]);
-            currencyNameLabel.Visible = true;
-            currencyNameLabel.CanFocus = false;
-            currencyNameLabel.MarginRight = 30;
-            currencyNameGrid.Attach(currencyNameLabel, 1, 0, 1, 1);
-
-
-
-
-            innerGrid.Attach(currencyNameGrid, 0, 0, 1, 1);
-
-
-
-            // Price Label
-
-            Label currencyPriceLabel = new Label(currencyPrice[index]);
-            currencyPriceLabel.Visible = true;
-            currencyPriceLabel.CanFocus = false;
-            currencyPriceLabel.MarginBottom = 9;
-            currencyPriceLabel.Halign = Align.End;
-            innerGrid.Attach(currencyPriceLabel, 1, 0, 1, 1);
-
-            // Volume Label
-
-            Label currencyVolumeLabel = new Label(currencyVolume[index]);
-            currencyVolumeLabel.Visible = true;
-            currencyVolumeLabel.CanFocus = false;
-            currencyVolumeLabel.MarginBottom = 9;
-            currencyVolumeLabel.Halign = Align.End;
-            innerGrid.Attach(currencyVolumeLabel, 2, 0, 1, 1);
-
-            // Rank Label
-
-            Label currencyRankLabel = new Label(currencyRank[index]);
-            currencyRankLabel.Visible = true;
-            currencyRankLabel.CanFocus = false;
-            currencyRankLabel.MarginBottom = 9;
-            innerGrid.Attach(currencyRankLabel, 3, 0, 1, 1);
-
-            // Exchange Button
-            Button exchangeButton = new Button("Exchange");
-            exchangeButton.MarginBottom = 9;
-            exchangeButton.MarginRight = 10;
-            innerGrid.Attach(exchangeButton, 4, 0, 1, 1);
-
-            // Connect button click events for main_window
-            exchangeButton.Clicked += exchange_button_main_window_clicked;
-
-
-
-            // Add the inner grid to the alignment
-            alignment.Add(innerGrid);
-
-            // Add the alignment to the frame
-            currencyFrame.Add(alignment);
-
-
-
-            // Add the frame to the market_values_box
-            market_values_box.Add(currencyFrame);
-            market_values_box.ShowAll();
+            // Found the label representing the currency name
+            return label;
         }
 
+        // If the child is a container, recursively search for a currency name label
+        if (child is Container subContainer)
+        {
+            var currencyNameLabelInChildren = FindCurrencyNameLabelInGrid(subContainer);
+            if (currencyNameLabelInChildren != null)
+            {
+                // Found a currency name label in a sub-container
+                return currencyNameLabelInChildren;
+            }
+        }
+
+        // You might need to handle other widget types based on your actual hierarchy
+    }
+
+    // No currency name label found in the children
+    return null;
+}
+
+private bool IsCurrencyNameLabel(Label label)
+{
+    // Example: Check if the label's Name property matches a specific identifier
+    return label.Name.StartsWith("CurrencyName_");
+}
+
+//------------------
+
+// -PRICE-
+private void OnSortButtonPrice(object sender, ButtonPressEventArgs args)
+{
+    // Handle the click event
+    var label = (Label)((EventBox)sender).Child;
+    //label.Text = "Clicked!";
+
+    // Toggle the sorting order
+    isAscendingOrderPrice = !isAscendingOrderPrice;
+
+    // Handle the click event and sort frames by price
+    SortFramesByPrice();
+}
+
+private void SortFramesByPrice()
+{
+    // Get all child frames in market_values_box
+    var frames = market_values_box.Children
+        .OfType<Frame>()
+        .ToList();
+
+    // Sort frames based on the price label
+    frames.Sort((frame1, frame2) =>
+    {
+        // Extract price labels from the frames
+        string priceLabel1 = GetPriceLabelFromFrame(frame1);
+        string priceLabel2 = GetPriceLabelFromFrame(frame2);
+
+        // Convert price labels to integers for comparison
+        decimal price1 = ExtractPriceFromLabel(priceLabel1);
+        decimal price2 = ExtractPriceFromLabel(priceLabel2);
+
+        // Compare prices
+        //return price1.CompareTo(price2);
+        // Compare price values based on the sorting order
+        int result = price1.CompareTo(price2);
+        return isAscendingOrderPrice ? result : -result; // Reverse order if descending
+
+    });
+
+    // Clear existing components in the box
+    foreach (var child in market_values_box.Children.ToList())
+    {
+        market_values_box.Remove(child);
+    }
+
+    // Add the frames back to the box in the sorted order
+    foreach (var frame in frames)
+    {
+        market_values_box.Add(frame);
+    }
+
+    // Show all widgets in the box
+    market_values_box.ShowAll();
+}
+
+private string GetPriceLabelFromFrame(Frame frame)
+{
+    // Assuming the currencyPriceLabel is nested within another container within the frame
+    Container container = frame.Children.FirstOrDefault() as Container;
+
+    if (container != null)
+    {
+        Label currencyPriceLabel = FindPriceLabelInGrid(container);
+        //Console.WriteLine(currencyPriceLabel);
+
+        // Return the text of the label, or a default value if not found
+        return currencyPriceLabel?.Text ?? "$0.00"; // Default to "$0.00" if label not found
+    }
+
+    // No suitable container found in the children
+    return "$0.00"; // Default to "$0.00" if container not found
+}
+
+// Helper method to find a Label widget in the children of a container
+private Label FindPriceLabelInGrid(Container container)
+{
+    foreach (var child in container.Children)
+    {
+        if (child is Label label && IsPriceLabel(label))
+        {
+            // Found the label representing the price
+            return label;
+        }
+
+        // If the child is a container, recursively search for a price label
+        if (child is Container subContainer)
+        {
+            var priceLabelInChildren = FindPriceLabelInGrid(subContainer);
+            if (priceLabelInChildren != null)
+            {
+                // Found a price label in a sub-container
+                return priceLabelInChildren;
+            }
+        }
+
+        // You might need to handle other widget types based on your actual hierarchy
+    }
+
+    // No price label found in the children
+    return null;
+}
+
+private bool IsPriceLabel(Label label)
+{
+    // Add your criteria to identify the price label
+    return label.Text.StartsWith("$"); // Example: Price label starts with "$"
+}
+
+private decimal ExtractPriceFromLabel(string priceLabel)
+{
+    // Assuming your price label is a string representation of a decimal
+    if (decimal.TryParse(priceLabel.TrimStart('$'), out decimal price))
+    {
+        return price;
+    }
+    return 0.00m; // Default to 0.00 if parsing fails
+}
+
+//---
+
+
+// -RANK- (Should start # at start)
+private void OnSortButtonRank(object sender, ButtonPressEventArgs args){
+	// Handle the click event
+        var label = (Label)((EventBox)sender).Child;
+        //label.Text = "Clicked!";
+
+        // Toggle the sorting order
+    isAscendingOrderRank = !isAscendingOrderRank;
+
+	SortFramesByRank();
+}
+
+private void SortFramesByRank()
+{
+    // Get all child frames in market_values_box
+var frames = market_values_box.Children
+    .OfType<Frame>()  // Use OfType<T> for better readability
+    .ToList();
+
+// Sort frames based on the rank label
+frames.Sort((frame1, frame2) =>
+{
+    // Extract rank labels from the frames
+    string rankLabel1 = GetRankLabelFromFrame(frame1);
+    string rankLabel2 = GetRankLabelFromFrame(frame2);
+
+    // Convert rank labels to integers for comparison
+    int rank1 = ExtractRankFromLabel(rankLabel1);
+    int rank2 = ExtractRankFromLabel(rankLabel2);
+
+    // Compare ranks
+    int result = rank1.CompareTo(rank2);
+    return isAscendingOrderRank ? result : -result;
+});
+
+// Clear existing components in the box
+foreach (var child in market_values_box.Children.ToList())
+{
+    market_values_box.Remove(child);
+}
+
+// Add the frames back to the box in the sorted order
+foreach (var frame in frames)
+{
+    market_values_box.Add(frame);
+}
+
+// Show all widgets in the box
+market_values_box.ShowAll();
+
+}
+
+private string GetRankLabelFromFrame(Frame frame)
+{
+    // Assuming the currencyRankLabel is nested within another container within the frame
+    Container container = frame.Children.FirstOrDefault() as Container;
+
+    if (container != null)
+    {
+        Label currencyRankLabel = FindRankLabelInGrid(container);
+        //Console.WriteLine(currencyRankLabel);
+
+        // Return the text of the label, or a default value if not found
+        return currencyRankLabel?.Text ?? "#0";
+    }
+
+    // No suitable container found in the children
+    return "#0";
+}
+
+
+// Helper method to find a Label widget in the children of a container
+private Label FindRankLabelInGrid(Container container)
+{
+    foreach (var child in container.Children)
+    {
+        if (child is Label label && IsRankLabel(label))
+        {
+            // Found the label representing the rank
+            return label;
+        }
+
+        // If the child is a container, recursively search for a rank label
+        if (child is Container subContainer)
+        {
+            var rankLabelInChildren = FindRankLabelInGrid(subContainer);
+            if (rankLabelInChildren != null)
+            {
+                // Found a rank label in a sub-container
+                return rankLabelInChildren;
+            }
+        }
+
+        // You might need to handle other widget types based on your actual hierarchy
+    }
+
+    // No rank label found in the children
+    return null;
+}
+
+private bool IsRankLabel(Label label)
+{
+    // Add your criteria to identify the rank label
+    return label.Text.StartsWith("#"); // Assuming rank labels start with "#"
+}
+
+private int ExtractRankFromLabel(string rankLabel)
+{
+    // Assuming your rank label is in the format "#X"
+    if (rankLabel.StartsWith("#") && int.TryParse(rankLabel.Substring(1), out int rank))
+    {
+        return rank;
+    }
+    return 0; // Default to 0 if parsing fails
+}
+
+
+// -VOLUME-
+
+// Event handler for the sort button click
+private void OnSortVolume(object sender, ButtonPressEventArgs args){
+	// Handle the click event
+        var label = (Label)((EventBox)sender).Child;
+        //label.Text = "Clicked!";
+
+        // Toggle the sorting order
+    isAscendingOrderVolume = !isAscendingOrderVolume;
+
+	SortFramesByVolume();
+}
+
+private void SortFramesByVolume()
+{
+    // Get all child frames in market_values_box
+var frames = market_values_box.Children
+    .OfType<Frame>()  // Use OfType<T> for better readability
+    .ToList();
+
+// Sort frames based on the rank label
+frames.Sort((frame1, frame2) =>
+{
+    // Extract rank labels from the frames
+    string volumeLabel1 = GetVolumeLabelFromFrame(frame1);
+    string volumeLabel2 = GetVolumeLabelFromFrame(frame2);
+
+    // Convert rank labels to integers for comparison
+    int volume1 = ExtractVolumeFromLabel(volumeLabel1);
+    //Console.WriteLine(volume1);
+    int volume2 = ExtractVolumeFromLabel(volumeLabel2);
+	//Console.WriteLine(volume2);
+
+    // Compare ranks
+    int result = volume1.CompareTo(volume2);
+    return isAscendingOrderVolume ? result : -result;
+});
+
+// Clear existing components in the box
+foreach (var child in market_values_box.Children.ToList())
+{
+    market_values_box.Remove(child);
+}
+
+// Add the frames back to the box in the sorted order
+foreach (var frame in frames)
+{
+    market_values_box.Add(frame);
+}
+
+// Show all widgets in the box
+market_values_box.ShowAll();
+
+}
+
+private string GetVolumeLabelFromFrame(Frame frame)
+{
+    // Assuming the currencyRankLabel is nested within another container within the frame
+    Container container = frame.Children.FirstOrDefault() as Container;
+
+    if (container != null)
+    {
+        Label currencyVolumeLabel = FindVolumeLabelInGrid(container);
+        //Console.WriteLine(currencyRankLabel);
+
+        // Return the text of the label, or a default value if not found
+        return currencyVolumeLabel?.Text ?? "0";
+    }
+
+    // No suitable container found in the children
+    return "0";
+}
+
+
+// Helper method to find a Label widget in the children of a container
+private Label FindVolumeLabelInGrid(Container container)
+{
+    foreach (var child in container.Children)
+    {
+        if (child is Label label && IsVolumeLabel(label))
+        {
+            // Found the label representing the volume
+            return label;
+        }
+
+        // If the child is a container, recursively search for a volume label
+        if (child is Container subContainer)
+        {
+            var volumeLabelInChildren = FindVolumeLabelInGrid(subContainer);
+            if (volumeLabelInChildren != null)
+            {
+                // Found a rank label in a sub-container
+                return volumeLabelInChildren;
+            }
+        }
+
+        // You might need to handle other widget types based on your actual hierarchy
+    }
+
+    // No rank label found in the children
+    return null;
+}
+
+private bool IsVolumeLabel(Label label)
+{
+    // Add your criteria to identify the rank label
+    return label.Name.StartsWith("Volume_"); // Assuming rank labels start with "#"
+}
+
+private int ExtractVolumeFromLabel(string volume)
+{
+    // Implement your logic to extract the numeric value from the volume string
+    // Example: Assume the numeric value is the first part of the string
+    if (int.TryParse(volume.Split(' ')[0], out int numericValue))
+    {
+
+        return numericValue;
+    }
+
+    return 0; // Default to 0 if parsing fails
+}
+//---
+//------------------------------------------------------------------------------------------
+
+
+
+
+
+// Window 1
 
         private void login_button_login_window1_clicked(object sender, EventArgs e)
         {
@@ -411,6 +1106,7 @@ namespace GladeFunctions
                 sendUserLoginDetails();
 
                 main_window.ShowAll();
+                requestShowServerAssets();
 
             }
             else
@@ -429,6 +1125,8 @@ namespace GladeFunctions
             // Show login_window2
             login_window2.ShowAll();
         }
+
+// Window 2
 
         private void submit_button_login_window2_clicked(object sender, EventArgs e)
         {
@@ -464,7 +1162,6 @@ namespace GladeFunctions
                 // Optionally, you can show an error message or take other actions
             }
         }
-
         private bool IsValidEmail(string email)
         {
             // You can implement your email validation logic here
@@ -485,7 +1182,6 @@ namespace GladeFunctions
             login_window2.Hide();
             login_window1.ShowAll();
         }
-
         private void agreement_login_window2_toggled(object sender, EventArgs e)
         {
             // Add your logic for handling the agreement CheckButton state change
@@ -494,8 +1190,10 @@ namespace GladeFunctions
             // Optionally, you can perform actions based on whether the CheckButton is checked or unchecked
             Console.WriteLine($"Agreement CheckButton state changed: {isChecked}");
         }
-    // Window 3
-            private void submit_button_login_window3_clicked(object sender, EventArgs e)
+
+// Window 3
+
+        private void submit_button_login_window3_clicked(object sender, EventArgs e)
         {
             registerPhoneNumber = phone_number_entry_login_window3.Text;
             registerDateOfBirth = dob_entry_login_window3.Text;
@@ -525,6 +1223,30 @@ namespace GladeFunctions
 
         }
 
+        private static void OnEntryChanged(object sender, EventArgs args)
+        {
+            if (sender is Entry entry)
+            {
+
+
+                if ((entry.Text).Length == 2){
+
+
+                    entry.Text += "/" ;
+                    entry.Position += 1;
+                }
+                else if  ((entry.Text).Length == 5){
+                    entry.Text += "/";
+                    entry.Position += 1;
+
+                }
+                entry.Position = -1;
+
+
+
+            }
+        }
+
         private bool IsValidPhoneNumber(string phoneNumber)
         {
             // Check if the phone number contains only digits
@@ -534,7 +1256,7 @@ namespace GladeFunctions
         private bool IsValidDateOfBirth(string dob)
         {
             // Validate date of birth format (00/00/0000)
-            if (DateTime.TryParseExact(dob, "MM/dd/yyyy", null, System.Globalization.DateTimeStyles.None, out _))
+            if (DateTime.TryParseExact(dob, "dd/MM/yyyy", null, System.Globalization.DateTimeStyles.None, out _))
             {
                 return true;
             }
@@ -556,6 +1278,10 @@ namespace GladeFunctions
 
             // Show login_window2
             login_window2.ShowAll();
+
+
+// Main Functions
+
         }
          static void Main(){
              new CCTPSApp();

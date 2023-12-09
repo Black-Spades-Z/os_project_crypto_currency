@@ -7,6 +7,10 @@ using static User;
 using static Transaction;
 using static Cryptocurrency;
 using static UserPortfolio;
+using static UserOffer;
+using static Miner;
+using static MinerUtil;
+using static Wallet;
 
 class CSharpServer
 {
@@ -79,28 +83,25 @@ class CSharpServer
             switch (data)
 	    {
     		case string _ when data.Contains("\"ObjectType\":\"User\"") && data.Contains("\"Purpose\":\"Register\""):
-				SendMessageToClient(stream, "{Registered : yes;}");
-        		// if (HandleRegisteredUser(data, out message))
-        		// {
-          //   			SendMessageToClient(stream, message);
-       	 	// 	}
-        		// else
-        		// {
-          //   			SendMessageToClient(stream, message);
-        		// }
+        		if (HandleRegisteredUser(data, out message))
+        		{
+            			SendMessageToClient(stream, message);
+       	 		}	
+        		else
+        		{		
+            			SendMessageToClient(stream, message);
+        		}
         	break;
         	
-        	case string _ when data.Contains("\"ObjectType\":\"User\"") && data.Contains("\"Purpose\":\"Login\""):
-
-				SendMessageToClient(stream, "Access");
-        		// if (HandleLoggedUser(data, out message))
-        		// {
-          //   			SendMessageToClient(stream, message);
-       	 	// 	}
-        		// else
-        		// {
-          //   			SendMessageToClient(stream, message);
-        		// }
+        	case string _ when data.Contains("\"ObjectType\":\"User\"") && data.Contains("\"Purpose\":\"GetWallet\""):
+        		if (HandleLoggedUser(data, out message))
+        		{
+            			SendMessageToClient(stream, message);
+       	 		}	
+        		else
+        		{		
+            			SendMessageToClient(stream, message);
+        		}
         	break;
 
     		case string _ when data.Contains("\"ObjectType\":\"Transaction\"") && data.Contains("\"Purpose\":\"Publish\"") :
@@ -127,6 +128,127 @@ class CSharpServer
         	
         	case string _ when data.Contains("\"ObjectType\":\"User\"") && data.Contains("\"Purpose\":\"GetPortfolio\"") :
         		if (HandleUserPortfolioRequest(data, out message))
+        		{
+        	    		SendMessageToClient(stream, message);
+        		}
+        		else
+        		{
+            			SendMessageToClient(stream, message);
+        		}
+        		break;
+        		
+        	case string _ when data.Contains("\"ObjectType\":\"Wallet\"") && data.Contains("\"Purpose\":\"GetTransactionList\"") :
+        		if (HandleTransactionListRequest(data, out message))
+        		{
+        	    		SendMessageToClient(stream, message);
+        		}
+        		else
+        		{
+            			SendMessageToClient(stream, message);
+        		}
+        		break;
+        		
+        	case string _ when data.Contains("\"ObjectType\":\"UserOffer\"") && data.Contains("\"Purpose\":\"Publish\"") :
+        		if (HandleReceivedUserOffer(data, out message))
+        		{
+        	    		SendMessageToClient(stream, message);
+        		}
+        		else
+        		{
+            			SendMessageToClient(stream, message);
+        		}
+        		break;
+        		
+        	case string _ when data.Contains("GetUserOffers") :
+        		if (HandleUserOffersRequest(data, out message))
+        		{
+        	    		SendMessageToClient(stream, message);
+        		}
+        		else
+        		{
+            			SendMessageToClient(stream, message);
+        		}
+        		break;
+        	
+        	case string _ when data.Contains("\"ObjectType\":\"User\"") && data.Contains("\"Purpose\":\"MinerCheck\""):
+        		if (CheckMiningUser(data, out message))
+        		{
+            			SendMessageToClient(stream, message);
+       	 		}	
+        		else
+        		{		
+            			SendMessageToClient(stream, message);
+        		}
+        	break;
+        		
+        	case string _ when data.Contains("\"ObjectType\":\"User\"") && data.Contains("\"Purpose\":\"MinerRegister\""):
+        		if (HandleMiningUser(data, out message))
+        		{
+            			SendMessageToClient(stream, message);
+       	 		}	
+        		else
+        		{		
+            			SendMessageToClient(stream, message);
+        		}
+        	break;
+        	 
+        	case string _ when data.Contains("ValidationStatusForMiner") :
+        		if (HandleValidationStatus(data, out message))
+        		{
+        	    		SendMessageToClient(stream, message);
+        		}
+        		else
+        		{
+            			SendMessageToClient(stream, message);
+        		}
+        		break;
+        		
+        	case string _ when data.Contains("GetTransactionForValidation") :
+        		if (HandleTransactionForValidation(data, out message))
+        		{
+        	    		SendMessageToClient(stream, message);
+        		}
+        		else
+        		{
+            			SendMessageToClient(stream, message);
+        		}
+        		break;
+        		
+        	case string _ when data.Contains("\"ObjectType\":\"Wallet\"") && data.Contains("\"Purpose\":\"GetWallet\"") :
+        		if (HandleWalletRequest(data, out message))
+        		{
+        	    		SendMessageToClient(stream, message);
+        		}
+        		else
+        		{
+            			SendMessageToClient(stream, message);
+        		}
+        		break;
+        		
+        	case string _ when data.Contains("\"ObjectType\":\"Transaction\"") && (data.Contains("\"Purpose\":\"Valid\"") || data.Contains("\"Purpose\":\"NotValid\"")):
+        		if (HandleValidationOfTransaction(data, out message))
+        		{
+        	    		SendMessageToClient(stream, message);
+        		}
+        		else
+        		{
+            			SendMessageToClient(stream, message);
+        		}
+        		break;
+        		
+        	case string _ when data.Contains("\"ObjectType\":\"UserPortfolio\"") :
+        		if (HandleUpdateUserPortfolio(data, out message))
+        		{
+        	    		SendMessageToClient(stream, message);
+        		}
+        		else
+        		{
+            			SendMessageToClient(stream, message);
+        		}
+        		break;
+        		
+        	case string _ when data.Contains("\"ObjectType\":\"Wallet\"") && data.Contains("\"Purpose\":\"UpdateWallet\"") :
+        		if (HandleWalletUpdate(data, out message))
         		{
         	    		SendMessageToClient(stream, message);
         		}
