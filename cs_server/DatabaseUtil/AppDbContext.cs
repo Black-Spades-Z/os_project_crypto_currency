@@ -13,6 +13,6 @@ public class AppDbContext : DbContext
     
     protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
     {
-        optionsBuilder.UseMySql("Server=localhost;Port=3306;Database=Crypto;User Id=zero;Password=zero;", ServerVersion.AutoDetect("Server=localhost;Port=3306;Database=Crypto;User Id=zero;Password=zero;"));
+        optionsBuilder.UseMySql("Server=localhost;Port=3306;Database=Crypto;User Id=root;Password=root;", ServerVersion.AutoDetect("Server=localhost;Port=3306;Database=Crypto;User Id=root;Password=root;"));
     }
 }

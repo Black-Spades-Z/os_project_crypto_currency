@@ -1,20 +1,20 @@
 {
   "format": 1,
   "restore": {
-    "/home/zero/university/OS/osdll/os_project_crypto_currency/cs_server/cs_server.csproj": {}
+    "/home/asadbek/os_crypto/cs_server/cs_server.csproj": {}
   },
   "projects": {
-    "/home/zero/university/OS/osdll/os_project_crypto_currency/cs_server/cs_server.csproj": {
+    "/home/asadbek/os_crypto/cs_server/cs_server.csproj": {
       "version": "1.0.0",
       "restore": {
-        "projectUniqueName": "/home/zero/university/OS/osdll/os_project_crypto_currency/cs_server/cs_server.csproj",
+        "projectUniqueName": "/home/asadbek/os_crypto/cs_server/cs_server.csproj",
         "projectName": "cs_server",
-        "projectPath": "/home/zero/university/OS/osdll/os_project_crypto_currency/cs_server/cs_server.csproj",
-        "packagesPath": "/home/zero/.nuget/packages/",
-        "outputPath": "/home/zero/university/OS/osdll/os_project_crypto_currency/cs_server/obj/",
+        "projectPath": "/home/asadbek/os_crypto/cs_server/cs_server.csproj",
+        "packagesPath": "/home/asadbek/.nuget/packages/",
+        "outputPath": "/home/asadbek/os_crypto/cs_server/obj/",
         "projectStyle": "PackageReference",
         "configFilePaths": [
-          "/home/zero/.nuget/NuGet/NuGet.Config"
+          "/home/asadbek/.nuget/NuGet/NuGet.Config"
         ],
         "originalTargetFrameworks": [
           "net7.0"
@@ -79,7 +79,7 @@
               "privateAssets": "all"
             }
           },
-          "runtimeIdentifierGraphPath": "/usr/share/dotnet/sdk/7.0.404/RuntimeIdentifierGraph.json"
+          "runtimeIdentifierGraphPath": "/usr/lib/dotnet/sdk/7.0.114/RuntimeIdentifierGraph.json"
         }
       }
     }
