@@ -93,12 +93,8 @@ public class User
         };
     }
     
-    public static User GetUserPortfolioDetails()
+    public static User GetUserPortfolioDetails(int userId)
     {
-        Console.WriteLine("Enter user details:");
-
-        Console.Write("UserId : ");
-        int userId = Convert.ToInt32(Console.ReadLine());
 
         return new User
         {

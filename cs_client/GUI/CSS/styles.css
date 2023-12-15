@@ -270,16 +270,16 @@
   	  border: 2px solid #76b2e9;
 }
 .logout-button-portfolio {
-  background-color: #FFFFFF; 
-  color: #000000; 
-  padding: 10px 20px; 
+
+  color: #000000;
+  padding: 10px 20px;
   border: 2px solid white;
   border-radius: 8px;
-  text-decoration: none; 
-  transition: background-color 0.1s ease; 
+  text-decoration: none;
+  transition: background-color 0.1s ease;
 }
 .logout-button-portfolio:hover {
-  	background-color: #DCDCDC; 
+  	background-color: #DCDCDC;
   	  border: 2px solid #76b2e9;
 }
 

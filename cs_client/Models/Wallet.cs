@@ -1,6 +1,7 @@
 using System;
 using System.Net;
 using System.Net.Sockets;
+using System.IO;
 using System.Text;
 using Newtonsoft.Json;
 using System.ComponentModel.DataAnnotations.Schema;
@@ -31,7 +32,25 @@ public class Wallet
     {
         return JsonConvert.DeserializeObject<Wallet>(json);
     }
-    
+    private static  void writeJsonFile(string response){
+        string filePath = "User/account.json"; // Replace with your file path
+
+        try
+        {
+            // Serialize object to JSON
+            string jsonString = JsonConvert.SerializeObject(response);
+
+            // Write JSON string to file
+            File.WriteAllText(filePath, jsonString);
+
+            Console.WriteLine("JSON data saved to file successfully.");
+        }
+        catch (Exception ex)
+        {
+            Console.WriteLine("Error saving JSON data to file: " + ex.Message);
+        }
+    }
+
     public static Wallet WaitForWallet(NetworkStream stream)
 	{
 	    try
@@ -47,6 +66,8 @@ public class Wallet
 
 		string response = Encoding.ASCII.GetString(buffer, 0, bytesRead);
 		Wallet wallet = JsonConvert.DeserializeObject<Wallet>(response);
+
+		writeJsonFile(response);
 		return wallet;
 	    }
 	    catch (Exception e)
@@ -55,5 +76,6 @@ public class Wallet
 	    }
 	    return null;
 	}
+
 }
 

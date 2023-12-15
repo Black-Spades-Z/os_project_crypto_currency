@@ -11,6 +11,7 @@ using static UserOffer;
 using static Miner;
 using static MinerUtil;
 using static Wallet;
+using static Block;
 
 class CSharpServer
 {
@@ -192,7 +193,7 @@ class CSharpServer
         		}
         	break;
         	 
-        	case string _ when data.Contains("ValidationStatusForMiner") :
+        	case string _ when data.Contains("TransactionValidationStatusForMiner") :
         		if (HandleValidationStatus(data, out message))
         		{
         	    		SendMessageToClient(stream, message);
@@ -249,6 +250,50 @@ class CSharpServer
         		
         	case string _ when data.Contains("\"ObjectType\":\"Wallet\"") && data.Contains("\"Purpose\":\"UpdateWallet\"") :
         		if (HandleWalletUpdate(data, out message))
+        		{
+        	    		SendMessageToClient(stream, message);
+        		}
+        		else
+        		{
+            			SendMessageToClient(stream, message);
+        		}
+        		break;
+        	
+        	case string _ when data.Contains("BlockValidationStatusForMiner") :
+        		if (HandleBlockValidationStatus(data, out message))
+        		{
+        	    		SendMessageToClient(stream, message);
+        		}
+        		else
+        		{
+            			SendMessageToClient(stream, message);
+        		}
+        		break;
+        		
+        	case string _ when data.Contains("GetTransactionsForBlockValidation") :
+        		if (HandleBlockForValidation(data, out message))
+        		{
+        	    		SendMessageToClient(stream, message);
+        		}
+        		else
+        		{
+            			SendMessageToClient(stream, message);
+        		}
+        		break;
+        		
+        	case string _ when data.Contains("\"ObjectType\":\"Block\"") && data.Contains("\"Purpose\":\"InsertBlock\"") :
+        		if (HandleBlockInsertionRequest(data, out message))
+        		{
+        	    		SendMessageToClient(stream, message);
+        		}
+        		else
+        		{
+            			SendMessageToClient(stream, message);
+        		}
+        		break;
+        		
+        	case string _ when data.Contains("GetBlockchain") :
+        		if (HandleBlockchainRequest(data, out message))
         		{
         	    		SendMessageToClient(stream, message);
         		}

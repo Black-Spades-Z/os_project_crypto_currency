@@ -87,46 +87,6 @@ public class Transaction
 	    };
 	}
 
-	public static Transaction setTransaction()
-	{
-	    Console.WriteLine("Enter transaction details:");
-
-	    Console.Write("From Address: ");
-	    string fromAddress = Console.ReadLine();
-
-	    Console.Write("To Address: ");
-	    string toAddress = Console.ReadLine();
-
-	    Console.Write("Cash Value: ");
-	    int cashValue;
-	    while (!int.TryParse(Console.ReadLine(), out cashValue))
-	    {
-		Console.Clear(); // Clear the console to ensure a clean input prompt
-		Console.WriteLine("Invalid input. Please enter a valid integer for Value.");
-		Console.Write("Value: ");
-	    }
-
-	    Console.Write("Value: ");
-	    int cryptoValue;
-	    while (!int.TryParse(Console.ReadLine(), out cryptoValue))
-	    {
-		Console.Clear(); // Clear the console to ensure a clean input prompt
-		Console.WriteLine("Invalid input. Please enter a valid integer for Value.");
-		Console.Write("Value: ");
-	    }
-
-	    Console.Write("Cryptocurrency (Bitcoin, Ethereum, Litecoin, etc.): ");
-	    string cryptocurrency = Console.ReadLine();
-
-	    return new Transaction
-	    {
-		FromAddress = fromAddress,
-		ToAddress = toAddress,
-		CashValue = cashValue,
-		CryptoValue = cryptoValue,
-		CryptocurrencyName = cryptocurrency
-	    };
-	}
 
 	public static Transaction setTransaction(string fromAddress, string toAddress, int cashValue, int cryptoValue, string cryptoCurrencyName)
 	{
@@ -141,7 +101,7 @@ public class Transaction
 	    };
 	}
 	
-	public static void WaitForUserTransactionList(NetworkStream stream)
+	public static List<Transaction> WaitForUserTransactionList(NetworkStream stream)
 	{
 	    try
 	    {
@@ -152,16 +112,20 @@ public class Transaction
 		{
 		    Console.WriteLine("Connection closed by server.");
 		    Environment.Exit(0); // Exit the client if the server closes the connection
+			return null;
 		}
 
 		string response = Encoding.ASCII.GetString(buffer, 0, bytesRead);
 		List<Transaction> userTransactions = JsonConvert.DeserializeObject<List<Transaction>>(response);
 		Console.WriteLine(userTransactions.Count);
 		
+		return userTransactions;
 	    }
 	    catch (Exception e)
 	    {
 		Console.WriteLine($"Error in waiting for response: {e}");
 	    }
+
+	    return null;
 	}
 }

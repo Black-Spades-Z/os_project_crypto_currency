@@ -2,8 +2,6 @@ using System;
 using System.Net.Sockets;
 using System.Text;
 using System.Threading;
-using System.IO;
-using System.Text.Json;
 using System.ComponentModel.DataAnnotations.Schema;
 
 using static Transaction;
@@ -365,50 +363,8 @@ public class CSharpClient
             Console.WriteLine($"Error in waiting for response: {e}");
         }
     }
-    private static  void writeJsonFile(string response){
-        string filePath = "User/account.json"; // Replace with your file path
-
-        try
-        {
-            // Sample JSON data (an object to serialize)
 
 
-            // Serialize object to JSON
-            string jsonString = JsonSerializer.Serialize(response);
-
-            // Write JSON string to file
-            File.WriteAllText(filePath, jsonString);
-
-            Console.WriteLine("JSON data saved to file successfully.");
-        }
-        catch (Exception ex)
-        {
-            Console.WriteLine("Error saving JSON data to file: " + ex.Message);
-        }
-    }
-    public static void WaitForUsername(NetworkStream stream)
-    {
-        try
-        {
-            byte[] buffer = new byte[16384];
-            int bytesRead = stream.Read(buffer, 0, buffer.Length);
-
-            if (bytesRead <= 0)
-            {
-                Console.WriteLine("Connection closed by server.");
-                Environment.Exit(0); // Exit the client if the server closes the connection
-            }
-
-            string response = Encoding.ASCII.GetString(buffer, 0, bytesRead);
-            Console.WriteLine($"Response from server: {response}");
-            writeJsonFile(response);
-
-        }
-        catch (Exception e)
-        {
-            Console.WriteLine($"Error in waiting for response: {e}");
-        }
-    }
 
     public static  TcpClient getClient(){
         return client;

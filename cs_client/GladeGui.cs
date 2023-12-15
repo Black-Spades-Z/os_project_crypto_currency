@@ -28,14 +28,34 @@ namespace GladeFunctions
 
         //Global variables
 
-        string FILEPATH = "User/account.json";
-       // var accountDetails;
+        private string FILEPATH = "User/account.json";
+
+        // Class Variables
+
+        static User user;
+        static User miningUser;
+        static Wallet accountDetails;
+        static UserPortfolio accountPortfolio;
+        static List<Transaction> userTransactionsList;
+        static UserOffer userOffer;
+        static List<UserOffer> userOffersList;
+        static bool checkMiner;
+
+
+        // Server Assets
 
         private string[] currencyName =  new string[50];
         private float[] currencyPrice =  new float[50];
         private float[] currencyVolume = new float[50];
         private string[] currencyRank =   new string[50];
         private string[] currencyIcons = new string[50];
+
+        // Buy from Server
+
+        private int cashValue = 100;
+        private int cryptoValue = 20;
+        private string cryptoCurrencyName = "Bitcoin";
+
 
         // Main Window
         private bool isAscendingOrderPrice = true; // Flag to track sorting order
@@ -139,7 +159,7 @@ namespace GladeFunctions
 
 
 
-            User user = SetUserLoginDetails(loginEmail, loginPassword);
+            user = SetUserLoginDetails(loginEmail, loginPassword);
             user.Purpose = "GetWallet";
             string serializedUser = user.Serialize();
 
@@ -148,7 +168,7 @@ namespace GladeFunctions
 
             // Wait for a response from the server
             Console.WriteLine("Getting response");
-            WaitForUsername(client.GetStream());
+            accountDetails =  WaitForWallet(client.GetStream());
             Console.WriteLine("Got response");
         }
         private void sendUserRegisterDetails(){
@@ -157,7 +177,7 @@ namespace GladeFunctions
 
 
 
-            User user = SetUserRegsitrationDetails(  registerEmail,  registerPassword,  registerFullName,  registerDateOfBirth, registerAddress,  registerPhoneNumber,  registerNationality);
+            user = SetUserRegsitrationDetails(  registerEmail,  registerPassword,  registerFullName,  registerDateOfBirth, registerAddress,  registerPhoneNumber,  registerNationality);
             user.Purpose = "Register";
             string serializedUser = user.Serialize();
 
@@ -201,37 +221,71 @@ namespace GladeFunctions
 
         }
 
-        // private void buyFromServer(){
-        //
-        //
-        //     client = getClient();
-        //
-        //     readJsonFile();
-        //
-        //
-        //
-        //       // Create a Transaction object and serialize it
-        //     Transaction transaction = setTransaction("server", accountDetails.);
-        //     transaction.Purpose = "Publish";
-        //
-        //     string serializedTransaction = transaction.Serialize();
-        //
-        //     // Send the serialized Transaction object to C client
-        //     SendMessage(client.GetStream(), serializedTransaction);
-        //
-        //     // Wait for a response from the server
-        //     WaitForResponse(client.GetStream());
-        //
-        // }
-/*
-        private void readJsonFile(){
+        private void buyFromServer(){
 
-            // Read the entire JSON file as a string
-            string jsonString = File.ReadAllText(FILEPATH);
 
-            // Deserialize the JSON string into an object
-            accountDetails = JsonSerializer.Deserialize<User>(jsonString);
-        }*/
+            client = getClient();
+
+
+
+
+            // Create a Transaction object and serialize it
+            Transaction transaction = setTransaction("server", accountDetails.WalletAddress, cashValue, cryptoValue, cryptoCurrencyName);
+            transaction.Purpose = "Publish";
+
+            string serializedTransaction = transaction.Serialize();
+
+            // Send the serialized Transaction object to C client
+            SendMessage(client.GetStream(), serializedTransaction);
+
+            // Wait for a response from the server
+            WaitForResponse(client.GetStream());
+
+        }
+
+        private void requestUserPortfolio(){
+
+            client = getClient();
+
+
+            string serializedUser;
+
+            User portfolioUser = GetUserPortfolioDetails(accountDetails.UserId);
+            portfolioUser.Purpose = "GetPortfolio";
+            serializedUser = portfolioUser.Serialize();
+
+            // Send the serialized User object to C client
+            SendMessage(client.GetStream(), serializedUser);
+
+            // Wait for a response from the server
+            accountPortfolio = WaitForAccountPortfolio(client.GetStream());
+
+        }
+
+        private void requestTransactionList(){
+
+            client = getClient();
+
+            Wallet userWallet = new();
+            userWallet.WalletAddress = accountDetails.WalletAddress;
+            userWallet.Purpose = "GetTransactionList";
+            string serializedWallet = userWallet.Serialize();
+
+            // Send the serialized User object to C client
+            SendMessage(client.GetStream(), serializedWallet);
+
+            // Wait for a response from the server
+            userTransactionsList = WaitForUserTransactionList(client.GetStream());
+
+        }
+
+        private void publishUserOffer(){
+
+            client = getClient();
+
+
+        }
+
 
 
 
@@ -480,7 +534,7 @@ namespace GladeFunctions
     	// index counter
     private void exchange_button_main_window_clicked(object sender, EventArgs e){
 
-
+            buyFromServer();
 
 
     }
@@ -631,6 +685,7 @@ namespace GladeFunctions
         // Exchange Button
         Button exchangeButton = new Button("Exchange");
         exchangeButton.Name = $"ExchangeButton_{index}";
+
         //exchangeButton.MarginBottom = 9;
         //exchangeButton.MarginRight = 10;
         //exchangeButton.Halign = Align.End;
@@ -644,6 +699,7 @@ namespace GladeFunctions
 
         // Connect button click events for main_window
         exchangeButton.Clicked += exchange_button_main_window_clicked;
+
 
 
 
@@ -1154,6 +1210,7 @@ private int ExtractVolumeFromLabel(string volume)
 
                 main_window.ShowAll();
                 requestShowServerAssets();
+                requestUserPortfolio();
 
             }
             else
