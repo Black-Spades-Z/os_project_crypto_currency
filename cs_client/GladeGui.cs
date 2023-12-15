@@ -11,6 +11,7 @@ using static UserPortfolio;
 using static UserOffer;
 using static Wallet;
 using static MinerUtil;
+using static CustomAlertWindow;
 
 
 namespace GladeFunctions
@@ -26,6 +27,9 @@ namespace GladeFunctions
 
 
         //Global variables
+
+        string FILEPATH = "User/account.json";
+       // var accountDetails;
 
         private string[] currencyName =  new string[50];
         private float[] currencyPrice =  new float[50];
@@ -47,6 +51,7 @@ namespace GladeFunctions
         private EventBox price_event_box;
         private EventBox currency_name_event_box;
         private EventBox volume_box;
+        private Button protfolio_button_gtkwindow1;
 
 
 
@@ -195,6 +200,37 @@ namespace GladeFunctions
 
         }
 
+        // private void buyFromServer(){
+        //
+        //
+        //     client = getClient();
+        //
+        //     readJsonFile();
+        //
+        //
+        //
+        //       // Create a Transaction object and serialize it
+        //     Transaction transaction = setTransaction("server", accountDetails.);
+        //     transaction.Purpose = "Publish";
+        //
+        //     string serializedTransaction = transaction.Serialize();
+        //
+        //     // Send the serialized Transaction object to C client
+        //     SendMessage(client.GetStream(), serializedTransaction);
+        //
+        //     // Wait for a response from the server
+        //     WaitForResponse(client.GetStream());
+        //
+        // }
+/*
+        private void readJsonFile(){
+
+            // Read the entire JSON file as a string
+            string jsonString = File.ReadAllText(FILEPATH);
+
+            // Deserialize the JSON string into an object
+            accountDetails = JsonSerializer.Deserialize<User>(jsonString);
+        }*/
 
 
 
@@ -223,6 +259,8 @@ namespace GladeFunctions
             login_window2.DefaultSize = new Gdk.Size(1440, 968);
             login_window3 = (Window)builder.GetObject("login_window3");
             login_window3.DefaultSize = new Gdk.Size(1440, 968);
+            portfolio_window = (Window)builder.GetObject("portfolio_window");
+            portfolio_window.DefaultSize = new Gdk.Size(1440, 968);
 
             // Retrieve objects from Glade for main_window
             card = (Frame)builder.GetObject("card");
@@ -232,6 +270,7 @@ namespace GladeFunctions
             price_event_box = (EventBox)builder.GetObject("price_event");
             currency_name_event_box = (EventBox)builder.GetObject("currency_name_event");
             volume_box = (EventBox)builder.GetObject("volume_event");
+            protfolio_button_gtkwindow1 = (Button)builder.GetObject("protfolio_button_gtkwindow1");
 
 
             // Retrieve objects from Glade for login_window1
@@ -272,12 +311,8 @@ namespace GladeFunctions
             search_portfolio = (Entry)builder.GetObject("search_portfolio");
 
 
-            // Main Window 1
-
-
-
-
-
+            // Main Window
+            protfolio_button_gtkwindow1.Clicked += protfolio_button_gtkwindow1_clicked;
 
             // Connect button click events for login_window1
             login_button_login_window1.Clicked += login_button_login_window1_clicked;
@@ -353,6 +388,9 @@ namespace GladeFunctions
             logout_button_portfolio_css.AddProvider(cssProvider, Gtk.StyleProviderPriority.Application);
             logout_button_portfolio_css.AddClass("logout-button-portfolio");
 
+            var protfolio_button_gtkwindow1_css = protfolio_button_gtkwindow1.StyleContext;
+            protfolio_button_gtkwindow1_css.AddProvider(cssProvider, Gtk.StyleProviderPriority.Application);
+            protfolio_button_gtkwindow1_css.AddClass("logout-button-portfolio");
 
             // CSS Entries
 
@@ -417,16 +455,23 @@ namespace GladeFunctions
 
 
 
-            main_window.Hide();
             login_window1.ShowAll();
-            login_window2.Hide();
-            login_window3.Hide();
+
 
             Application.Run();
         }
 
 
 // Main Window
+
+
+
+    private void protfolio_button_gtkwindow1_clicked(object sender, EventArgs e){
+        main_window.Hide();
+        portfolio_window.ShowAll();
+
+
+    }
 
 
     // Sorting and adding ;
@@ -1117,6 +1162,7 @@ private int ExtractVolumeFromLabel(string volume)
 
         private void authorization_button_login_window1_clicked(object sender, EventArgs e)
         {
+
             Console.WriteLine("Submit button clicked.");
 
             // Close login_window1
@@ -1140,15 +1186,29 @@ private int ExtractVolumeFromLabel(string volume)
                 if (!IsValidEmail(registerEmail))
                 {
                     Console.WriteLine("Invalid email address.");
+                    showSuccessAllert("Invalid email address.");
                     // Optionally, you can show an error message or take other actions
                     return;
                 }
 
                 // Validate password
-                if (registerPassword.Length < 7 || !PasswordContainsDigitAndUppercase(registerPassword))
+                if (registerPassword.Length < 7)
                 {
-                    Console.WriteLine("Password must be at least 7 characters long and contain at least one digit and one uppercase character.");
+                    Console.WriteLine("Password must be at least 7 characters long.");
+                    showSuccessAllert("Password less than 7 digits");
+                    return;
+                }
+                else if (PasswordContainsDigitAndUppercase(registerPassword) == 1)
+                {
+                    Console.WriteLine("Password must be  contain at least one digit and one uppercase character.");
+                    showSuccessAllert("Password has no digits");
                     // Optionally, you can show an error message or take other actions
+                    return;
+                }
+                else if (PasswordContainsDigitAndUppercase(registerPassword) == 2)
+                {
+                    Console.WriteLine("Password must be one uppercase character.");
+                    showSuccessAllert("Password has no Uppercase");
                     return;
                 }
 
@@ -1168,10 +1228,17 @@ private int ExtractVolumeFromLabel(string volume)
             return email.Contains('@');
         }
 
-        private bool PasswordContainsDigitAndUppercase(string password)
+        private int PasswordContainsDigitAndUppercase(string password)
         {
             // Check if the password contains at least one digit and one uppercase character
-            return password.Any(char.IsDigit) && password.Any(char.IsUpper);
+            if (!password.Any(char.IsDigit))
+            {
+                return 1;
+            }
+            else if (!password.Any(char.IsUpper)){
+                return 2;
+            };
+            return 0;
         }
 
         private void back_button_login_window2_clicked(object sender, EventArgs e)

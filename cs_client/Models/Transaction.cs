@@ -86,6 +86,60 @@ public class Transaction
 		CryptocurrencyName = cryptocurrency
 	    };
 	}
+
+	public static Transaction setTransaction()
+	{
+	    Console.WriteLine("Enter transaction details:");
+
+	    Console.Write("From Address: ");
+	    string fromAddress = Console.ReadLine();
+
+	    Console.Write("To Address: ");
+	    string toAddress = Console.ReadLine();
+
+	    Console.Write("Cash Value: ");
+	    int cashValue;
+	    while (!int.TryParse(Console.ReadLine(), out cashValue))
+	    {
+		Console.Clear(); // Clear the console to ensure a clean input prompt
+		Console.WriteLine("Invalid input. Please enter a valid integer for Value.");
+		Console.Write("Value: ");
+	    }
+
+	    Console.Write("Value: ");
+	    int cryptoValue;
+	    while (!int.TryParse(Console.ReadLine(), out cryptoValue))
+	    {
+		Console.Clear(); // Clear the console to ensure a clean input prompt
+		Console.WriteLine("Invalid input. Please enter a valid integer for Value.");
+		Console.Write("Value: ");
+	    }
+
+	    Console.Write("Cryptocurrency (Bitcoin, Ethereum, Litecoin, etc.): ");
+	    string cryptocurrency = Console.ReadLine();
+
+	    return new Transaction
+	    {
+		FromAddress = fromAddress,
+		ToAddress = toAddress,
+		CashValue = cashValue,
+		CryptoValue = cryptoValue,
+		CryptocurrencyName = cryptocurrency
+	    };
+	}
+
+	public static Transaction setTransaction(string fromAddress, string toAddress, int cashValue, int cryptoValue, string cryptoCurrencyName)
+	{
+
+	    return new Transaction
+	    {
+		FromAddress = fromAddress,
+		ToAddress = toAddress,
+		CashValue = cashValue,
+		CryptoValue = cryptoValue,
+		CryptocurrencyName = cryptoCurrencyName
+	    };
+	}
 	
 	public static void WaitForUserTransactionList(NetworkStream stream)
 	{
