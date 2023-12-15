@@ -69,6 +69,7 @@ namespace GladeFunctions
         // Window 2
         private string registerEmail;
         private string registerPassword;
+        private string registerConfirmPassword;
         private string registerFullName;
         private string registerDateOfBirth;
         private string registerAddress;
@@ -1142,6 +1143,7 @@ private int ExtractVolumeFromLabel(string volume)
             loginEmail = email_entry_login_window1.Text;
             loginPassword = password_entry_login_window1.Text;
 
+
             if (IsValidEmail(loginEmail))
             {
                 Console.WriteLine($"Login successful. Email: {loginEmail}, Password: {loginPassword}");
@@ -1157,6 +1159,7 @@ private int ExtractVolumeFromLabel(string volume)
             else
             {
                 Console.WriteLine("Invalid email address.");
+                showErrorAllert("Invalid email address");
             }
         }
 
@@ -1182,11 +1185,12 @@ private int ExtractVolumeFromLabel(string volume)
                 registerFullName= name_entry_login_window2.Text;
                 registerEmail = email_entry_login_window2.Text;
                 registerPassword = password_entry_login_window2.Text;
+                registerConfirmPassword = password_confirm_entry_login_window2.Text;
     // Validate email
                 if (!IsValidEmail(registerEmail))
                 {
                     Console.WriteLine("Invalid email address.");
-                    showSuccessAllert("Invalid email address.");
+                    showErrorAllert("Invalid email address.");
                     // Optionally, you can show an error message or take other actions
                     return;
                 }
@@ -1195,20 +1199,26 @@ private int ExtractVolumeFromLabel(string volume)
                 if (registerPassword.Length < 7)
                 {
                     Console.WriteLine("Password must be at least 7 characters long.");
-                    showSuccessAllert("Password less than 7 digits");
+                    showErrorAllert("Password less than 7 digits");
                     return;
                 }
                 else if (PasswordContainsDigitAndUppercase(registerPassword) == 1)
                 {
                     Console.WriteLine("Password must be  contain at least one digit and one uppercase character.");
-                    showSuccessAllert("Password has no digits");
+                    showErrorAllert("Password has no digits");
                     // Optionally, you can show an error message or take other actions
                     return;
                 }
                 else if (PasswordContainsDigitAndUppercase(registerPassword) == 2)
                 {
                     Console.WriteLine("Password must be one uppercase character.");
-                    showSuccessAllert("Password has no Uppercase");
+                    showErrorAllert("Password has no Uppercase");
+                    return;
+                }
+                else if (registerPassword != registerConfirmPassword){
+
+                    Console.WriteLine("Passwords does not match");
+                    showErrorAllert("Passwords does not match");
                     return;
                 }
 
@@ -1219,6 +1229,8 @@ private int ExtractVolumeFromLabel(string volume)
             else
             {
                 Console.WriteLine("Please agree to the terms before submitting.");
+                showErrorAllert("Please agree to terms");
+
                 // Optionally, you can show an error message or take other actions
             }
         }
@@ -1271,6 +1283,7 @@ private int ExtractVolumeFromLabel(string volume)
             if (!IsValidPhoneNumber(registerPhoneNumber))
             {
                 Console.WriteLine("Invalid phone number. Please enter only digits.");
+                showErrorAllert("Invalid phone number");
                 // Optionally, you can show an error message or take other actions
                 return;
             }
@@ -1279,6 +1292,7 @@ private int ExtractVolumeFromLabel(string volume)
             if (!IsValidDateOfBirth(registerDateOfBirth))
             {
                 Console.WriteLine("Invalid date of birth. Please enter the date in the format 00/00/0000.");
+                showErrorAllert("Invalid Data of Birth");
                 // Optionally, you can show an error message or take other actions
                 return;
             }
