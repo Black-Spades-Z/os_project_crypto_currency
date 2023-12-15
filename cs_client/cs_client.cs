@@ -10,6 +10,7 @@ using static UserPortfolio;
 using static UserOffer;
 using static Wallet;
 using static MinerUtil;
+using static Block;
 
 class CSharpClient
 {
@@ -96,6 +97,8 @@ class CSharpClient
                 Console.WriteLine("9. Check miner");
                 Console.WriteLine("10. Insert miner");
                 Console.WriteLine("11. Start validation");
+                Console.WriteLine("12. Block Hashing");
+                Console.WriteLine("13. BlockChain");
                 Console.WriteLine("Type 'exit' to quit.");
 
                 string choice = Console.ReadLine();
@@ -225,7 +228,7 @@ class CSharpClient
                     case "11":
                     	while(true){
                     	    Console.ReadLine();
-                            RequestMessage = "ValidationStatusForMiner";
+                            RequestMessage = "TransactionValidationStatusForMiner";
 
                             SendMessage(stream, RequestMessage);
 
@@ -320,6 +323,36 @@ class CSharpClient
                             }
                         }
                         break;
+                        
+                        case "12":
+                    	while(true){
+                    	    Console.ReadLine();
+                            RequestMessage = "BlockValidationStatusForMiner";
+
+                            SendMessage(stream, RequestMessage);
+
+                            if(WaitForBlockValidationResponse(stream))
+                            {
+                            	RequestMessage = "GetTransactionsForBlockValidation";
+                                SendMessage(stream, RequestMessage);
+                                Block block = WaitForBlockForValidation(stream);
+                            	
+                            	HashBlock(block);
+                            	block.Purpose = "InsertBlock";
+                            	string serializedBlock = block.Serialize();
+                            	SendMessage(stream, serializedBlock);
+                            	WaitForResponse(stream);
+                            }
+                        }
+                        break;
+                        
+                        case "13":
+                            RequestMessage = "GetBlockchain";
+
+                            SendMessage(stream, RequestMessage);
+                            List<Block> blocks = WaitForBLockchain(stream);
+                        break;
+                        
 
                     case "exit":
                         Environment.Exit(0);

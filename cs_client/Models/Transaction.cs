@@ -51,31 +51,34 @@ public class Transaction
 	    Console.WriteLine("Enter transaction details:");
 
 	    Console.Write("From Address: ");
-	    string fromAddress = Console.ReadLine();
+	    //string fromAddress = Console.ReadLine();
+	    string fromAddress = "F99E527860ECB668DEA0F2E8840335F9648600D1E0937E9F047C1714A27505D0";
 
 	    Console.Write("To Address: ");
-	    string toAddress = Console.ReadLine();
+	    //string toAddress = Console.ReadLine();
+	    string toAddress = "0EBABFC7C06FC828AA01D82979AEE3A21236D41F228FB56EDF8F378BA18A849E";
 
 	    Console.Write("Cash Value: ");
-	    int cashValue;
-	    while (!int.TryParse(Console.ReadLine(), out cashValue))
-	    {
-		Console.Clear(); // Clear the console to ensure a clean input prompt
-		Console.WriteLine("Invalid input. Please enter a valid integer for Value.");
-		Console.Write("Value: ");
-	    }
+	    int cashValue = 1;
+	    //while (!int.TryParse(Console.ReadLine(), out cashValue))
+	    //{
+		//Console.Clear(); // Clear the console to ensure a clean input prompt
+		//Console.WriteLine("Invalid input. Please enter a valid integer for Value.");
+		//Console.Write("Value: ");
+	    //}
 	    
 	    Console.Write("Value: ");
-	    int cryptoValue;
-	    while (!int.TryParse(Console.ReadLine(), out cryptoValue))
-	    {
-		Console.Clear(); // Clear the console to ensure a clean input prompt
-		Console.WriteLine("Invalid input. Please enter a valid integer for Value.");
-		Console.Write("Value: ");
-	    }
+	    int cryptoValue = 1;
+	    //while (!int.TryParse(Console.ReadLine(), out cryptoValue))
+	    //{
+		//Console.Clear(); // Clear the console to ensure a clean input prompt
+		//Console.WriteLine("Invalid input. Please enter a valid integer for Value.");
+		//Console.Write("Value: ");
+	   // }
 
 	    Console.Write("Cryptocurrency (Bitcoin, Ethereum, Litecoin, etc.): ");
-	    string cryptocurrency = Console.ReadLine();
+	    //string cryptocurrency = Console.ReadLine();
+	    string cryptocurrency = "Bitcoin";
 	    
 	    return new Transaction
 	    {

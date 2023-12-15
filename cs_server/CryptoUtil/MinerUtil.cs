@@ -124,5 +124,76 @@ public static class MinerUtil
 	    	Console.WriteLine(ex.Message);
 	    }
 	}
+	
+	public static bool HandleBlockValidationStatus(string data, out string message)
+	{ 
+	    try
+	    {
+	    	using (var context = new AppDbContext())
+		{
+			var countOfValidTransactions = context.Transactions.Count(p => p.ValidationStatus == "Valid");
+			Console.WriteLine(countOfValidTransactions);
+			if(countOfValidTransactions > 20)
+			{
+				message = "Available";
+			}
+			else
+			{
+				message = "Failure. No validation needed.";
+			}
+		}
+	    }
+	    catch (Exception ex)
+	    {
+	    	Console.WriteLine(ex.Message);
+		message = "Failure.";
+		return false;
+	    }
+	    return true;
+	}
+	
+	public static bool HandleBlockForValidation(string data, out string message)
+	{ 
+	    try
+	    {
+	    	using (var context = new AppDbContext())
+		{
+			Block block = new();
+			block.BlockTransactions = context.Transactions.Where(p => p.ValidationStatus == "Valid").Take(20).ToList();
+			foreach (var transaction in block.BlockTransactions)
+			{
+			    transaction.ValidationStatus = "Hashed";
+			}
+
+			// Save changes to the database
+			context.SaveChanges();
+			
+			
+			block.BlockNumber = context.Blocks.Select(b => b.BlockNumber).FirstOrDefault() + 1;
+			
+			if(block.BlockNumber > 1)
+			{
+				block.PreviousHash = context.Blocks.Where(b => b.BlockNumber == block.BlockNumber - 1).Select(b => b.Hash).ToString();
+			}			
+			
+			Console.WriteLine(block.BlockTransactions.Count);
+			if(block.BlockTransactions.Count == 20)
+			{
+				message = JsonConvert.SerializeObject(block);
+			}
+			else
+			{
+				message = "Failure.";
+			}
+		}
+	    }
+	    catch (Exception ex)
+	    {
+	    	Console.WriteLine(ex.Message);
+		message = "Failure.";
+		return false;
+	    }
+	    return true;
+	}
 
 }

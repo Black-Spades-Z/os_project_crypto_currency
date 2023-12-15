@@ -10,6 +10,7 @@ public class AppDbContext : DbContext
     public DbSet<UserPortfolio> AccPortfolio { get; set; }
     public DbSet<UserOffer> UserOffers { get; set; }
     public DbSet<Miner> Miners { get; set; }
+    public DbSet<Block> Blocks { get; set; }
     
     protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
     {
