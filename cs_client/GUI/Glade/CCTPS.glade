@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<!-- Generated with glade 3.38.2 -->
+<!-- Generated with glade 3.40.0 -->
 <interface>
   <requires lib="gtk+" version="3.24"/>
   <object class="GtkWindow" id="Attention_window1">
@@ -2869,7 +2869,7 @@ By using the Crypto app, you agree to the terms outlined in this Privacy Policy.
           </packing>
         </child>
         <child>
-          <object class="GtkButton" id="transactions_button_gtkwindow1">
+          <object class="GtkButton" id="transactions_button_main_window">
             <property name="width-request">224</property>
             <property name="height-request">56</property>
             <property name="visible">True</property>
@@ -8560,7 +8560,7 @@ entered data</property>
           </packing>
         </child>
         <child>
-          <object class="GtkButton" id="protfolio_button_portfolio">
+          <object class="GtkButton" id="portfolio_button_portfolio">
             <property name="width-request">224</property>
             <property name="height-request">56</property>
             <property name="visible">True</property>
@@ -10665,7 +10665,7 @@ entered data</property>
       </object>
     </child>
   </object>
-  <object class="GtkWindow" id="transaction_window">
+  <object class="GtkWindow" id="transactions_window">
     <property name="width-request">1440</property>
     <property name="height-request">968</property>
     <property name="can-focus">False</property>
@@ -11218,7 +11218,7 @@ entered data</property>
           </packing>
         </child>
         <child>
-          <object class="GtkButton" id="transactions_button_portfolio1">
+          <object class="GtkButton" id="transactions_button_transactions_window">
             <property name="width-request">224</property>
             <property name="height-request">56</property>
             <property name="visible">True</property>
@@ -11374,7 +11374,7 @@ entered data</property>
                             <property name="hscroll-policy">natural</property>
                             <property name="vscroll-policy">natural</property>
                             <child>
-                              <object class="GtkBox" id="transaction_box">
+                              <object class="GtkBox" id="transactions_box">
                                 <property name="visible">True</property>
                                 <property name="can-focus">False</property>
                                 <property name="orientation">vertical</property>

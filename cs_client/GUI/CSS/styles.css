@@ -186,7 +186,7 @@
 	outline : 2px solid #00BFFF;
 	box-shadow:0 0 10px rgba(0, 0, 0, 0.5);
 }
-.protfolio-button-portfolio {
+.portfolio-button-portfolio {
   background-color: #FFFFFF; 
   color: #000000; 
   padding: 10px 20px; 
@@ -195,7 +195,7 @@
   text-decoration: none; 
   transition: background-color 0.1s ease; 
 }
-.protfolio-button-portfolio:hover {
+.portfolio-button-portfolio:hover {
   background-color: #DCDCDC; 
   border: 2px solid #76b2e9;
 }

@@ -71,7 +71,8 @@ namespace GladeFunctions
         private EventBox price_event_box;
         private EventBox currency_name_event_box;
         private EventBox volume_box;
-        private Button protfolio_button_gtkwindow1;
+        private Button portfolio_button_gtkwindow1;
+        private Button transactions_button_main_window;
 
 
 
@@ -120,11 +121,24 @@ namespace GladeFunctions
         private Entry search_portfolio;
         private Button dashboard_button_portfolio;
         private Button p2p_button_portfolio;
-        private Button protfolio_button_portfolio;
+        private Button portfolio_button_portfolio;
         private Button transactions_button_portfolio;
         private Button settings_button_portfolio;
         private Button help_button_porftolio;
         private Button logout_button_portfolio;
+
+        //Window transactions
+
+        private Window transactions_window;
+        private Entry search_transactions;
+        private Box transactions_box;
+        private Button dashboard_button_transactions;
+        private Button p2p_button_transactions;
+        private Button portfolio_button_transactions;
+        private Button transactions_button_transactions;
+        private Button settings_button_transactions;
+
+        private Button logout_button_transactions;
 
         // main Window 1
         // private Button dashboard_button_gtkwindow1;
@@ -277,13 +291,75 @@ namespace GladeFunctions
             // Wait for a response from the server
             userTransactionsList = WaitForUserTransactionList(client.GetStream());
 
+
+            // Add this data to the window
+
+            for (int i = 0; i < userTransactionsList.Count; i++){
+                AddFrameToTransactionWindow(i);
+            }
+
         }
 
         private void publishUserOffer(){
 
             client = getClient();
 
+            userOffer = setUserOffer(accountDetails.WalletAddress, cashValue, cryptoValue, cryptoCurrencyName);
+            userOffer.Purpose = "Publish";
+            string serializedUserOffer = userOffer.Serialize();
 
+            SendMessage(client.GetStream(), serializedUserOffer);
+
+            WaitForResponse(client.GetStream());
+
+
+        }
+
+        private void requestUserOfferList(){
+
+            client = getClient();
+
+            string RequestMessage = "GetUserOffers";
+
+            SendMessage(client.GetStream(), RequestMessage);
+
+            userOffersList = WaitForUserOffers(client.GetStream());
+        }
+
+        private void checkForMiner(){
+
+            client = getClient();
+
+            miningUser = new();
+            miningUser.Purpose = "MinerCheck";
+            miningUser.UserId = accountDetails.UserId;
+
+            string serializedUser = miningUser.Serialize();
+
+            // Send the serialized User object to C client
+            SendMessage(client.GetStream(), serializedUser);
+
+            // Wait for a response from the server
+            checkMiner = WaitForMinerCheck(client.GetStream());
+        }
+
+        private void sendMiningUserDetails(){
+
+            client = getClient();
+
+             // Create a User object and serialize it
+            miningUser = new();
+            miningUser.Purpose = "MinerRegister";
+            miningUser.UserId = accountDetails.UserId;
+
+            string serializedUser = miningUser.Serialize();
+
+
+            // Send the serialized User object to C client
+            SendMessage(client.GetStream(), serializedUser);
+
+            // Wait for a response from the server
+            WaitForResponse(client.GetStream());
         }
 
 
@@ -316,6 +392,8 @@ namespace GladeFunctions
             login_window3.DefaultSize = new Gdk.Size(1440, 968);
             portfolio_window = (Window)builder.GetObject("portfolio_window");
             portfolio_window.DefaultSize = new Gdk.Size(1440, 968);
+            transactions_window = (Window)builder.GetObject("transactions_window");
+            transactions_window.DefaultSize = new Gdk.Size(1440, 968);
 
             // Retrieve objects from Glade for main_window
             card = (Frame)builder.GetObject("card");
@@ -325,7 +403,8 @@ namespace GladeFunctions
             price_event_box = (EventBox)builder.GetObject("price_event");
             currency_name_event_box = (EventBox)builder.GetObject("currency_name_event");
             volume_box = (EventBox)builder.GetObject("volume_event");
-            protfolio_button_gtkwindow1 = (Button)builder.GetObject("protfolio_button_gtkwindow1");
+            portfolio_button_gtkwindow1 = (Button)builder.GetObject("portfolio_button_gtkwindow1");
+            transactions_button_main_window = (Button)builder.GetObject("transactions_button_main_window");
 
 
             // Retrieve objects from Glade for login_window1
@@ -358,16 +437,21 @@ namespace GladeFunctions
             //Window portfolio
             dashboard_button_portfolio = (Button)builder.GetObject("dashboard_button_portfolio");
             p2p_button_portfolio = (Button)builder.GetObject("p2p_button_portfolio");
-            protfolio_button_portfolio = (Button)builder.GetObject("protfolio_button_portfolio");
+            portfolio_button_portfolio = (Button)builder.GetObject("portfolio_button_portfolio");
             transactions_button_portfolio = (Button)builder.GetObject("transactions_button_portfolio");
             settings_button_portfolio = (Button)builder.GetObject("settings_button_portfolio");
             help_button_porftolio = (Button)builder.GetObject("help_button_porftolio");
             logout_button_portfolio = (Button)builder.GetObject("logout_button_portfolio");
             search_portfolio = (Entry)builder.GetObject("search_portfolio");
 
+            // Window transactions
+
+            transactions_box = (Box)builder.GetObject("transactions_box");
+
 
             // Main Window
-            protfolio_button_gtkwindow1.Clicked += protfolio_button_gtkwindow1_clicked;
+            portfolio_button_portfolio.Clicked += portfolio_button_gtkwindow1_clicked;
+            transactions_button_main_window.Clicked += transactions_button_main_window_clicked;
 
             // Connect button click events for login_window1
             login_button_login_window1.Clicked += login_button_login_window1_clicked;
@@ -423,9 +507,9 @@ namespace GladeFunctions
             p2p_button_portfolio_css.AddProvider(cssProvider, Gtk.StyleProviderPriority.Application);
             p2p_button_portfolio_css.AddClass("p2p-button-portfolio");
 
-            var protfolio_button_portfolio_css = protfolio_button_portfolio.StyleContext;
-            protfolio_button_portfolio_css.AddProvider(cssProvider, Gtk.StyleProviderPriority.Application);
-            protfolio_button_portfolio_css.AddClass("protfolio-button-portfolio");
+            var portfolio_button_portfolio_css = portfolio_button_portfolio.StyleContext;
+            portfolio_button_portfolio_css.AddProvider(cssProvider, Gtk.StyleProviderPriority.Application);
+            portfolio_button_portfolio_css.AddClass("portfolio-button-portfolio");
 
             var transactions_button_portfolio_css = transactions_button_portfolio.StyleContext;
             transactions_button_portfolio_css.AddProvider(cssProvider, Gtk.StyleProviderPriority.Application);
@@ -443,9 +527,9 @@ namespace GladeFunctions
             logout_button_portfolio_css.AddProvider(cssProvider, Gtk.StyleProviderPriority.Application);
             logout_button_portfolio_css.AddClass("logout-button-portfolio");
 
-            var protfolio_button_gtkwindow1_css = protfolio_button_gtkwindow1.StyleContext;
-            protfolio_button_gtkwindow1_css.AddProvider(cssProvider, Gtk.StyleProviderPriority.Application);
-            protfolio_button_gtkwindow1_css.AddClass("logout-button-portfolio");
+            var portfolio_button_gtkwindow1_css = portfolio_button_portfolio.StyleContext;
+            portfolio_button_gtkwindow1_css.AddProvider(cssProvider, Gtk.StyleProviderPriority.Application);
+            portfolio_button_gtkwindow1_css.AddClass("logout-button-portfolio");
 
             // CSS Entries
 
@@ -521,7 +605,7 @@ namespace GladeFunctions
 
 
 
-    private void protfolio_button_gtkwindow1_clicked(object sender, EventArgs e){
+    private void portfolio_button_gtkwindow1_clicked(object sender, EventArgs e){
         main_window.Hide();
         portfolio_window.ShowAll();
 
@@ -1211,6 +1295,8 @@ private int ExtractVolumeFromLabel(string volume)
                 main_window.ShowAll();
                 requestShowServerAssets();
                 requestUserPortfolio();
+                sendMiningUserDetails();
+
 
             }
             else
@@ -1416,11 +1502,187 @@ private int ExtractVolumeFromLabel(string volume)
 
             // Show login_window2
             login_window2.ShowAll();
+        }
 
+
+// Transactions Window
+
+        private void AddFrameToTransactionWindow(int index)
+        {
+
+
+
+
+            // Create a new frame
+            Frame currencyFrame = new Frame("");
+
+            // Create the frame
+            currencyFrame.Visible = true;
+            currencyFrame.CanFocus = false;
+            //currencyFrame.MarginTop = 10;
+            //currencyFrame.MarginBottom = 10;
+            currencyFrame.LabelXalign = 0;
+            currencyFrame.ShadowType = ShadowType.None;
+
+            // Create the alignment
+            Alignment alignment = new Alignment(0, 0, 0, 0);
+            alignment.Visible = true;
+            alignment.CanFocus = false;
+            //alignment.LeftPadding = 12;
+
+
+            // Create the inner grid
+            Grid innerGrid = new Grid();
+            innerGrid.Visible = false;
+            innerGrid.CanFocus = false;
+            //innerGrid.RowSpacing = 10;
+            //innerGrid.ColumnSpacing = 10;
+            innerGrid.RowHomogeneous = true;
+            innerGrid.ColumnHomogeneous = true;
+
+
+
+
+
+
+
+            // Create the inner grid
+            Grid currencyNameGrid = new Grid();
+            //currencyNameGrid.MarginBottom = 9;
+            //currencyNameGrid.MarginLeft = 30;
+            currencyNameGrid.Visible = true;
+            currencyNameGrid.CanFocus = false;
+            currencyNameGrid.RowSpacing = 0;
+            //currencyNameGrid.ColumnSpacing = 10;
+            currencyNameGrid.RowHomogeneous = true;
+            currencyNameGrid.ColumnHomogeneous = true;
+
+
+            // Add child widgets to the inner grid (similar to your provided XML structure)
+            // Here, you'd create and add GtkImage, GtkLabel, GtkButton, etc., to the innerGrid
+
+
+            // Icon Image
+
+            Image currencyIconImage = new Image($"GUI/Glade/images/icons/{userTransactionsList[index].CryptocurrencyName}.png");
+            currencyIconImage.Visible = true;
+            currencyIconImage.CanFocus = false;
+            //currencyIconImage.MarginLeft = 40;
+            currencyNameGrid.Attach(currencyIconImage, 0, 0, 1, 1);
+
+            // Name Label
+
+            Label currencyNameLabel = new Label(userTransactionsList[index].CryptocurrencyName);
+            currencyNameLabel.Name = $"CurrencyName_{index}";
+            currencyNameLabel.Visible = true;
+            currencyNameLabel.CanFocus = false;
+            currencyNameLabel.Halign = Align.Start; // Adjust horizontal alignment
+            currencyNameLabel.Valign = Align.Center; // Adjust vertical alignment
+            //currencyNameLabel.MarginRight = 30;
+
+
+            currencyNameGrid.Attach(currencyNameLabel, 1, 0, 1, 1);
+
+
+            // inner frame for currency name
+
+            Frame currencyNameFrame= new Frame("");
+            currencyNameFrame.ShadowType = ShadowType.None;
+            currencyNameFrame.Add(currencyNameGrid);
+
+            // Set fixed width for the currency Frame
+            int fixedWidth = 200; // Set your desired fixed width
+            currencyNameFrame.SetSizeRequest(fixedWidth, -1);
+
+            innerGrid.Attach(currencyNameFrame, 0, 0, 1, 1);
+
+
+
+
+            // Date Label
+
+            DateTime transactionDateTime = userTransactionsList[index].DateTime;
+
+            Label currencyDateLabel = new Label($"{transactionDateTime}");
+            currencyDateLabel.Name = $"CurrencyDate_{index}";
+            currencyDateLabel.Visible = true;
+            currencyDateLabel.CanFocus = false;
+            //currencyDateLabel.MarginBottom = 9;
+            //currencyDateLabel.Halign = Align.End;
+
+            // inner frame for Date
+            Frame DateFrame= new Frame("");
+            DateFrame.ShadowType = ShadowType.None;
+            DateFrame.Add(currencyDateLabel);
+
+            // Set fixed width for the DateFrame
+            //int fixedWidth = 150; // Set your desired fixed width
+            DateFrame.SetSizeRequest(fixedWidth, -1);
+
+            innerGrid.Attach(DateFrame, 1, 0, 1, 1);
+
+            // Volume Label
+
+            Label currencyVolumeLabel = new Label(userTransactionsList[index].CryptoValue);
+            currencyVolumeLabel.Name = $"Volume_{index}";
+            currencyVolumeLabel.Visible = true;
+            currencyVolumeLabel.CanFocus = false;
+            //currencyVolumeLabel.MarginBottom = 9;
+            //currencyVolumeLabel.Halign = Align.End;
+
+            // inner frame for volume
+            Frame volumeFrame= new Frame("");
+            volumeFrame.ShadowType = ShadowType.None;
+            volumeFrame.Add(currencyVolumeLabel);
+
+            innerGrid.Attach(volumeFrame, 2, 0, 1, 1);
+
+            // Fee Label
+
+            Label currencyFeeLabel = new Label($"{userTransactionsList[index].TransactionFee}");
+            currencyFeeLabel.Name = $"CurrencyFee_{index}";
+            currencyFeeLabel.Visible = true;
+            currencyFeeLabel.CanFocus = false;
+            //currencyFeeLabel.MarginBottom = 9;
+            //currencyFeeLabel.Halign = Align.End;
+
+            // inner frame for Fee
+            Frame FeeFrame= new Frame("");
+            FeeFrame.ShadowType = ShadowType.None;
+            FeeFrame.Add(currencyFeeLabel);
+
+            innerGrid.Attach(FeeFrame, 3, 0, 1, 1);
+
+
+
+            // Add the inner grid to the alignment
+            alignment.Add(innerGrid);
+
+            // Add the alignment to the frame
+            currencyFrame.Add(alignment);
+
+            // Align Frame
+
+            currencyFrame.MarginEnd = 20;
+
+
+
+            // Add the frame to the market_values_box
+            transactions_box.Add(currencyFrame);
+            transactions_box.ShowAll();
+        }
+// Navigation bar functions
+
+        private void transactions_button_main_window_clicked(object sender, EventArgs args){
+            main_window.Hide();
+
+            transactions_window.ShowAll();
+            requestTransactionList();
+        }
 
 // Main Functions
 
-        }
+
          static void Main(){
              new CCTPSApp();
         }

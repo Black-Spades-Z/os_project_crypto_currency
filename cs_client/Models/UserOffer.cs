@@ -30,7 +30,7 @@ public class UserOffer
         return JsonConvert.DeserializeObject<UserOffer>(json);
     }
     
-    public static void WaitForUserOffers(NetworkStream stream)
+    public static List<UserOffer>  WaitForUserOffers(NetworkStream stream)
 	{
 	    try
 	    {
@@ -41,16 +41,20 @@ public class UserOffer
 		{
 		    Console.WriteLine("Connection closed by server.");
 		    Environment.Exit(0); // Exit the client if the server closes the connection
+			return null;
 		}
 
 		string response = Encoding.ASCII.GetString(buffer, 0, bytesRead);
 		List<UserOffer> userOffers = JsonConvert.DeserializeObject<List<UserOffer>>(response);
 		Console.WriteLine(userOffers.Count);
+
+		return userOffers;
 	    }
 	    catch (Exception e)
 	    {
 		Console.WriteLine($"Error in waiting for response: {e}");
 	    }
+	    return null;
 	}
     
     public static UserOffer GetUserOffer()
@@ -87,6 +91,17 @@ public class UserOffer
 		CashValue = cashValue,
 		CryptoValue = cryptoValue,
 		CryptocurrencyName = cryptocurrency
+	    };
+	}
+	public static UserOffer setUserOffer(string fromAddress, int cashValue, int cryptoValue, string cryptoCurrencyName)
+	{
+
+	    return new UserOffer
+	    {
+		FromAddress = fromAddress,
+		CashValue = cashValue,
+		CryptoValue = cryptoValue,
+		CryptocurrencyName = cryptoCurrencyName
 	    };
 	}
 }

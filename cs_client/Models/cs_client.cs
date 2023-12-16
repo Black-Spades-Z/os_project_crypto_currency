@@ -273,7 +273,7 @@ public class CSharpClient
                                 User recipientUser = new();
 		                recipientUser.Purpose = "GetPortfolio";
 		                recipientUser.UserId = recipientWallet.UserId;
-		                serializedUser = recipientUser.Serialize();
+		                serializedUser = recipientUser.SeGetUserOfferrialize();
 
 		                SendMessage(stream, serializedUser);
 		                UserPortfolio recipientPortfolioUser = WaitForAccountPortfolio(stream);
@@ -340,6 +340,33 @@ public class CSharpClient
     }
 }
 */
+    public static bool WaitForMinerCheck(NetworkStream stream)
+    {
+        try
+        {
+            byte[] buffer = new byte[16384];
+            int bytesRead = stream.Read(buffer, 0, buffer.Length);
+
+            if (bytesRead <= 0)
+            {
+                Console.WriteLine("Connection closed by server.");
+                Environment.Exit(0); // Exit the client if the server closes the connection
+                return false;
+            }
+
+            string response = Encoding.ASCII.GetString(buffer, 0, bytesRead);
+            Console.WriteLine($"Response from server: {response}");
+            if (response == "Success"){
+                return true;
+            }
+            return false;
+        }
+        catch (Exception e)
+        {
+            Console.WriteLine($"Error in waiting for response: {e}");
+        }
+        return false;
+    }
 
 
     public static void WaitForResponse(NetworkStream stream)

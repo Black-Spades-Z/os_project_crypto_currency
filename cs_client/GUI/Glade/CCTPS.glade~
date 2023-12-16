@@ -2334,7 +2334,7 @@ By using the Crypto app, you agree to the terms outlined in this Privacy Policy.
             <property name="margin-left">40</property>
             <property name="margin-start">40</property>
             <property name="margin-top">25</property>
-            <property name="pixbuf">images\NavBar\Logo.png</property>
+            <property name="pixbuf">Desktop/Project/Logo.png</property>
           </object>
           <packing>
             <property name="left-attach">0</property>
@@ -2373,7 +2373,7 @@ By using the Crypto app, you agree to the terms outlined in this Privacy Policy.
                 <property name="visible">True</property>
                 <property name="can-focus">False</property>
                 <property name="halign">start</property>
-                <property name="pixbuf">images\NavBar\Settings.png</property>
+                <property name="pixbuf">Desktop/Project/Content (7).png</property>
               </object>
             </child>
           </object>
@@ -2396,7 +2396,7 @@ By using the Crypto app, you agree to the terms outlined in this Privacy Policy.
                 <property name="visible">True</property>
                 <property name="can-focus">False</property>
                 <property name="halign">start</property>
-                <property name="pixbuf">images\NavBar\Help.png</property>
+                <property name="pixbuf">Desktop/Project/Content (8).png</property>
               </object>
             </child>
           </object>
@@ -2419,7 +2419,7 @@ By using the Crypto app, you agree to the terms outlined in this Privacy Policy.
                 <property name="visible">True</property>
                 <property name="can-focus">False</property>
                 <property name="halign">start</property>
-                <property name="pixbuf">images\NavBar\Logout.png</property>
+                <property name="pixbuf">Desktop/Project/Content (9).png</property>
               </object>
             </child>
           </object>
@@ -2587,7 +2587,7 @@ By using the Crypto app, you agree to the terms outlined in this Privacy Policy.
             <property name="margin-right">20</property>
             <property name="margin-end">20</property>
             <property name="margin-top">28</property>
-            <property name="pixbuf">images\NavBar\Avatar.png</property>
+            <property name="stock">gtk-missing-image</property>
           </object>
           <packing>
             <property name="left-attach">11</property>
@@ -2629,7 +2629,7 @@ By using the Crypto app, you agree to the terms outlined in this Privacy Policy.
                 <property name="visible">True</property>
                 <property name="can-focus">False</property>
                 <property name="margin-top">28</property>
-                <property name="pixbuf">images\NavBar\Notification.png</property>
+                <property name="pixbuf">Desktop/Project/Icon - Notification (1).png</property>
               </object>
             </child>
           </object>
@@ -2699,7 +2699,7 @@ By using the Crypto app, you agree to the terms outlined in this Privacy Policy.
           </packing>
         </child>
         <child>
-          <object class="GtkSearchEntry">
+          <object class="GtkSearchEntry" id="search_bar_main_window">
             <property name="width-request">444</property>
             <property name="height-request">48</property>
             <property name="visible">True</property>
@@ -2789,7 +2789,7 @@ By using the Crypto app, you agree to the terms outlined in this Privacy Policy.
                 <property name="halign">start</property>
                 <property name="margin-right">70</property>
                 <property name="margin-end">70</property>
-                <property name="pixbuf">images\NavBar\DashboardActive.png</property>
+                <property name="pixbuf">Desktop/Project/Content (2).png</property>
               </object>
             </child>
           </object>
@@ -2814,7 +2814,7 @@ By using the Crypto app, you agree to the terms outlined in this Privacy Policy.
                 <property name="halign">start</property>
                 <property name="margin-right">125</property>
                 <property name="margin-end">125</property>
-                <property name="pixbuf">images\NavBar\P2P.png</property>
+                <property name="pixbuf">Desktop/Project/Content (4).png</property>
               </object>
             </child>
           </object>
@@ -2859,7 +2859,7 @@ By using the Crypto app, you agree to the terms outlined in this Privacy Policy.
                 <property name="halign">start</property>
                 <property name="margin-right">93</property>
                 <property name="margin-end">93</property>
-                <property name="pixbuf">images\NavBar\Portfolio.png</property>
+                <property name="pixbuf">Desktop/Project/Content (10).png</property>
               </object>
             </child>
           </object>
@@ -2869,7 +2869,7 @@ By using the Crypto app, you agree to the terms outlined in this Privacy Policy.
           </packing>
         </child>
         <child>
-          <object class="GtkButton" id="transactions_button_gtkwindow1">
+          <object class="GtkButton" id="transactions_button_main_window">
             <property name="width-request">224</property>
             <property name="height-request">56</property>
             <property name="visible">True</property>
@@ -2884,7 +2884,7 @@ By using the Crypto app, you agree to the terms outlined in this Privacy Policy.
                 <property name="halign">start</property>
                 <property name="margin-right">60</property>
                 <property name="margin-end">60</property>
-                <property name="pixbuf">images\NavBar\Transactions.png</property>
+                <property name="pixbuf">Desktop/Project/Content (5).png</property>
               </object>
             </child>
           </object>
@@ -2911,6 +2911,16 @@ By using the Crypto app, you agree to the terms outlined in this Privacy Policy.
           <packing>
             <property name="left-attach">0</property>
             <property name="top-attach">11</property>
+          </packing>
+        </child>
+        <child>
+          <object class="GtkLabel">
+            <property name="visible">True</property>
+            <property name="can-focus">False</property>
+          </object>
+          <packing>
+            <property name="left-attach">0</property>
+            <property name="top-attach">10</property>
           </packing>
         </child>
         <child>
@@ -2981,6 +2991,7 @@ By using the Crypto app, you agree to the terms outlined in this Privacy Policy.
                   <object class="GtkFrame">
                     <property name="visible">True</property>
                     <property name="can-focus">False</property>
+                    <property name="margin-left">60</property>
                     <property name="margin-start">60</property>
                     <property name="label-xalign">0</property>
                     <property name="shadow-type">none</property>
@@ -3122,6 +3133,8 @@ By using the Crypto app, you agree to the terms outlined in this Privacy Policy.
                                                   <object class="GtkGrid">
                                                     <property name="visible">True</property>
                                                     <property name="can-focus">False</property>
+                                                    <property name="halign">end</property>
+                                                    <property name="valign">end</property>
                                                     <property name="row-homogeneous">True</property>
                                                     <property name="column-homogeneous">True</property>
                                                     <child>
@@ -3130,12 +3143,11 @@ By using the Crypto app, you agree to the terms outlined in this Privacy Policy.
                                                         <property name="can-focus">False</property>
                                                         <property name="halign">start</property>
                                                         <property name="margin-left">10</property>
-                                                        <property name="margin-right">10</property>
                                                         <property name="margin-start">10</property>
-                                                        <property name="margin-end">10</property>
-                                                        <property name="margin-top">10</property>
-                                                        <property name="margin-bottom">10</property>
                                                         <property name="label" translatable="yes">ABCDEF</property>
+                                                        <attributes>
+                                                          <attribute name="font-desc" value="Ubuntu 19"/>
+                                                        </attributes>
                                                       </object>
                                                       <packing>
                                                         <property name="left-attach">0</property>
@@ -3172,6 +3184,9 @@ By using the Crypto app, you agree to the terms outlined in this Privacy Policy.
                                                         <property name="margin-top">10</property>
                                                         <property name="margin-bottom">10</property>
                                                         <property name="label" translatable="yes">Current Balance</property>
+                                                        <attributes>
+                                                          <attribute name="foreground" value="#9a9a99999696"/>
+                                                        </attributes>
                                                       </object>
                                                       <packing>
                                                         <property name="left-attach">0</property>
@@ -3183,13 +3198,15 @@ By using the Crypto app, you agree to the terms outlined in this Privacy Policy.
                                                         <property name="visible">True</property>
                                                         <property name="can-focus">False</property>
                                                         <property name="halign">start</property>
-                                                        <property name="margin-left">10</property>
-                                                        <property name="margin-right">10</property>
-                                                        <property name="margin-start">10</property>
-                                                        <property name="margin-end">10</property>
+                                                        <property name="valign">end</property>
+                                                        <property name="margin-left">5</property>
+                                                        <property name="margin-start">5</property>
                                                         <property name="margin-top">10</property>
-                                                        <property name="margin-bottom">10</property>
                                                         <property name="label" translatable="yes">Holder</property>
+                                                        <attributes>
+                                                          <attribute name="font-desc" value="Ubuntu 10"/>
+                                                          <attribute name="foreground" value="#9a9a99999696"/>
+                                                        </attributes>
                                                       </object>
                                                       <packing>
                                                         <property name="left-attach">0</property>
@@ -3215,13 +3232,12 @@ By using the Crypto app, you agree to the terms outlined in this Privacy Policy.
                                                         <property name="visible">True</property>
                                                         <property name="can-focus">False</property>
                                                         <property name="halign">start</property>
-                                                        <property name="margin-left">10</property>
-                                                        <property name="margin-right">10</property>
-                                                        <property name="margin-start">10</property>
-                                                        <property name="margin-end">10</property>
-                                                        <property name="margin-top">10</property>
-                                                        <property name="margin-bottom">10</property>
+                                                        <property name="margin-left">5</property>
+                                                        <property name="margin-start">5</property>
                                                         <property name="label" translatable="yes">150,000,000</property>
+                                                        <attributes>
+                                                          <attribute name="font-desc" value="Ubuntu 20"/>
+                                                        </attributes>
                                                       </object>
                                                       <packing>
                                                         <property name="left-attach">0</property>
@@ -3229,7 +3245,18 @@ By using the Crypto app, you agree to the terms outlined in this Privacy Policy.
                                                       </packing>
                                                     </child>
                                                     <child>
-                                                      <placeholder/>
+                                                      <object class="GtkLabel" id="personal_name_card">
+                                                        <property name="visible">True</property>
+                                                        <property name="can-focus">False</property>
+                                                        <property name="halign">start</property>
+                                                        <property name="margin-left">5</property>
+                                                        <property name="margin-start">5</property>
+                                                        <property name="label" translatable="yes">Asadbek Mahmudov</property>
+                                                      </object>
+                                                      <packing>
+                                                        <property name="left-attach">0</property>
+                                                        <property name="top-attach">4</property>
+                                                      </packing>
                                                     </child>
                                                     <child>
                                                       <placeholder/>
@@ -3325,105 +3352,144 @@ By using the Crypto app, you agree to the terms outlined in this Privacy Policy.
                               </packing>
                             </child>
                             <child>
-                              <object class="GtkFrame">
+                              <object class="GtkScrolledWindow">
                                 <property name="visible">True</property>
-                                <property name="can-focus">False</property>
-                                <property name="margin-left">20</property>
-                                <property name="margin-start">20</property>
-                                <property name="margin-top">10</property>
-                                <property name="margin-bottom">10</property>
-                                <property name="label-xalign">0</property>
+                                <property name="can-focus">True</property>
+                                <property name="hscrollbar-policy">never</property>
                                 <property name="shadow-type">in</property>
+                                <property name="propagate-natural-height">True</property>
                                 <child>
-                                  <object class="GtkAlignment">
+                                  <object class="GtkViewport">
                                     <property name="visible">True</property>
                                     <property name="can-focus">False</property>
-                                    <property name="left-padding">12</property>
                                     <child>
-                                      <!-- n-columns=2 n-rows=1 -->
-                                      <object class="GtkGrid">
+                                      <object class="GtkBox" id="portfolio_items_box">
                                         <property name="visible">True</property>
                                         <property name="can-focus">False</property>
-                                        <property name="row-homogeneous">True</property>
-                                        <property name="column-homogeneous">True</property>
+                                        <property name="orientation">vertical</property>
                                         <child>
-                                          <!-- n-columns=2 n-rows=1 -->
-                                          <object class="GtkGrid">
+                                          <object class="GtkFrame" id="portfolio_item">
                                             <property name="visible">True</property>
                                             <property name="can-focus">False</property>
-                                            <property name="row-homogeneous">True</property>
-                                            <property name="column-homogeneous">True</property>
+                                            <property name="margin-left">20</property>
+                                            <property name="margin-start">20</property>
+                                            <property name="margin-top">10</property>
+                                            <property name="margin-bottom">10</property>
+                                            <property name="label-xalign">0</property>
+                                            <property name="shadow-type">in</property>
                                             <child>
-                                              <!-- n-columns=1 n-rows=2 -->
-                                              <object class="GtkGrid">
+                                              <object class="GtkAlignment">
                                                 <property name="visible">True</property>
                                                 <property name="can-focus">False</property>
-                                                <property name="row-homogeneous">True</property>
-                                                <property name="column-homogeneous">True</property>
+                                                <property name="left-padding">12</property>
                                                 <child>
-                                                  <object class="GtkLabel">
+                                                  <!-- n-columns=2 n-rows=1 -->
+                                                  <object class="GtkGrid">
                                                     <property name="visible">True</property>
                                                     <property name="can-focus">False</property>
-                                                    <property name="label" translatable="yes">Etherium</property>
+                                                    <property name="row-homogeneous">True</property>
+                                                    <property name="column-homogeneous">True</property>
+                                                    <child>
+                                                      <!-- n-columns=2 n-rows=1 -->
+                                                      <object class="GtkGrid">
+                                                        <property name="visible">True</property>
+                                                        <property name="can-focus">False</property>
+                                                        <property name="row-homogeneous">True</property>
+                                                        <property name="column-homogeneous">True</property>
+                                                        <child>
+                                                          <!-- n-columns=1 n-rows=2 -->
+                                                          <object class="GtkGrid">
+                                                            <property name="visible">True</property>
+                                                            <property name="can-focus">False</property>
+                                                            <property name="row-homogeneous">True</property>
+                                                            <property name="column-homogeneous">True</property>
+                                                            <child>
+                                                            <object class="GtkLabel">
+                                                            <property name="visible">True</property>
+                                                            <property name="can-focus">False</property>
+                                                            <property name="label" translatable="yes">Etherium</property>
+                                                            </object>
+                                                            <packing>
+                                                            <property name="left-attach">0</property>
+                                                            <property name="top-attach">0</property>
+                                                            </packing>
+                                                            </child>
+                                                            <child>
+                                                            <object class="GtkLabel">
+                                                            <property name="visible">True</property>
+                                                            <property name="can-focus">False</property>
+                                                            <property name="label" translatable="yes">$ 3,2k</property>
+                                                            </object>
+                                                            <packing>
+                                                            <property name="left-attach">0</property>
+                                                            <property name="top-attach">1</property>
+                                                            </packing>
+                                                            </child>
+                                                          </object>
+                                                          <packing>
+                                                            <property name="left-attach">1</property>
+                                                            <property name="top-attach">0</property>
+                                                          </packing>
+                                                        </child>
+                                                        <child>
+                                                          <object class="GtkImage">
+                                                            <property name="visible">True</property>
+                                                            <property name="can-focus">False</property>
+                                                            <property name="margin-top">20</property>
+                                                            <property name="margin-bottom">20</property>
+                                                            <property name="stock">gtk-missing-image</property>
+                                                          </object>
+                                                          <packing>
+                                                            <property name="left-attach">0</property>
+                                                            <property name="top-attach">0</property>
+                                                          </packing>
+                                                        </child>
+                                                      </object>
+                                                      <packing>
+                                                        <property name="left-attach">0</property>
+                                                        <property name="top-attach">0</property>
+                                                      </packing>
+                                                    </child>
+                                                    <child>
+                                                      <object class="GtkLabel">
+                                                        <property name="visible">True</property>
+                                                        <property name="can-focus">False</property>
+                                                        <property name="label" translatable="yes">0,0123 ETH</property>
+                                                      </object>
+                                                      <packing>
+                                                        <property name="left-attach">1</property>
+                                                        <property name="top-attach">0</property>
+                                                      </packing>
+                                                    </child>
                                                   </object>
-                                                  <packing>
-                                                    <property name="left-attach">0</property>
-                                                    <property name="top-attach">0</property>
-                                                  </packing>
-                                                </child>
-                                                <child>
-                                                  <object class="GtkLabel">
-                                                    <property name="visible">True</property>
-                                                    <property name="can-focus">False</property>
-                                                    <property name="label" translatable="yes">$ 3,2k</property>
-                                                  </object>
-                                                  <packing>
-                                                    <property name="left-attach">0</property>
-                                                    <property name="top-attach">1</property>
-                                                  </packing>
                                                 </child>
                                               </object>
-                                              <packing>
-                                                <property name="left-attach">1</property>
-                                                <property name="top-attach">0</property>
-                                              </packing>
                                             </child>
-                                            <child>
-                                              <object class="GtkImage">
-                                                <property name="visible">True</property>
-                                                <property name="can-focus">False</property>
-                                                <property name="margin-top">20</property>
-                                                <property name="margin-bottom">20</property>
-                                                <property name="stock">gtk-missing-image</property>
-                                              </object>
-                                              <packing>
-                                                <property name="left-attach">0</property>
-                                                <property name="top-attach">0</property>
-                                              </packing>
+                                            <child type="label_item">
+                                              <placeholder/>
                                             </child>
                                           </object>
                                           <packing>
-                                            <property name="left-attach">0</property>
-                                            <property name="top-attach">0</property>
+                                            <property name="expand">False</property>
+                                            <property name="fill">True</property>
+                                            <property name="position">0</property>
                                           </packing>
                                         </child>
                                         <child>
-                                          <object class="GtkLabel">
-                                            <property name="visible">True</property>
-                                            <property name="can-focus">False</property>
-                                            <property name="label" translatable="yes">0,0123 ETH</property>
-                                          </object>
-                                          <packing>
-                                            <property name="left-attach">1</property>
-                                            <property name="top-attach">0</property>
-                                          </packing>
+                                          <placeholder/>
+                                        </child>
+                                        <child>
+                                          <placeholder/>
+                                        </child>
+                                        <child>
+                                          <placeholder/>
+                                        </child>
+                                        <child>
+                                          <placeholder/>
                                         </child>
                                       </object>
                                     </child>
                                   </object>
-                                </child>
-                                <child type="label_item">
-                                  <placeholder/>
                                 </child>
                               </object>
                               <packing>
@@ -3433,436 +3499,16 @@ By using the Crypto app, you agree to the terms outlined in this Privacy Policy.
                               </packing>
                             </child>
                             <child>
-                              <object class="GtkFrame">
-                                <property name="visible">True</property>
-                                <property name="can-focus">False</property>
-                                <property name="margin-left">20</property>
-                                <property name="margin-start">20</property>
-                                <property name="margin-top">10</property>
-                                <property name="margin-bottom">10</property>
-                                <property name="label-xalign">0</property>
-                                <property name="shadow-type">in</property>
-                                <child>
-                                  <object class="GtkAlignment">
-                                    <property name="visible">True</property>
-                                    <property name="can-focus">False</property>
-                                    <property name="left-padding">12</property>
-                                    <child>
-                                      <!-- n-columns=2 n-rows=1 -->
-                                      <object class="GtkGrid">
-                                        <property name="visible">True</property>
-                                        <property name="can-focus">False</property>
-                                        <property name="row-homogeneous">True</property>
-                                        <property name="column-homogeneous">True</property>
-                                        <child>
-                                          <!-- n-columns=2 n-rows=1 -->
-                                          <object class="GtkGrid">
-                                            <property name="visible">True</property>
-                                            <property name="can-focus">False</property>
-                                            <property name="row-homogeneous">True</property>
-                                            <property name="column-homogeneous">True</property>
-                                            <child>
-                                              <!-- n-columns=1 n-rows=2 -->
-                                              <object class="GtkGrid">
-                                                <property name="visible">True</property>
-                                                <property name="can-focus">False</property>
-                                                <property name="row-homogeneous">True</property>
-                                                <property name="column-homogeneous">True</property>
-                                                <child>
-                                                  <object class="GtkLabel">
-                                                    <property name="visible">True</property>
-                                                    <property name="can-focus">False</property>
-                                                    <property name="label" translatable="yes">Etherium</property>
-                                                  </object>
-                                                  <packing>
-                                                    <property name="left-attach">0</property>
-                                                    <property name="top-attach">0</property>
-                                                  </packing>
-                                                </child>
-                                                <child>
-                                                  <object class="GtkLabel">
-                                                    <property name="visible">True</property>
-                                                    <property name="can-focus">False</property>
-                                                    <property name="label" translatable="yes">$ 3,2k</property>
-                                                  </object>
-                                                  <packing>
-                                                    <property name="left-attach">0</property>
-                                                    <property name="top-attach">1</property>
-                                                  </packing>
-                                                </child>
-                                              </object>
-                                              <packing>
-                                                <property name="left-attach">1</property>
-                                                <property name="top-attach">0</property>
-                                              </packing>
-                                            </child>
-                                            <child>
-                                              <object class="GtkImage">
-                                                <property name="visible">True</property>
-                                                <property name="can-focus">False</property>
-                                                <property name="margin-top">20</property>
-                                                <property name="margin-bottom">20</property>
-                                                <property name="stock">gtk-missing-image</property>
-                                              </object>
-                                              <packing>
-                                                <property name="left-attach">0</property>
-                                                <property name="top-attach">0</property>
-                                              </packing>
-                                            </child>
-                                          </object>
-                                          <packing>
-                                            <property name="left-attach">0</property>
-                                            <property name="top-attach">0</property>
-                                          </packing>
-                                        </child>
-                                        <child>
-                                          <object class="GtkLabel">
-                                            <property name="visible">True</property>
-                                            <property name="can-focus">False</property>
-                                            <property name="label" translatable="yes">0,0123 ETH</property>
-                                          </object>
-                                          <packing>
-                                            <property name="left-attach">1</property>
-                                            <property name="top-attach">0</property>
-                                          </packing>
-                                        </child>
-                                      </object>
-                                    </child>
-                                  </object>
-                                </child>
-                                <child type="label_item">
-                                  <placeholder/>
-                                </child>
-                              </object>
-                              <packing>
-                                <property name="expand">False</property>
-                                <property name="fill">True</property>
-                                <property name="position">3</property>
-                              </packing>
+                              <placeholder/>
                             </child>
                             <child>
-                              <object class="GtkFrame">
-                                <property name="visible">True</property>
-                                <property name="can-focus">False</property>
-                                <property name="margin-left">20</property>
-                                <property name="margin-start">20</property>
-                                <property name="margin-top">10</property>
-                                <property name="margin-bottom">10</property>
-                                <property name="label-xalign">0</property>
-                                <property name="shadow-type">in</property>
-                                <child>
-                                  <object class="GtkAlignment">
-                                    <property name="visible">True</property>
-                                    <property name="can-focus">False</property>
-                                    <property name="left-padding">12</property>
-                                    <child>
-                                      <!-- n-columns=2 n-rows=1 -->
-                                      <object class="GtkGrid">
-                                        <property name="visible">True</property>
-                                        <property name="can-focus">False</property>
-                                        <property name="row-homogeneous">True</property>
-                                        <property name="column-homogeneous">True</property>
-                                        <child>
-                                          <!-- n-columns=2 n-rows=1 -->
-                                          <object class="GtkGrid">
-                                            <property name="visible">True</property>
-                                            <property name="can-focus">False</property>
-                                            <property name="row-homogeneous">True</property>
-                                            <property name="column-homogeneous">True</property>
-                                            <child>
-                                              <!-- n-columns=1 n-rows=2 -->
-                                              <object class="GtkGrid">
-                                                <property name="visible">True</property>
-                                                <property name="can-focus">False</property>
-                                                <property name="row-homogeneous">True</property>
-                                                <property name="column-homogeneous">True</property>
-                                                <child>
-                                                  <object class="GtkLabel">
-                                                    <property name="visible">True</property>
-                                                    <property name="can-focus">False</property>
-                                                    <property name="label" translatable="yes">Etherium</property>
-                                                  </object>
-                                                  <packing>
-                                                    <property name="left-attach">0</property>
-                                                    <property name="top-attach">0</property>
-                                                  </packing>
-                                                </child>
-                                                <child>
-                                                  <object class="GtkLabel">
-                                                    <property name="visible">True</property>
-                                                    <property name="can-focus">False</property>
-                                                    <property name="label" translatable="yes">$ 3,2k</property>
-                                                  </object>
-                                                  <packing>
-                                                    <property name="left-attach">0</property>
-                                                    <property name="top-attach">1</property>
-                                                  </packing>
-                                                </child>
-                                              </object>
-                                              <packing>
-                                                <property name="left-attach">1</property>
-                                                <property name="top-attach">0</property>
-                                              </packing>
-                                            </child>
-                                            <child>
-                                              <object class="GtkImage">
-                                                <property name="visible">True</property>
-                                                <property name="can-focus">False</property>
-                                                <property name="margin-top">20</property>
-                                                <property name="margin-bottom">20</property>
-                                                <property name="stock">gtk-missing-image</property>
-                                              </object>
-                                              <packing>
-                                                <property name="left-attach">0</property>
-                                                <property name="top-attach">0</property>
-                                              </packing>
-                                            </child>
-                                          </object>
-                                          <packing>
-                                            <property name="left-attach">0</property>
-                                            <property name="top-attach">0</property>
-                                          </packing>
-                                        </child>
-                                        <child>
-                                          <object class="GtkLabel">
-                                            <property name="visible">True</property>
-                                            <property name="can-focus">False</property>
-                                            <property name="label" translatable="yes">0,0123 ETH</property>
-                                          </object>
-                                          <packing>
-                                            <property name="left-attach">1</property>
-                                            <property name="top-attach">0</property>
-                                          </packing>
-                                        </child>
-                                      </object>
-                                    </child>
-                                  </object>
-                                </child>
-                                <child type="label_item">
-                                  <placeholder/>
-                                </child>
-                              </object>
-                              <packing>
-                                <property name="expand">False</property>
-                                <property name="fill">True</property>
-                                <property name="position">4</property>
-                              </packing>
+                              <placeholder/>
                             </child>
                             <child>
-                              <object class="GtkFrame">
-                                <property name="visible">True</property>
-                                <property name="can-focus">False</property>
-                                <property name="margin-left">20</property>
-                                <property name="margin-start">20</property>
-                                <property name="margin-top">10</property>
-                                <property name="margin-bottom">10</property>
-                                <property name="label-xalign">0</property>
-                                <property name="shadow-type">in</property>
-                                <child>
-                                  <object class="GtkAlignment">
-                                    <property name="visible">True</property>
-                                    <property name="can-focus">False</property>
-                                    <property name="left-padding">12</property>
-                                    <child>
-                                      <!-- n-columns=2 n-rows=1 -->
-                                      <object class="GtkGrid">
-                                        <property name="visible">True</property>
-                                        <property name="can-focus">False</property>
-                                        <property name="row-homogeneous">True</property>
-                                        <property name="column-homogeneous">True</property>
-                                        <child>
-                                          <!-- n-columns=2 n-rows=1 -->
-                                          <object class="GtkGrid">
-                                            <property name="visible">True</property>
-                                            <property name="can-focus">False</property>
-                                            <property name="row-homogeneous">True</property>
-                                            <property name="column-homogeneous">True</property>
-                                            <child>
-                                              <!-- n-columns=1 n-rows=2 -->
-                                              <object class="GtkGrid">
-                                                <property name="visible">True</property>
-                                                <property name="can-focus">False</property>
-                                                <property name="row-homogeneous">True</property>
-                                                <property name="column-homogeneous">True</property>
-                                                <child>
-                                                  <object class="GtkLabel">
-                                                    <property name="visible">True</property>
-                                                    <property name="can-focus">False</property>
-                                                    <property name="label" translatable="yes">Etherium</property>
-                                                  </object>
-                                                  <packing>
-                                                    <property name="left-attach">0</property>
-                                                    <property name="top-attach">0</property>
-                                                  </packing>
-                                                </child>
-                                                <child>
-                                                  <object class="GtkLabel">
-                                                    <property name="visible">True</property>
-                                                    <property name="can-focus">False</property>
-                                                    <property name="label" translatable="yes">$ 3,2k</property>
-                                                  </object>
-                                                  <packing>
-                                                    <property name="left-attach">0</property>
-                                                    <property name="top-attach">1</property>
-                                                  </packing>
-                                                </child>
-                                              </object>
-                                              <packing>
-                                                <property name="left-attach">1</property>
-                                                <property name="top-attach">0</property>
-                                              </packing>
-                                            </child>
-                                            <child>
-                                              <object class="GtkImage">
-                                                <property name="visible">True</property>
-                                                <property name="can-focus">False</property>
-                                                <property name="margin-top">20</property>
-                                                <property name="margin-bottom">20</property>
-                                                <property name="stock">gtk-missing-image</property>
-                                              </object>
-                                              <packing>
-                                                <property name="left-attach">0</property>
-                                                <property name="top-attach">0</property>
-                                              </packing>
-                                            </child>
-                                          </object>
-                                          <packing>
-                                            <property name="left-attach">0</property>
-                                            <property name="top-attach">0</property>
-                                          </packing>
-                                        </child>
-                                        <child>
-                                          <object class="GtkLabel">
-                                            <property name="visible">True</property>
-                                            <property name="can-focus">False</property>
-                                            <property name="label" translatable="yes">0,0123 ETH</property>
-                                          </object>
-                                          <packing>
-                                            <property name="left-attach">1</property>
-                                            <property name="top-attach">0</property>
-                                          </packing>
-                                        </child>
-                                      </object>
-                                    </child>
-                                  </object>
-                                </child>
-                                <child type="label_item">
-                                  <placeholder/>
-                                </child>
-                              </object>
-                              <packing>
-                                <property name="expand">False</property>
-                                <property name="fill">True</property>
-                                <property name="position">5</property>
-                              </packing>
+                              <placeholder/>
                             </child>
                             <child>
-                              <object class="GtkFrame">
-                                <property name="visible">True</property>
-                                <property name="can-focus">False</property>
-                                <property name="margin-left">20</property>
-                                <property name="margin-start">20</property>
-                                <property name="margin-top">10</property>
-                                <property name="margin-bottom">10</property>
-                                <property name="label-xalign">0</property>
-                                <property name="shadow-type">in</property>
-                                <child>
-                                  <object class="GtkAlignment">
-                                    <property name="visible">True</property>
-                                    <property name="can-focus">False</property>
-                                    <property name="left-padding">12</property>
-                                    <child>
-                                      <!-- n-columns=2 n-rows=1 -->
-                                      <object class="GtkGrid">
-                                        <property name="visible">True</property>
-                                        <property name="can-focus">False</property>
-                                        <property name="row-homogeneous">True</property>
-                                        <property name="column-homogeneous">True</property>
-                                        <child>
-                                          <!-- n-columns=2 n-rows=1 -->
-                                          <object class="GtkGrid">
-                                            <property name="visible">True</property>
-                                            <property name="can-focus">False</property>
-                                            <property name="row-homogeneous">True</property>
-                                            <property name="column-homogeneous">True</property>
-                                            <child>
-                                              <!-- n-columns=1 n-rows=2 -->
-                                              <object class="GtkGrid">
-                                                <property name="visible">True</property>
-                                                <property name="can-focus">False</property>
-                                                <property name="row-homogeneous">True</property>
-                                                <property name="column-homogeneous">True</property>
-                                                <child>
-                                                  <object class="GtkLabel">
-                                                    <property name="visible">True</property>
-                                                    <property name="can-focus">False</property>
-                                                    <property name="label" translatable="yes">Etherium</property>
-                                                  </object>
-                                                  <packing>
-                                                    <property name="left-attach">0</property>
-                                                    <property name="top-attach">0</property>
-                                                  </packing>
-                                                </child>
-                                                <child>
-                                                  <object class="GtkLabel">
-                                                    <property name="visible">True</property>
-                                                    <property name="can-focus">False</property>
-                                                    <property name="label" translatable="yes">$ 3,2k</property>
-                                                  </object>
-                                                  <packing>
-                                                    <property name="left-attach">0</property>
-                                                    <property name="top-attach">1</property>
-                                                  </packing>
-                                                </child>
-                                              </object>
-                                              <packing>
-                                                <property name="left-attach">1</property>
-                                                <property name="top-attach">0</property>
-                                              </packing>
-                                            </child>
-                                            <child>
-                                              <object class="GtkImage">
-                                                <property name="visible">True</property>
-                                                <property name="can-focus">False</property>
-                                                <property name="margin-top">20</property>
-                                                <property name="margin-bottom">20</property>
-                                                <property name="stock">gtk-missing-image</property>
-                                              </object>
-                                              <packing>
-                                                <property name="left-attach">0</property>
-                                                <property name="top-attach">0</property>
-                                              </packing>
-                                            </child>
-                                          </object>
-                                          <packing>
-                                            <property name="left-attach">0</property>
-                                            <property name="top-attach">0</property>
-                                          </packing>
-                                        </child>
-                                        <child>
-                                          <object class="GtkLabel">
-                                            <property name="visible">True</property>
-                                            <property name="can-focus">False</property>
-                                            <property name="label" translatable="yes">0,0123 ETH</property>
-                                          </object>
-                                          <packing>
-                                            <property name="left-attach">1</property>
-                                            <property name="top-attach">0</property>
-                                          </packing>
-                                        </child>
-                                      </object>
-                                    </child>
-                                  </object>
-                                </child>
-                                <child type="label_item">
-                                  <placeholder/>
-                                </child>
-                              </object>
-                              <packing>
-                                <property name="expand">False</property>
-                                <property name="fill">True</property>
-                                <property name="position">6</property>
-                              </packing>
+                              <placeholder/>
                             </child>
                           </object>
                         </child>
@@ -3883,6 +3529,7 @@ By using the Crypto app, you agree to the terms outlined in this Privacy Policy.
                   <object class="GtkFrame">
                     <property name="visible">True</property>
                     <property name="can-focus">False</property>
+                    <property name="margin-left">60</property>
                     <property name="margin-start">60</property>
                     <property name="label-xalign">0</property>
                     <property name="shadow-type">none</property>
@@ -3902,7 +3549,6 @@ By using the Crypto app, you agree to the terms outlined in this Privacy Policy.
                               <object class="GtkEventBox" id="currency_name_event">
                                 <property name="visible">True</property>
                                 <property name="can-focus">False</property>
-                                <signal name="button-press-event" handler="on_currency_name_click" swapped="no"/>
                                 <child>
                                   <object class="GtkLabel" id="currency_name_main_lbl">
                                     <property name="visible">True</property>
@@ -3925,7 +3571,6 @@ By using the Crypto app, you agree to the terms outlined in this Privacy Policy.
                               <object class="GtkEventBox" id="price_event">
                                 <property name="visible">True</property>
                                 <property name="can-focus">False</property>
-                                <signal name="button-press-event" handler="on_price_click" swapped="no"/>
                                 <child>
                                   <object class="GtkLabel" id="price_name_main_lbl">
                                     <property name="visible">True</property>
@@ -3949,7 +3594,6 @@ By using the Crypto app, you agree to the terms outlined in this Privacy Policy.
                               <object class="GtkEventBox" id="volume_event">
                                 <property name="visible">True</property>
                                 <property name="can-focus">False</property>
-                                <signal name="button-press-event" handler="on_volume_click" swapped="no"/>
                                 <child>
                                   <object class="GtkLabel" id="volume_name_main_lbl">
                                     <property name="visible">True</property>
@@ -3973,7 +3617,6 @@ By using the Crypto app, you agree to the terms outlined in this Privacy Policy.
                               <object class="GtkEventBox" id="rank_event">
                                 <property name="visible">True</property>
                                 <property name="can-focus">False</property>
-                                <signal name="button-press-event" handler="on_rank_click" swapped="no"/>
                                 <child>
                                   <object class="GtkLabel" id="rank_name_main_lbl">
                                     <property name="visible">True</property>
@@ -4055,33 +3698,6 @@ By using the Crypto app, you agree to the terms outlined in this Privacy Policy.
             <property name="top-attach">2</property>
             <property name="width">13</property>
             <property name="height">30</property>
-          </packing>
-        </child>
-        <child>
-          <object class="GtkButton">
-            <property name="width-request">224</property>
-            <property name="height-request">56</property>
-            <property name="visible">True</property>
-            <property name="can-focus">True</property>
-            <property name="receives-default">True</property>
-            <property name="halign">start</property>
-            <property name="valign">start</property>
-            <property name="margin-top">10</property>
-            <property name="relief">none</property>
-            <child>
-              <object class="GtkImage">
-                <property name="visible">True</property>
-                <property name="can-focus">False</property>
-                <property name="halign">start</property>
-                <property name="margin-right">60</property>
-                <property name="margin-end">60</property>
-                <property name="pixbuf">images\NavBar\Miner.png</property>
-              </object>
-            </child>
-          </object>
-          <packing>
-            <property name="left-attach">0</property>
-            <property name="top-attach">10</property>
           </packing>
         </child>
         <child>
@@ -8944,7 +8560,7 @@ entered data</property>
           </packing>
         </child>
         <child>
-          <object class="GtkButton" id="protfolio_button_portfolio">
+          <object class="GtkButton" id="portfolio_button_portfolio">
             <property name="width-request">224</property>
             <property name="height-request">56</property>
             <property name="visible">True</property>
@@ -9430,6 +9046,153 @@ entered data</property>
         </child>
         <child>
           <placeholder/>
+        </child>
+      </object>
+    </child>
+  </object>
+  <object class="GtkDialog" id="search_properties_popup">
+    <property name="can-focus">False</property>
+    <property name="type-hint">dialog</property>
+    <child internal-child="vbox">
+      <object class="GtkBox">
+        <property name="can-focus">False</property>
+        <property name="orientation">vertical</property>
+        <property name="spacing">2</property>
+        <child internal-child="action_area">
+          <object class="GtkButtonBox">
+            <property name="can-focus">False</property>
+            <property name="layout-style">end</property>
+            <child>
+              <placeholder/>
+            </child>
+            <child>
+              <placeholder/>
+            </child>
+          </object>
+          <packing>
+            <property name="expand">False</property>
+            <property name="fill">False</property>
+            <property name="position">0</property>
+          </packing>
+        </child>
+        <child>
+          <!-- n-columns=2 n-rows=5 -->
+          <object class="GtkGrid">
+            <property name="visible">True</property>
+            <property name="can-focus">False</property>
+            <property name="column-spacing">5</property>
+            <child>
+              <object class="GtkEntry">
+                <property name="visible">True</property>
+                <property name="can-focus">True</property>
+                <property name="margin-left">10</property>
+                <property name="margin-start">10</property>
+              </object>
+              <packing>
+                <property name="left-attach">0</property>
+                <property name="top-attach">1</property>
+              </packing>
+            </child>
+            <child>
+              <object class="GtkEntry">
+                <property name="visible">True</property>
+                <property name="can-focus">True</property>
+                <property name="margin-left">10</property>
+                <property name="margin-start">10</property>
+              </object>
+              <packing>
+                <property name="left-attach">0</property>
+                <property name="top-attach">3</property>
+              </packing>
+            </child>
+            <child>
+              <object class="GtkEntry">
+                <property name="visible">True</property>
+                <property name="can-focus">True</property>
+                <property name="margin-left">10</property>
+                <property name="margin-right">10</property>
+                <property name="margin-start">10</property>
+                <property name="margin-end">10</property>
+              </object>
+              <packing>
+                <property name="left-attach">1</property>
+                <property name="top-attach">3</property>
+              </packing>
+            </child>
+            <child>
+              <object class="GtkLabel">
+                <property name="visible">True</property>
+                <property name="can-focus">False</property>
+                <property name="halign">start</property>
+                <property name="margin-left">10</property>
+                <property name="margin-start">10</property>
+                <property name="margin-top">10</property>
+                <property name="label" translatable="yes">Name:</property>
+              </object>
+              <packing>
+                <property name="left-attach">0</property>
+                <property name="top-attach">0</property>
+              </packing>
+            </child>
+            <child>
+              <object class="GtkLabel">
+                <property name="visible">True</property>
+                <property name="can-focus">False</property>
+                <property name="halign">start</property>
+                <property name="margin-left">10</property>
+                <property name="margin-start">10</property>
+                <property name="margin-top">10</property>
+                <property name="label" translatable="yes">From:</property>
+              </object>
+              <packing>
+                <property name="left-attach">0</property>
+                <property name="top-attach">2</property>
+              </packing>
+            </child>
+            <child>
+              <object class="GtkLabel">
+                <property name="visible">True</property>
+                <property name="can-focus">False</property>
+                <property name="halign">start</property>
+                <property name="margin-left">10</property>
+                <property name="margin-start">10</property>
+                <property name="margin-top">10</property>
+                <property name="label" translatable="yes">To:</property>
+              </object>
+              <packing>
+                <property name="left-attach">1</property>
+                <property name="top-attach">2</property>
+              </packing>
+            </child>
+            <child>
+              <object class="GtkButton" id="search_apply_button">
+                <property name="label" translatable="yes">apply</property>
+                <property name="visible">True</property>
+                <property name="can-focus">True</property>
+                <property name="receives-default">True</property>
+                <property name="halign">center</property>
+                <property name="valign">center</property>
+                <property name="margin-top">10</property>
+                <property name="margin-bottom">10</property>
+              </object>
+              <packing>
+                <property name="left-attach">0</property>
+                <property name="top-attach">4</property>
+                <property name="width">2</property>
+              </packing>
+            </child>
+            <child>
+              <placeholder/>
+            </child>
+            <child>
+              <placeholder/>
+            </child>
+          </object>
+          <packing>
+            <property name="expand">False</property>
+            <property name="fill">True</property>
+            <property name="position">1</property>
+          </packing>
         </child>
       </object>
     </child>
@@ -10902,7 +10665,7 @@ entered data</property>
       </object>
     </child>
   </object>
-  <object class="GtkWindow" id="transaction_window">
+  <object class="GtkWindow" id="transactions_window">
     <property name="width-request">1440</property>
     <property name="height-request">968</property>
     <property name="can-focus">False</property>
@@ -11455,7 +11218,7 @@ entered data</property>
           </packing>
         </child>
         <child>
-          <object class="GtkButton" id="transactions_button_portfolio1">
+          <object class="GtkButton" id="transactions_button_transactions_window">
             <property name="width-request">224</property>
             <property name="height-request">56</property>
             <property name="visible">True</property>
@@ -11611,7 +11374,7 @@ entered data</property>
                             <property name="hscroll-policy">natural</property>
                             <property name="vscroll-policy">natural</property>
                             <child>
-                              <object class="GtkBox" id="market_values_box3">
+                              <object class="GtkBox" id="transactions_box">
                                 <property name="visible">True</property>
                                 <property name="can-focus">False</property>
                                 <property name="orientation">vertical</property>
@@ -11824,7 +11587,16 @@ entered data</property>
                   </packing>
                 </child>
                 <child>
-                  <placeholder/>
+                  <object class="GtkButton" id="transactions_sort">
+                    <property name="label" translatable="yes">sort</property>
+                    <property name="visible">True</property>
+                    <property name="can-focus">True</property>
+                    <property name="receives-default">True</property>
+                  </object>
+                  <packing>
+                    <property name="left-attach">4</property>
+                    <property name="top-attach">1</property>
+                  </packing>
                 </child>
                 <child>
                   <placeholder/>
