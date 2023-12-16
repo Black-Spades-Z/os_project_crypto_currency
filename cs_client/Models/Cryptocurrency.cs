@@ -9,11 +9,26 @@ using System.ComponentModel.DataAnnotations;
 
 public class Cryptocurrency
 {
+	[NotMapped]
+    	public string ObjectType => "Crypto";
+	[NotMapped]
+	public string Purpose { get; set; }
+
 	[Key]
 	public string Name { get; set; }
 	public decimal Price { get; set; }
 	public decimal Fee { get; set; }
 	public decimal Amount { get; set; }
+	
+	public string Serialize()
+    {
+        return JsonConvert.SerializeObject(this);
+    }
+
+    public static Cryptocurrency Deserialize(string json)
+    {
+        return JsonConvert.DeserializeObject<Cryptocurrency>(json);
+    }
 	
 	public static int WaitForServerAssets(NetworkStream stream, string[] currencyName, float[] currencyPrice, float[] currencyVolume, string[] currencyRank, string[] currencyIcons)
 	{

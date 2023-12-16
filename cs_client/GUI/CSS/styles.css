@@ -1,5 +1,8 @@
 .card{
     background-image : url("../Glade/images/Dashboard/MyBalance.png");
+	background-repeat: no-repeat;
+	background-size: cover;
+
 
 }
 .main-window{
@@ -189,8 +192,8 @@
 .navbar-button {
   color: #000000; 
   padding: 10px 20px; 
-  border: 2px solid white;
-  border-radius: 8px;
+
+
   text-decoration: none; 
   transition: background-color 0.1s ease; 
 }

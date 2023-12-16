@@ -48,6 +48,43 @@ public class UserPortfolio
     {
         return JsonConvert.DeserializeObject<UserPortfolio>(json);
     }
+
+    public Dictionary<string, object> GetUserPortfolioAsDictionary()
+    {
+        var userPortfolioData = new Dictionary<string, object>
+        {
+            { "UserId", UserId },
+            { "Bitcoin", Bitcoin },
+            { "Ethereum", Ethereum },
+            { "Ripple", Ripple},
+            { "Litecoin", Litecoin},
+            { "Cardano", Cardano},
+            { "Polkadot", Polkadot},
+            { "BinanceCoin", BinanceCoin},
+            { "Chainlink", Chainlink},
+            { "Stellar", Stellar},
+            { "BitcoinCash", BitcoinCash},
+            { "Dogecoin", Dogecoin},
+            { "USD_Coin", USD_Coin},
+            { "Aave", Aave},
+            { "Cosmos", Cosmos},
+            { "Monero", Monero},
+            { "Neo", Neo},
+            { "Tezos", Tezos},
+            { "Maker", Maker},
+            { "EOS", EOS},
+            { "TRON", TRON},
+            { "VeChain", VeChain},
+            { "Solana", Solana},
+            { "Theta", Theta},
+            { "Dash", Dash},
+            { "Uniswap", Uniswap},
+            { "Compound", Compound}
+
+        };
+        return userPortfolioData;
+    }
+
     
     public static UserPortfolio WaitForAccountPortfolio(NetworkStream stream)
 	{

@@ -2042,11 +2042,13 @@ Our support team is ready to help.</property>
     </data>
   </object>
   <object class="GtkWindow" id="logout_window">
+    <property name="width-request">400</property>
+    <property name="height-request">150</property>
     <property name="can-focus">False</property>
+    <property name="resizable">False</property>
+    <property name="destroy-with-parent">True</property>
     <child>
       <object class="GtkFrame">
-        <property name="width-request">354</property>
-        <property name="height-request">324</property>
         <property name="visible">True</property>
         <property name="can-focus">False</property>
         <property name="label-xalign">0</property>
@@ -2077,7 +2079,7 @@ Our support team is ready to help.</property>
                       <object class="GtkImage">
                         <property name="visible">True</property>
                         <property name="can-focus">False</property>
-                        <property name="pixbuf">Close.png</property>
+                        <property name="pixbuf">images/P2P/Close.png</property>
                       </object>
                     </child>
                   </object>
@@ -2881,6 +2883,8 @@ Our support team is ready to help.</property>
                                         <property name="column-homogeneous">True</property>
                                         <child>
                                           <object class="GtkFrame" id="card">
+                                            <property name="width-request">290</property>
+                                            <property name="height-request">156</property>
                                             <property name="visible">True</property>
                                             <property name="can-focus">False</property>
                                             <property name="label-xalign">0</property>
@@ -3984,7 +3988,7 @@ Our support team is ready to help.</property>
           </packing>
         </child>
         <child>
-          <object class="GtkButton" id="miner_button__miner_window">
+          <object class="GtkButton" id="miner_button_miner_window">
             <property name="width-request">224</property>
             <property name="height-request">56</property>
             <property name="visible">True</property>
@@ -7032,7 +7036,7 @@ entered data</property>
           </packing>
         </child>
         <child>
-          <object class="GtkButton" id="help_button_porftolio_window">
+          <object class="GtkButton" id="help_button_portfolio_window">
             <property name="width-request">224</property>
             <property name="height-request">56</property>
             <property name="visible">True</property>
@@ -9503,7 +9507,7 @@ entered data</property>
       </object>
     </child>
   </object>
-  <object class="GtkWindow" id="transaction_window">
+  <object class="GtkWindow" id="transactions_window">
     <property name="width-request">1440</property>
     <property name="height-request">968</property>
     <property name="can-focus">False</property>
@@ -9802,29 +9806,6 @@ entered data</property>
           </object>
           <packing>
             <property name="left-attach">6</property>
-            <property name="top-attach">0</property>
-          </packing>
-        </child>
-        <child>
-          <object class="GtkSearchEntry" id="search_bar_transaction_window">
-            <property name="width-request">444</property>
-            <property name="height-request">48</property>
-            <property name="visible">True</property>
-            <property name="can-focus">True</property>
-            <property name="valign">center</property>
-            <property name="margin-left">420</property>
-            <property name="margin-right">100</property>
-            <property name="margin-start">420</property>
-            <property name="margin-end">100</property>
-            <property name="margin-top">28</property>
-            <property name="primary-icon-name">edit-find-symbolic</property>
-            <property name="primary-icon-activatable">False</property>
-            <property name="primary-icon-sensitive">False</property>
-            <property name="placeholder-text" translatable="yes">Search..</property>
-            <property name="input-hints">GTK_INPUT_HINT_SPELLCHECK | GTK_INPUT_HINT_NONE</property>
-          </object>
-          <packing>
-            <property name="left-attach">10</property>
             <property name="top-attach">0</property>
           </packing>
         </child>
@@ -10135,7 +10116,7 @@ entered data</property>
                         <property name="hscroll-policy">natural</property>
                         <property name="vscroll-policy">natural</property>
                         <child>
-                          <object class="GtkBox" id="market_values_box3">
+                          <object class="GtkBox" id="transactions_box">
                             <property name="visible">True</property>
                             <property name="can-focus">False</property>
                             <property name="orientation">vertical</property>
@@ -10387,6 +10368,35 @@ entered data</property>
             <property name="top-attach">2</property>
             <property name="width">13</property>
             <property name="height">30</property>
+          </packing>
+        </child>
+        <child>
+          <object class="GtkEventBox" id="search_transaction">
+            <property name="visible">True</property>
+            <property name="can-focus">False</property>
+            <child>
+              <object class="GtkSearchEntry" id="search_bar_transaction_window">
+                <property name="width-request">444</property>
+                <property name="height-request">48</property>
+                <property name="visible">True</property>
+                <property name="can-focus">True</property>
+                <property name="valign">center</property>
+                <property name="margin-left">420</property>
+                <property name="margin-right">100</property>
+                <property name="margin-start">420</property>
+                <property name="margin-end">100</property>
+                <property name="margin-top">28</property>
+                <property name="primary-icon-name">edit-find-symbolic</property>
+                <property name="primary-icon-activatable">False</property>
+                <property name="primary-icon-sensitive">False</property>
+                <property name="placeholder-text" translatable="yes">Search..</property>
+                <property name="input-hints">GTK_INPUT_HINT_SPELLCHECK | GTK_INPUT_HINT_NONE</property>
+              </object>
+            </child>
+          </object>
+          <packing>
+            <property name="left-attach">10</property>
+            <property name="top-attach">0</property>
           </packing>
         </child>
         <child>

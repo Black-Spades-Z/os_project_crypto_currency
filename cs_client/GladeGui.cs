@@ -71,8 +71,16 @@ namespace GladeFunctions
         private EventBox price_event_box;
         private EventBox currency_name_event_box;
         private EventBox volume_box;
-        private Button portfolio_button_gtkwindow1;
+        private Button dashboard_button_main_window;
+        private Button p2p_button_main_window;
+        private Button portfolio_button_main_window;
         private Button transactions_button_main_window;
+        private Button miner_button_main_window;
+        private Button settings_button_main_window;
+        private Button help_button_main_window;
+        private Button logout_button_main_window;
+        private Box market_values_box_main_window;
+
 
 
 
@@ -119,33 +127,128 @@ namespace GladeFunctions
         //Window portfolio
         private Window portfolio_window;
         private Entry search_portfolio;
-        private Button dashboard_button_portfolio;
-        private Button p2p_button_portfolio;
-        private Button portfolio_button_portfolio;
-        private Button transactions_button_portfolio;
-        private Button settings_button_portfolio;
-        private Button help_button_porftolio;
-        private Button logout_button_portfolio;
+        private Button dashboard_button_portfolio_window;
+        private Button p2p_button_portfolio_window;
+        private Button portfolio_button_portfolio_window;
+        private Button transactions_button_portfolio_window;
+        private Button miner_button_portfolio_window;
+        private Button settings_button_portfolio_window;
+        private Button help_button_portfolio_window;
+        private Button logout_button_portfolio_window;
+        private Box portfolio_items_box;
 
         //Window transactions
 
         private Window transactions_window;
         private Entry search_transactions;
         private Box transactions_box;
-        private Button dashboard_button_transactions;
-        private Button p2p_button_transactions;
-        private Button portfolio_button_transactions;
-        private Button transactions_button_transactions;
-        private Button settings_button_transactions;
+        private Button dashboard_button_transaction_window;
+        private Button p2p_button_transaction_window;
+        private Button portfolio_button_transaction_window;
+        private Button transactions_button_transaction_window;
+        private Button miner_button_transaction_window;
+        private Button settings_button_transaction_window;
+        private Button help_button_transaction_window;
+        private Button logout_button_transaction_window;
 
-        private Button logout_button_transactions;
+        //Window P2P
 
-        // main Window 1
-        // private Button dashboard_button_gtkwindow1;
-        // private Button p2p_button_gtkwindow1;
-        // private Button portfolio_button_gtkwindow1;
-        // private Button settings_button_gtkwindow1;
-        // private Button help_button_gtkwindow1;
+        private Window p2p_window1;
+
+        private Button dashboard_button_p2p_window1;
+        private Button p2p_button_p2p_window1;
+        private Button portfolio_button_p2p_window1;
+        private Button transactions_button_p2p_window1;
+        private Button miner_button_p2p_window1;
+        private Button settings_button_p2p_window1;
+        private Button help_button_p2p_window1;
+        private Button logout_button_p2p_window1;
+
+
+        private Window p2p_window2;
+
+        private Button dashboard_button_p2p_window2;
+        private Button p2p_button_p2p_window2;
+        private Button portfolio_button_p2p_window2;
+        private Button transactions_button_p2p_window2;
+        private Button miner_button_p2p_window2;
+        private Button settings_button_p2p_window2;
+        private Button help_button_p2p_window2;
+        private Button logout_button_p2p_window2;
+
+        // Window Miner
+
+        private Window miner_window;
+
+        private Button dashboard_button_miner_window;
+        private Button p2p_button_miner_window;
+        private Button portfolio_button_miner_window;
+        private Button transactions_button_miner_window;
+        private Button miner_button_miner_window;
+        private Button settings_button_miner_window;
+        private Button help_button_miner_window;
+        private Button logout_button_miner_window;
+
+        // Window Settings
+
+        private Window settings_window;
+
+        private Label username_settings_window;
+        private Label email_settings_window;
+        private Label phone_number_settings_window;
+
+        private Button dashboard_button_settings_window;
+        private Button p2p_button_settings_window;
+        private Button portfolio_button_settings_window;
+        private Button transactions_button_settings_window;
+        private Button miner_button_settings_window;
+        private Button settings_button_settings_window;
+        private Button help_button_settings_window;
+        private Button logout_button_settings_window;
+
+
+        // Window Help
+
+        private Window help_window;
+
+        private Button dashboard_button_help_window;
+        private Button p2p_button_help_window;
+        private Button portfolio_button_help_window;
+        private Button transactions_button_help_window;
+        private Button miner_button_help_window;
+        private Button settings_button_help_window;
+        private Button help_button_help_window;
+        private Button logout_button_help_window;
+
+        // Window Logout
+
+        private Window logout_window;
+
+        private Button exit_button_logout_window;
+        private Button cancel_button_logout_window;
+
+
+        // Window p2p_buy_window
+
+        private Window p2p_buy_window;
+        private Button buy_button_p2p_buy_window;
+        private Button cancel_button_p2p_buy_window;
+        private Entry buy_entry_p2p_buy_window;
+        private Label value_label_p2p_window;
+
+
+        // Window p2p_sell_window
+
+        private Window p2p_sell_window;
+        private Label available_label_p2p_sell_window;
+        private Label limit_label_p2p_sell_window;
+        private Label price_label_p2p_sell_window;
+        private Button sell_button_p2p_sell_window;
+        private Button cancel_button_p2p_sell_window;
+
+
+
+
 
 
         // ServerSocket functions
@@ -390,10 +493,22 @@ namespace GladeFunctions
             login_window2.DefaultSize = new Gdk.Size(1440, 968);
             login_window3 = (Window)builder.GetObject("login_window3");
             login_window3.DefaultSize = new Gdk.Size(1440, 968);
+            p2p_window1 = (Window)builder.GetObject("p2p_window1");
+            p2p_window1.DefaultSize = new Gdk.Size(1440, 968);
+            p2p_window2 = (Window)builder.GetObject("p2p_window2");
+            p2p_window2.DefaultSize = new Gdk.Size(1440, 968);
             portfolio_window = (Window)builder.GetObject("portfolio_window");
             portfolio_window.DefaultSize = new Gdk.Size(1440, 968);
             transactions_window = (Window)builder.GetObject("transactions_window");
             transactions_window.DefaultSize = new Gdk.Size(1440, 968);
+            miner_window = (Window)builder.GetObject("miner_window");
+            miner_window.DefaultSize = new Gdk.Size(1440, 968);
+            settings_window = (Window)builder.GetObject("settings_window");
+            settings_window.DefaultSize = new Gdk.Size(1440, 968);
+            help_window = (Window)builder.GetObject("help_window");
+            help_window.DefaultSize = new Gdk.Size(1440, 968);
+            logout_window = (Window)builder.GetObject("logout_window");
+            logout_window.DefaultSize = new Gdk.Size(600, 200);
 
             // Retrieve objects from Glade for main_window
             card = (Frame)builder.GetObject("card");
@@ -403,8 +518,18 @@ namespace GladeFunctions
             price_event_box = (EventBox)builder.GetObject("price_event");
             currency_name_event_box = (EventBox)builder.GetObject("currency_name_event");
             volume_box = (EventBox)builder.GetObject("volume_event");
-            portfolio_button_gtkwindow1 = (Button)builder.GetObject("portfolio_button_gtkwindow1");
+
+            dashboard_button_main_window = (Button)builder.GetObject("dashboard_button_main_window");
+            p2p_button_main_window = (Button)builder.GetObject("p2p_button_main_window");
+            portfolio_button_main_window = (Button)builder.GetObject("portfolio_button_main_window");
             transactions_button_main_window = (Button)builder.GetObject("transactions_button_main_window");
+            miner_button_main_window = (Button)builder.GetObject("miner_button_main_window");
+            settings_button_main_window = (Button)builder.GetObject("settings_button_main_window");
+            help_button_main_window = (Button)builder.GetObject("help_button_main_window");
+            logout_button_main_window = (Button)builder.GetObject("logout_button_main_window");
+            market_values_box_main_window = (Box)builder.GetObject("market_values_box_main_window");
+
+
 
 
             // Retrieve objects from Glade for login_window1
@@ -435,23 +560,174 @@ namespace GladeFunctions
 
 
             //Window portfolio
-            dashboard_button_portfolio = (Button)builder.GetObject("dashboard_button_portfolio");
-            p2p_button_portfolio = (Button)builder.GetObject("p2p_button_portfolio");
-            portfolio_button_portfolio = (Button)builder.GetObject("portfolio_button_portfolio");
-            transactions_button_portfolio = (Button)builder.GetObject("transactions_button_portfolio");
-            settings_button_portfolio = (Button)builder.GetObject("settings_button_portfolio");
-            help_button_porftolio = (Button)builder.GetObject("help_button_porftolio");
-            logout_button_portfolio = (Button)builder.GetObject("logout_button_portfolio");
-            search_portfolio = (Entry)builder.GetObject("search_portfolio");
+            dashboard_button_portfolio_window = (Button)builder.GetObject("dashboard_button_portfolio_window");
+            p2p_button_portfolio_window = (Button)builder.GetObject("p2p_button_portfolio_window");
+            portfolio_button_portfolio_window = (Button)builder.GetObject("portfolio_button_portfolio_window");
+            transactions_button_portfolio_window = (Button)builder.GetObject("transactions_button_portfolio_window");
+            miner_button_portfolio_window = (Button)builder.GetObject("miner_button_portfolio_window");
+            settings_button_portfolio_window = (Button)builder.GetObject("settings_button_portfolio_window");
+            help_button_portfolio_window = (Button)builder.GetObject("help_button_portfolio_window");
+            logout_button_portfolio_window = (Button)builder.GetObject("logout_button_portfolio_window");
+            portfolio_items_box = (Box)builder.GetObject("portfolio_items_box");
+
 
             // Window transactions
+            dashboard_button_transaction_window = (Button)builder.GetObject("dashboard_button_transaction_window");
+            p2p_button_transaction_window = (Button)builder.GetObject("p2p_button_transaction_window");
+            portfolio_button_transaction_window = (Button)builder.GetObject("portfolio_button_transaction_window");
+            transactions_button_transaction_window = (Button)builder.GetObject("transactions_button_transaction_window");
+            miner_button_transaction_window = (Button)builder.GetObject("miner_button_transaction_window");
+            settings_button_transaction_window = (Button)builder.GetObject("settings_button_transaction_window");
+            help_button_transaction_window = (Button)builder.GetObject("help_button_transaction_window");
+            logout_button_transaction_window = (Button)builder.GetObject("logout_button_transaction_window");
 
+            // Window p2p
+
+            dashboard_button_p2p_window1 = (Button)builder.GetObject("dashboard_button_p2p_window1");
+            p2p_button_p2p_window1 = (Button)builder.GetObject("p2p_button_p2p_window1");
+            portfolio_button_p2p_window1 = (Button)builder.GetObject("portfolio_button_p2p_window1");
+            transactions_button_p2p_window1 = (Button)builder.GetObject("transactions_button_p2p_window1");
+            miner_button_p2p_window1 = (Button)builder.GetObject("miner_button_p2p_window1");
+            settings_button_p2p_window1 = (Button)builder.GetObject("settings_button_p2p_window1");
+            help_button_p2p_window1 = (Button)builder.GetObject("help_button_p2p_window1");
+            logout_button_p2p_window1 = (Button)builder.GetObject("logout_button_p2p_window1");
+
+             // Window p2p
+
+            dashboard_button_p2p_window2 = (Button)builder.GetObject("dashboard_button_p2p_window2");
+            p2p_button_p2p_window2 = (Button)builder.GetObject("p2p_button_p2p_window2");
+            portfolio_button_p2p_window2 = (Button)builder.GetObject("portfolio_button_p2p_window2");
+            transactions_button_p2p_window2 = (Button)builder.GetObject("transactions_button_p2p_window2");
+            miner_button_p2p_window2 = (Button)builder.GetObject("miner_button_p2p_window2");
+            settings_button_p2p_window2 = (Button)builder.GetObject("settings_button_p2p_window2");
+            help_button_p2p_window2 = (Button)builder.GetObject("help_button_p2p_window2");
+            logout_button_p2p_window2 = (Button)builder.GetObject("logout_button_p2p_window2");
+
+
+            // Window miner
+
+            dashboard_button_miner_window = (Button)builder.GetObject("dashboard_button_miner_window");
+            p2p_button_miner_window = (Button)builder.GetObject("p2p_button_miner_window");
+            portfolio_button_miner_window = (Button)builder.GetObject("portfolio_button_miner_window");
+            transactions_button_miner_window = (Button)builder.GetObject("transactions_button_miner_window");
+            miner_button_miner_window = (Button)builder.GetObject("miner_button_miner_window");
+            settings_button_miner_window = (Button)builder.GetObject("settings_button_miner_window");
+            help_button_miner_window = (Button)builder.GetObject("help_button_miner_window");
+            logout_button_miner_window = (Button)builder.GetObject("logout_button_miner_window");
+
+            // Window settings
+
+            dashboard_button_settings_window = (Button)builder.GetObject("dashboard_button_settings_window");
+            p2p_button_settings_window = (Button)builder.GetObject("p2p_button_settings_window");
+            portfolio_button_settings_window = (Button)builder.GetObject("portfolio_button_settings_window");
+            transactions_button_settings_window = (Button)builder.GetObject("transactions_button_settings_window");
+            miner_button_settings_window = (Button)builder.GetObject("miner_button_settings_window");
+            settings_button_settings_window = (Button)builder.GetObject("settings_button_settings_window");
+            help_button_settings_window = (Button)builder.GetObject("help_button_settings_window");
+            logout_button_settings_window = (Button)builder.GetObject("logout_button_settings_window");
+
+            // Window help
+
+            dashboard_button_help_window = (Button)builder.GetObject("dashboard_button_help_window");
+            p2p_button_help_window = (Button)builder.GetObject("p2p_button_help_window");
+            portfolio_button_help_window = (Button)builder.GetObject("portfolio_button_help_window");
+            transactions_button_help_window = (Button)builder.GetObject("transactions_button_help_window");
+            miner_button_help_window = (Button)builder.GetObject("miner_button_help_window");
+            settings_button_help_window = (Button)builder.GetObject("settings_button_help_window");
+            help_button_help_window = (Button)builder.GetObject("help_button_help_window");
+            logout_button_help_window = (Button)builder.GetObject("logout_button_help_window");
             transactions_box = (Box)builder.GetObject("transactions_box");
 
 
-            // Main Window
-            portfolio_button_portfolio.Clicked += portfolio_button_gtkwindow1_clicked;
+            // Window main
+
+            dashboard_button_main_window.Clicked += dashboard_button_main_window_clicked;
+            p2p_button_main_window.Clicked += p2p_button_main_window_clicked;
+            portfolio_button_main_window.Clicked += portfolio_button_main_window_clicked;
             transactions_button_main_window.Clicked += transactions_button_main_window_clicked;
+            miner_button_main_window.Clicked += miner_button_main_window_clicked;
+            settings_button_main_window.Clicked += settings_button_main_window_clicked;
+            help_button_main_window.Clicked += help_button_main_window_clicked;
+            logout_button_main_window.Clicked += logout_button_main_window_clicked;
+
+            // Window portfolio
+
+            dashboard_button_portfolio_window.Clicked += dashboard_button_portfolio_window_clicked;
+            p2p_button_portfolio_window.Clicked += p2p_button_portfolio_window_clicked;
+            portfolio_button_portfolio_window.Clicked += portfolio_button_portfolio_window_clicked;
+            transactions_button_portfolio_window.Clicked += transactions_button_portfolio_window_clicked;
+            miner_button_portfolio_window.Clicked += miner_button_portfolio_window_clicked;
+            settings_button_portfolio_window.Clicked += settings_button_portfolio_window_clicked;
+            help_button_portfolio_window.Clicked += help_button_portfolio_window_clicked;
+            logout_button_portfolio_window.Clicked += logout_button_portfolio_window_clicked;
+
+            // Window p2p
+
+            dashboard_button_p2p_window1.Clicked += dashboard_button_p2p_window1_clicked;
+            p2p_button_p2p_window1.Clicked += p2p_button_p2p_window1_clicked;
+            portfolio_button_p2p_window1.Clicked += portfolio_button_p2p_window1_clicked;
+            transactions_button_p2p_window1.Clicked += transactions_button_p2p_window1_clicked;
+            miner_button_p2p_window1.Clicked += miner_button_p2p_window1_clicked;
+            settings_button_p2p_window1.Clicked += settings_button_p2p_window1_clicked;
+            help_button_p2p_window1.Clicked += help_button_p2p_window1_clicked;
+            logout_button_p2p_window1.Clicked += logout_button_p2p_window1_clicked;
+
+            // Window p2p
+
+            dashboard_button_p2p_window2.Clicked += dashboard_button_p2p_window2_clicked;
+            p2p_button_p2p_window2.Clicked += p2p_button_p2p_window2_clicked;
+            portfolio_button_p2p_window2.Clicked += portfolio_button_p2p_window2_clicked;
+            transactions_button_p2p_window2.Clicked += transactions_button_p2p_window2_clicked;
+            miner_button_p2p_window2.Clicked += miner_button_p2p_window2_clicked;
+            settings_button_p2p_window2.Clicked += settings_button_p2p_window2_clicked;
+            help_button_p2p_window2.Clicked += help_button_p2p_window2_clicked;
+            logout_button_p2p_window2.Clicked += logout_button_p2p_window2_clicked;
+
+            // Window transaction
+
+            dashboard_button_transaction_window.Clicked += dashboard_button_transaction_window_clicked;
+            p2p_button_transaction_window.Clicked += p2p_button_transaction_window_clicked;
+            portfolio_button_transaction_window.Clicked += portfolio_button_transaction_window_clicked;
+            transactions_button_transaction_window.Clicked += transactions_button_transaction_window_clicked;
+            miner_button_transaction_window.Clicked += miner_button_transaction_window_clicked;
+            settings_button_transaction_window.Clicked += settings_button_transaction_window_clicked;
+            help_button_transaction_window.Clicked += help_button_transaction_window_clicked;
+            logout_button_transaction_window.Clicked += logout_button_transaction_window_clicked;
+
+            // Window settings
+
+            dashboard_button_settings_window.Clicked += dashboard_button_settings_window_clicked;
+            p2p_button_settings_window.Clicked += p2p_button_settings_window_clicked;
+            portfolio_button_settings_window.Clicked += portfolio_button_settings_window_clicked;
+            transactions_button_settings_window.Clicked += transactions_button_settings_window_clicked;
+            miner_button_settings_window.Clicked += miner_button_settings_window_clicked;
+            settings_button_settings_window.Clicked += settings_button_settings_window_clicked;
+            help_button_settings_window.Clicked += help_button_settings_window_clicked;
+            logout_button_settings_window.Clicked += logout_button_settings_window_clicked;
+
+            // Window miner
+
+            dashboard_button_miner_window.Clicked += dashboard_button_miner_window_clicked;
+            p2p_button_miner_window.Clicked += p2p_button_miner_window_clicked;
+            portfolio_button_miner_window.Clicked += portfolio_button_miner_window_clicked;
+            transactions_button_miner_window.Clicked += transactions_button_miner_window_clicked;
+            miner_button_miner_window.Clicked += miner_button_miner_window_clicked;
+            settings_button_miner_window.Clicked += settings_button_miner_window_clicked;
+            help_button_miner_window.Clicked += help_button_miner_window_clicked;
+            logout_button_miner_window.Clicked += logout_button_miner_window_clicked;
+
+            // Window help
+
+            dashboard_button_help_window.Clicked += dashboard_button_help_window_clicked;
+            p2p_button_help_window.Clicked += p2p_button_help_window_clicked;
+            portfolio_button_help_window.Clicked += portfolio_button_help_window_clicked;
+            transactions_button_help_window.Clicked += transactions_button_help_window_clicked;
+            miner_button_help_window.Clicked += miner_button_help_window_clicked;
+            settings_button_help_window.Clicked += settings_button_help_window_clicked;
+            help_button_help_window.Clicked += help_button_help_window_clicked;
+            logout_button_help_window.Clicked += logout_button_help_window_clicked;
+
+
 
             // Connect button click events for login_window1
             login_button_login_window1.Clicked += login_button_login_window1_clicked;
@@ -499,37 +775,278 @@ namespace GladeFunctions
             back_button_login_window3_css.AddProvider(cssProvider, Gtk.StyleProviderPriority.Application);
             back_button_login_window3_css.AddClass("back-button-login-window3");
 
-            var dashboard_button_portfolio_css = dashboard_button_portfolio.StyleContext;
-            dashboard_button_portfolio_css.AddProvider(cssProvider, Gtk.StyleProviderPriority.Application);
-            dashboard_button_portfolio_css.AddClass("dashboard-button-portfolio");
+            // Buttons main window css
 
-            var p2p_button_portfolio_css = p2p_button_portfolio.StyleContext;
-            p2p_button_portfolio_css.AddProvider(cssProvider, Gtk.StyleProviderPriority.Application);
-            p2p_button_portfolio_css.AddClass("p2p-button-portfolio");
+            var dashboard_button_main_window_css = dashboard_button_main_window.StyleContext;
+            dashboard_button_main_window_css.AddProvider(cssProvider, Gtk.StyleProviderPriority.Application);
+            dashboard_button_main_window_css.AddClass("navbar-button");
 
-            var portfolio_button_portfolio_css = portfolio_button_portfolio.StyleContext;
-            portfolio_button_portfolio_css.AddProvider(cssProvider, Gtk.StyleProviderPriority.Application);
-            portfolio_button_portfolio_css.AddClass("portfolio-button-portfolio");
+            var p2p_button_main_window_css = p2p_button_main_window.StyleContext;
+            p2p_button_main_window_css.AddProvider(cssProvider, Gtk.StyleProviderPriority.Application);
+            p2p_button_main_window_css.AddClass("navbar-button");
 
-            var transactions_button_portfolio_css = transactions_button_portfolio.StyleContext;
-            transactions_button_portfolio_css.AddProvider(cssProvider, Gtk.StyleProviderPriority.Application);
-            transactions_button_portfolio_css.AddClass("transactions-button-portfolio");
+            var portfolio_button_main_window_css = portfolio_button_main_window.StyleContext;
+            portfolio_button_main_window_css.AddProvider(cssProvider, Gtk.StyleProviderPriority.Application);
+            portfolio_button_main_window_css.AddClass("navbar-button");
 
-            var settings_button_portfolio_css = settings_button_portfolio.StyleContext;
-            settings_button_portfolio_css.AddProvider(cssProvider, Gtk.StyleProviderPriority.Application);
-            settings_button_portfolio_css.AddClass("settings-button-portfolio");
+            var transactions_button_main_window_css = transactions_button_main_window.StyleContext;
+            transactions_button_main_window_css.AddProvider(cssProvider, Gtk.StyleProviderPriority.Application);
+            transactions_button_main_window_css.AddClass("navbar-button");
 
-            var help_button_porftolio_css = help_button_porftolio.StyleContext;
-            help_button_porftolio_css.AddProvider(cssProvider, Gtk.StyleProviderPriority.Application);
-            help_button_porftolio_css.AddClass("help-button-porftolio");
+            var miner_button_main_window_css = miner_button_main_window.StyleContext;
+            miner_button_main_window_css.AddProvider(cssProvider, Gtk.StyleProviderPriority.Application);
+            miner_button_main_window_css.AddClass("navbar-button");
 
-            var logout_button_portfolio_css = logout_button_portfolio.StyleContext;
-            logout_button_portfolio_css.AddProvider(cssProvider, Gtk.StyleProviderPriority.Application);
-            logout_button_portfolio_css.AddClass("logout-button-portfolio");
+            var settings_button_main_window_css = settings_button_main_window.StyleContext;
+            settings_button_main_window_css.AddProvider(cssProvider, Gtk.StyleProviderPriority.Application);
+            settings_button_main_window_css.AddClass("navbar-button");
 
-            var portfolio_button_gtkwindow1_css = portfolio_button_portfolio.StyleContext;
-            portfolio_button_gtkwindow1_css.AddProvider(cssProvider, Gtk.StyleProviderPriority.Application);
-            portfolio_button_gtkwindow1_css.AddClass("logout-button-portfolio");
+            var help_button_main_window_css = help_button_main_window.StyleContext;
+            help_button_main_window_css.AddProvider(cssProvider, Gtk.StyleProviderPriority.Application);
+            help_button_main_window_css.AddClass("navbar-button");
+
+            var logout_button_main_window_css = logout_button_main_window.StyleContext;
+            logout_button_main_window_css.AddProvider(cssProvider, Gtk.StyleProviderPriority.Application);
+            logout_button_main_window_css.AddClass("navbar-button");
+
+            // Buttons portfolio window css
+
+            var dashboard_button_portfolio_window_css = dashboard_button_portfolio_window.StyleContext;
+            dashboard_button_portfolio_window_css.AddProvider(cssProvider, Gtk.StyleProviderPriority.Application);
+            dashboard_button_portfolio_window_css.AddClass("navbar-button");
+
+            var p2p_button_portfolio_window_css = p2p_button_portfolio_window.StyleContext;
+            p2p_button_portfolio_window_css.AddProvider(cssProvider, Gtk.StyleProviderPriority.Application);
+            p2p_button_portfolio_window_css.AddClass("navbar-button");
+
+            var portfolio_button_portfolio_window_css = portfolio_button_portfolio_window.StyleContext;
+            portfolio_button_portfolio_window_css.AddProvider(cssProvider, Gtk.StyleProviderPriority.Application);
+            portfolio_button_portfolio_window_css.AddClass("navbar-button");
+
+            var transactions_button_portfolio_window_css = transactions_button_portfolio_window.StyleContext;
+            transactions_button_portfolio_window_css.AddProvider(cssProvider, Gtk.StyleProviderPriority.Application);
+            transactions_button_portfolio_window_css.AddClass("navbar-button");
+
+            var miner_button_portfolio_window_css = miner_button_portfolio_window.StyleContext;
+            miner_button_portfolio_window_css.AddProvider(cssProvider, Gtk.StyleProviderPriority.Application);
+            miner_button_portfolio_window_css.AddClass("navbar-button");
+
+            var settings_button_portfolio_window_css = settings_button_portfolio_window.StyleContext;
+            settings_button_portfolio_window_css.AddProvider(cssProvider, Gtk.StyleProviderPriority.Application);
+            settings_button_portfolio_window_css.AddClass("navbar-button");
+
+            var help_button_portfolio_window_css = help_button_portfolio_window.StyleContext;
+            help_button_portfolio_window_css.AddProvider(cssProvider, Gtk.StyleProviderPriority.Application);
+            help_button_portfolio_window_css.AddClass("navbar-button");
+
+            var logout_button_portfolio_window_css = logout_button_portfolio_window.StyleContext;
+            logout_button_portfolio_window_css.AddProvider(cssProvider, Gtk.StyleProviderPriority.Application);
+            logout_button_portfolio_window_css.AddClass("navbar-button");
+
+            // Buttons p2p window css
+
+            var dashboard_button_p2p_window1_css = dashboard_button_p2p_window1.StyleContext;
+            dashboard_button_p2p_window1_css.AddProvider(cssProvider, Gtk.StyleProviderPriority.Application);
+            dashboard_button_p2p_window1_css.AddClass("navbar-button");
+
+            var p2p_button_p2p_window1_css = p2p_button_p2p_window1.StyleContext;
+            p2p_button_p2p_window1_css.AddProvider(cssProvider, Gtk.StyleProviderPriority.Application);
+            p2p_button_p2p_window1_css.AddClass("navbar-button");
+
+            var portfolio_button_p2p_window1_css = portfolio_button_p2p_window1.StyleContext;
+            portfolio_button_p2p_window1_css.AddProvider(cssProvider, Gtk.StyleProviderPriority.Application);
+            portfolio_button_p2p_window1_css.AddClass("navbar-button");
+
+            var transactions_button_p2p_window1_css = transactions_button_p2p_window1.StyleContext;
+            transactions_button_p2p_window1_css.AddProvider(cssProvider, Gtk.StyleProviderPriority.Application);
+            transactions_button_p2p_window1_css.AddClass("navbar-button");
+
+            var miner_button_p2p_window1_css = miner_button_p2p_window1.StyleContext;
+            miner_button_p2p_window1_css.AddProvider(cssProvider, Gtk.StyleProviderPriority.Application);
+            miner_button_p2p_window1_css.AddClass("navbar-button");
+
+            var settings_button_p2p_window1_css = settings_button_p2p_window1.StyleContext;
+            settings_button_p2p_window1_css.AddProvider(cssProvider, Gtk.StyleProviderPriority.Application);
+            settings_button_p2p_window1_css.AddClass("navbar-button");
+
+            var help_button_p2p_window1_css = help_button_p2p_window1.StyleContext;
+            help_button_p2p_window1_css.AddProvider(cssProvider, Gtk.StyleProviderPriority.Application);
+            help_button_p2p_window1_css.AddClass("navbar-button");
+
+            var logout_button_p2p_window1_css = logout_button_p2p_window1.StyleContext;
+            logout_button_p2p_window1_css.AddProvider(cssProvider, Gtk.StyleProviderPriority.Application);
+            logout_button_p2p_window1_css.AddClass("navbar-button");
+
+            // Buttons p2p window css
+
+            var dashboard_button_p2p_window2_css = dashboard_button_p2p_window2.StyleContext;
+            dashboard_button_p2p_window2_css.AddProvider(cssProvider, Gtk.StyleProviderPriority.Application);
+            dashboard_button_p2p_window2_css.AddClass("navbar-button");
+
+            var p2p_button_p2p_window2_css = p2p_button_p2p_window2.StyleContext;
+            p2p_button_p2p_window2_css.AddProvider(cssProvider, Gtk.StyleProviderPriority.Application);
+            p2p_button_p2p_window2_css.AddClass("navbar-button");
+
+            var portfolio_button_p2p_window2_css = portfolio_button_p2p_window2.StyleContext;
+            portfolio_button_p2p_window2_css.AddProvider(cssProvider, Gtk.StyleProviderPriority.Application);
+            portfolio_button_p2p_window2_css.AddClass("navbar-button");
+
+            var transactions_button_p2p_window2_css = transactions_button_p2p_window2.StyleContext;
+            transactions_button_p2p_window2_css.AddProvider(cssProvider, Gtk.StyleProviderPriority.Application);
+            transactions_button_p2p_window2_css.AddClass("navbar-button");
+
+            var miner_button_p2p_window2_css = miner_button_p2p_window2.StyleContext;
+            miner_button_p2p_window2_css.AddProvider(cssProvider, Gtk.StyleProviderPriority.Application);
+            miner_button_p2p_window2_css.AddClass("navbar-button");
+
+            var settings_button_p2p_window2_css = settings_button_p2p_window2.StyleContext;
+            settings_button_p2p_window2_css.AddProvider(cssProvider, Gtk.StyleProviderPriority.Application);
+            settings_button_p2p_window2_css.AddClass("navbar-button");
+
+            var help_button_p2p_window2_css = help_button_p2p_window2.StyleContext;
+            help_button_p2p_window2_css.AddProvider(cssProvider, Gtk.StyleProviderPriority.Application);
+            help_button_p2p_window2_css.AddClass("navbar-button");
+
+            var logout_button_p2p_window2_css = logout_button_p2p_window2.StyleContext;
+            logout_button_p2p_window2_css.AddProvider(cssProvider, Gtk.StyleProviderPriority.Application);
+            logout_button_p2p_window2_css.AddClass("navbar-button");
+
+            // Buttons transaction window css
+
+            var dashboard_button_transaction_window_css = dashboard_button_transaction_window.StyleContext;
+            dashboard_button_transaction_window_css.AddProvider(cssProvider, Gtk.StyleProviderPriority.Application);
+            dashboard_button_transaction_window_css.AddClass("navbar-button");
+
+            var p2p_button_transaction_window_css = p2p_button_transaction_window.StyleContext;
+            p2p_button_transaction_window_css.AddProvider(cssProvider, Gtk.StyleProviderPriority.Application);
+            p2p_button_transaction_window_css.AddClass("navbar-button");
+
+            var portfolio_button_transaction_window_css = portfolio_button_transaction_window.StyleContext;
+            portfolio_button_transaction_window_css.AddProvider(cssProvider, Gtk.StyleProviderPriority.Application);
+            portfolio_button_transaction_window_css.AddClass("navbar-button");
+
+            var transactions_button_transaction_window_css = transactions_button_transaction_window.StyleContext;
+            transactions_button_transaction_window_css.AddProvider(cssProvider, Gtk.StyleProviderPriority.Application);
+            transactions_button_transaction_window_css.AddClass("navbar-button");
+
+            var miner_button_transaction_window_css = miner_button_transaction_window.StyleContext;
+            miner_button_transaction_window_css.AddProvider(cssProvider, Gtk.StyleProviderPriority.Application);
+            miner_button_transaction_window_css.AddClass("navbar-button");
+
+            var settings_button_transaction_window_css = settings_button_transaction_window.StyleContext;
+            settings_button_transaction_window_css.AddProvider(cssProvider, Gtk.StyleProviderPriority.Application);
+            settings_button_transaction_window_css.AddClass("navbar-button");
+
+            var help_button_transaction_window_css = help_button_transaction_window.StyleContext;
+            help_button_transaction_window_css.AddProvider(cssProvider, Gtk.StyleProviderPriority.Application);
+            help_button_transaction_window_css.AddClass("navbar-button");
+
+            var logout_button_transaction_window_css = logout_button_transaction_window.StyleContext;
+            logout_button_transaction_window_css.AddProvider(cssProvider, Gtk.StyleProviderPriority.Application);
+            logout_button_transaction_window_css.AddClass("navbar-button");
+
+            // Buttons miner window css
+
+            var dashboard_button_miner_window_css = dashboard_button_miner_window.StyleContext;
+            dashboard_button_miner_window_css.AddProvider(cssProvider, Gtk.StyleProviderPriority.Application);
+            dashboard_button_miner_window_css.AddClass("navbar-button");
+
+            var p2p_button_miner_window_css = p2p_button_miner_window.StyleContext;
+            p2p_button_miner_window_css.AddProvider(cssProvider, Gtk.StyleProviderPriority.Application);
+            p2p_button_miner_window_css.AddClass("navbar-button");
+
+            var portfolio_button_miner_window_css = portfolio_button_miner_window.StyleContext;
+            portfolio_button_miner_window_css.AddProvider(cssProvider, Gtk.StyleProviderPriority.Application);
+            portfolio_button_miner_window_css.AddClass("navbar-button");
+
+            var transactions_button_miner_window_css = transactions_button_miner_window.StyleContext;
+            transactions_button_miner_window_css.AddProvider(cssProvider, Gtk.StyleProviderPriority.Application);
+            transactions_button_miner_window_css.AddClass("navbar-button");
+
+            var miner_button_miner_window_css = miner_button_miner_window.StyleContext;
+            miner_button_miner_window_css.AddProvider(cssProvider, Gtk.StyleProviderPriority.Application);
+            miner_button_miner_window_css.AddClass("navbar-button");
+
+            var settings_button_miner_window_css = settings_button_miner_window.StyleContext;
+            settings_button_miner_window_css.AddProvider(cssProvider, Gtk.StyleProviderPriority.Application);
+            settings_button_miner_window_css.AddClass("navbar-button");
+
+            var help_button_miner_window_css = help_button_miner_window.StyleContext;
+            help_button_miner_window_css.AddProvider(cssProvider, Gtk.StyleProviderPriority.Application);
+            help_button_miner_window_css.AddClass("navbar-button");
+
+            var logout_button_miner_window_css = logout_button_miner_window.StyleContext;
+            logout_button_miner_window_css.AddProvider(cssProvider, Gtk.StyleProviderPriority.Application);
+            logout_button_miner_window_css.AddClass("navbar-button");
+
+            // Buttons settings window css
+
+            var dashboard_button_settings_window_css = dashboard_button_settings_window.StyleContext;
+            dashboard_button_settings_window_css.AddProvider(cssProvider, Gtk.StyleProviderPriority.Application);
+            dashboard_button_settings_window_css.AddClass("navbar-button");
+
+            var p2p_button_settings_window_css = p2p_button_settings_window.StyleContext;
+            p2p_button_settings_window_css.AddProvider(cssProvider, Gtk.StyleProviderPriority.Application);
+            p2p_button_settings_window_css.AddClass("navbar-button");
+
+            var portfolio_button_settings_window_css = portfolio_button_settings_window.StyleContext;
+            portfolio_button_settings_window_css.AddProvider(cssProvider, Gtk.StyleProviderPriority.Application);
+            portfolio_button_settings_window_css.AddClass("navbar-button");
+
+            var transactions_button_settings_window_css = transactions_button_settings_window.StyleContext;
+            transactions_button_settings_window_css.AddProvider(cssProvider, Gtk.StyleProviderPriority.Application);
+            transactions_button_settings_window_css.AddClass("navbar-button");
+
+            var miner_button_settings_window_css = miner_button_settings_window.StyleContext;
+            miner_button_settings_window_css.AddProvider(cssProvider, Gtk.StyleProviderPriority.Application);
+            miner_button_settings_window_css.AddClass("navbar-button");
+
+            var settings_button_settings_window_css = settings_button_settings_window.StyleContext;
+            settings_button_settings_window_css.AddProvider(cssProvider, Gtk.StyleProviderPriority.Application);
+            settings_button_settings_window_css.AddClass("navbar-button");
+
+            var help_button_settings_window_css = help_button_settings_window.StyleContext;
+            help_button_settings_window_css.AddProvider(cssProvider, Gtk.StyleProviderPriority.Application);
+            help_button_settings_window_css.AddClass("navbar-button");
+
+            var logout_button_settings_window_css = logout_button_settings_window.StyleContext;
+            logout_button_settings_window_css.AddProvider(cssProvider, Gtk.StyleProviderPriority.Application);
+            logout_button_settings_window_css.AddClass("navbar-button");
+
+            // Buttons help window css
+
+            var dashboard_button_help_window_css = dashboard_button_help_window.StyleContext;
+            dashboard_button_help_window_css.AddProvider(cssProvider, Gtk.StyleProviderPriority.Application);
+            dashboard_button_help_window_css.AddClass("navbar-button");
+
+            var p2p_button_help_window_css = p2p_button_help_window.StyleContext;
+            p2p_button_help_window_css.AddProvider(cssProvider, Gtk.StyleProviderPriority.Application);
+            p2p_button_help_window_css.AddClass("navbar-button");
+
+            var portfolio_button_help_window_css = portfolio_button_help_window.StyleContext;
+            portfolio_button_help_window_css.AddProvider(cssProvider, Gtk.StyleProviderPriority.Application);
+            portfolio_button_help_window_css.AddClass("navbar-button");
+
+            var transactions_button_help_window_css = transactions_button_help_window.StyleContext;
+            transactions_button_help_window_css.AddProvider(cssProvider, Gtk.StyleProviderPriority.Application);
+            transactions_button_help_window_css.AddClass("navbar-button");
+
+            var miner_button_help_window_css = miner_button_help_window.StyleContext;
+            miner_button_help_window_css.AddProvider(cssProvider, Gtk.StyleProviderPriority.Application);
+            miner_button_help_window_css.AddClass("navbar-button");
+
+            var settings_button_help_window_css = settings_button_help_window.StyleContext;
+            settings_button_help_window_css.AddProvider(cssProvider, Gtk.StyleProviderPriority.Application);
+            settings_button_help_window_css.AddClass("navbar-button");
+
+            var help_button_help_window_css = help_button_help_window.StyleContext;
+            help_button_help_window_css.AddProvider(cssProvider, Gtk.StyleProviderPriority.Application);
+            help_button_help_window_css.AddClass("navbar-button");
+
+            var logout_button_help_window_css = logout_button_help_window.StyleContext;
+            logout_button_help_window_css.AddProvider(cssProvider, Gtk.StyleProviderPriority.Application);
+            logout_button_help_window_css.AddClass("navbar-button");
+
 
             // CSS Entries
 
@@ -573,9 +1090,6 @@ namespace GladeFunctions
             address_entry_login_window3_css.AddProvider(cssProvider, 		   Gtk.StyleProviderPriority.Application);
             address_entry_login_window3_css.AddClass("address-entry-login-window3");
 
-            var search_portfolio_css = search_portfolio.StyleContext;
-            search_portfolio_css.AddProvider(cssProvider, 		   Gtk.StyleProviderPriority.Application);
-            search_portfolio_css.AddClass("search-portfolio");
 
 
             // CSS Card
@@ -589,10 +1103,18 @@ namespace GladeFunctions
             main_window_css.AddClass("main-window");
 
 
+
+            main_window.DeleteEvent += delegate { Application.Quit(); };
             login_window1.DeleteEvent += delegate { Application.Quit(); };
             login_window2.DeleteEvent += delegate { Application.Quit(); };
-
-
+            login_window3.DeleteEvent += delegate { Application.Quit(); };
+            p2p_window1.DeleteEvent += delegate { Application.Quit(); };
+            p2p_window2.DeleteEvent += delegate { Application.Quit(); };
+            portfolio_window.DeleteEvent += delegate { Application.Quit(); };
+            transactions_window.DeleteEvent += delegate { Application.Quit(); };
+            miner_window.DeleteEvent += delegate { Application.Quit(); };
+            settings_window.DeleteEvent += delegate { Application.Quit(); };
+            help_window.DeleteEvent += delegate { Application.Quit(); };
 
             login_window1.ShowAll();
 
@@ -604,13 +1126,342 @@ namespace GladeFunctions
 // Main Window
 
 
+    // Nav Bar main
 
-    private void portfolio_button_gtkwindow1_clicked(object sender, EventArgs e){
-        main_window.Hide();
-        portfolio_window.ShowAll();
+    private void dashboard_button_main_window_clicked(object sender, EventArgs e){
 
 
     }
+    private void p2p_button_main_window_clicked(object sender, EventArgs e){
+        main_window.Hide();
+        p2p_window1.ShowAll();
+
+    }
+    private void portfolio_button_main_window_clicked (object sender, EventArgs e){
+        main_window.Hide();
+        portfolio_window.ShowAll();
+
+    }
+    private void transactions_button_main_window_clicked (object sender, EventArgs e){
+        main_window.Hide();
+        transactions_window.ShowAll();
+
+    }
+    private void miner_button_main_window_clicked (object sender, EventArgs e){
+        main_window.Hide();
+        miner_window.Show();
+
+    }
+    private void settings_button_main_window_clicked (object sender, EventArgs e){
+        main_window.Hide();
+        settings_window.ShowAll();
+
+    }
+    private void help_button_main_window_clicked (object sender, EventArgs e){
+        main_window.Hide();
+        help_window.ShowAll();
+
+    }
+    private void logout_button_main_window_clicked (object sender, EventArgs e){
+
+        logout_window.ShowAll();
+    }
+
+
+    // Nav Bar portfolio
+
+    private void dashboard_button_portfolio_window_clicked(object sender, EventArgs e){
+        portfolio_window.Hide();
+        main_window.ShowAll();
+
+    }
+    private void p2p_button_portfolio_window_clicked(object sender, EventArgs e){
+        portfolio_window.Hide();
+        p2p_window1.ShowAll();
+
+    }
+    private void portfolio_button_portfolio_window_clicked (object sender, EventArgs e){
+
+    }
+    private void transactions_button_portfolio_window_clicked (object sender, EventArgs e){
+        portfolio_window.Hide();
+        transactions_window.ShowAll();
+
+    }
+    private void miner_button_portfolio_window_clicked (object sender, EventArgs e){
+        portfolio_window.Hide();
+        miner_window.Show();
+
+    }
+    private void settings_button_portfolio_window_clicked (object sender, EventArgs e){
+        portfolio_window.Hide();
+        settings_window.ShowAll();
+
+    }
+    private void help_button_portfolio_window_clicked (object sender, EventArgs e){
+        portfolio_window.Hide();
+        help_window.ShowAll();
+
+    }
+    private void logout_button_portfolio_window_clicked (object sender, EventArgs e){
+
+        logout_window.ShowAll();
+    }
+
+    // Nav Bar p2p
+
+    private void dashboard_button_p2p_window1_clicked(object sender, EventArgs e){
+        p2p_window1.Hide();
+        main_window.ShowAll();
+
+    }
+    private void p2p_button_p2p_window1_clicked(object sender, EventArgs e){
+
+
+    }
+    private void portfolio_button_p2p_window1_clicked (object sender, EventArgs e){
+        p2p_window1.Hide();
+        portfolio_window.ShowAll();
+
+    }
+    private void transactions_button_p2p_window1_clicked (object sender, EventArgs e){
+        p2p_window1.Hide();
+        transactions_window.ShowAll();
+
+    }
+    private void miner_button_p2p_window1_clicked (object sender, EventArgs e){
+        p2p_window1.Hide();
+        miner_window.Show();
+
+    }
+    private void settings_button_p2p_window1_clicked (object sender, EventArgs e){
+        p2p_window1.Hide();
+        settings_window.ShowAll();
+
+    }
+    private void help_button_p2p_window1_clicked (object sender, EventArgs e){
+        p2p_window1.Hide();
+        help_window.ShowAll();
+
+    }
+    private void logout_button_p2p_window1_clicked (object sender, EventArgs e){
+
+        logout_window.ShowAll();
+    }
+
+    // Nav Bar p2p
+
+    private void dashboard_button_p2p_window2_clicked(object sender, EventArgs e){
+        p2p_window2.Hide();
+        main_window.ShowAll();
+
+    }
+    private void p2p_button_p2p_window2_clicked(object sender, EventArgs e){
+
+
+    }
+    private void portfolio_button_p2p_window2_clicked (object sender, EventArgs e){
+        p2p_window2.Hide();
+        portfolio_window.ShowAll();
+
+    }
+    private void transactions_button_p2p_window2_clicked (object sender, EventArgs e){
+        p2p_window2.Hide();
+        transactions_window.ShowAll();
+
+    }
+    private void miner_button_p2p_window2_clicked (object sender, EventArgs e){
+        p2p_window2.Hide();
+        miner_window.Show();
+
+    }
+    private void settings_button_p2p_window2_clicked (object sender, EventArgs e){
+        p2p_window2.Hide();
+        settings_window.ShowAll();
+
+    }
+    private void help_button_p2p_window2_clicked (object sender, EventArgs e){
+        p2p_window2.Hide();
+        help_window.ShowAll();
+
+    }
+    private void logout_button_p2p_window2_clicked (object sender, EventArgs e){
+
+        logout_window.ShowAll();
+    }
+
+    // Nav Bar transaction
+
+    private void dashboard_button_transaction_window_clicked(object sender, EventArgs e){
+        transactions_window.Hide();
+        main_window.ShowAll();
+
+    }
+    private void p2p_button_transaction_window_clicked(object sender, EventArgs e){
+        transactions_window.Hide();
+        p2p_window1.ShowAll();
+
+    }
+    private void portfolio_button_transaction_window_clicked (object sender, EventArgs e){
+        transactions_window.Hide();
+        portfolio_window.ShowAll();
+
+    }
+    private void transactions_button_transaction_window_clicked (object sender, EventArgs e){
+
+
+    }
+    private void miner_button_transaction_window_clicked (object sender, EventArgs e){
+        transactions_window.Hide();
+        miner_window.Show();
+
+    }
+    private void settings_button_transaction_window_clicked (object sender, EventArgs e){
+        transactions_window.Hide();
+        settings_window.ShowAll();
+
+    }
+    private void help_button_transaction_window_clicked (object sender, EventArgs e){
+        transactions_window.Hide();
+        help_window.ShowAll();
+
+    }
+    private void logout_button_transaction_window_clicked (object sender, EventArgs e){
+
+        logout_window.ShowAll();
+    }
+
+     // Nav Bar miner
+
+    private void dashboard_button_miner_window_clicked(object sender, EventArgs e){
+        miner_window.Hide();
+        main_window.ShowAll();
+
+    }
+    private void p2p_button_miner_window_clicked(object sender, EventArgs e){
+        miner_window.Hide();
+        p2p_window1.ShowAll();
+
+    }
+    private void portfolio_button_miner_window_clicked (object sender, EventArgs e){
+        miner_window.Hide();
+        portfolio_window.ShowAll();
+
+    }
+    private void transactions_button_miner_window_clicked (object sender, EventArgs e){
+        miner_window.Hide();
+        transactions_window.ShowAll();
+
+    }
+    private void miner_button_miner_window_clicked (object sender, EventArgs e){
+        miner_window.Hide();
+        miner_window.Show();
+
+    }
+    private void settings_button_miner_window_clicked (object sender, EventArgs e){
+        miner_window.Hide();
+        settings_window.ShowAll();
+
+    }
+    private void help_button_miner_window_clicked (object sender, EventArgs e){
+        miner_window.Hide();
+        help_window.ShowAll();
+
+    }
+    private void logout_button_miner_window_clicked (object sender, EventArgs e){
+
+        logout_window.ShowAll();
+    }
+
+    // Nav Bar settings
+
+    private void dashboard_button_settings_window_clicked(object sender, EventArgs e){
+        settings_window.Hide();
+        main_window.ShowAll();
+
+    }
+    private void p2p_button_settings_window_clicked(object sender, EventArgs e){
+        settings_window.Hide();
+        p2p_window1.ShowAll();
+
+    }
+    private void portfolio_button_settings_window_clicked (object sender, EventArgs e){
+        settings_window.Hide();
+        portfolio_window.ShowAll();
+
+    }
+    private void transactions_button_settings_window_clicked (object sender, EventArgs e){
+        settings_window.Hide();
+        transactions_window.ShowAll();
+
+    }
+    private void miner_button_settings_window_clicked (object sender, EventArgs e){
+        settings_window.Hide();
+        miner_window.Show();
+
+    }
+    private void settings_button_settings_window_clicked (object sender, EventArgs e){
+        settings_window.Hide();
+        settings_window.ShowAll();
+
+    }
+    private void help_button_settings_window_clicked (object sender, EventArgs e){
+        settings_window.Hide();
+        help_window.ShowAll();
+
+    }
+    private void logout_button_settings_window_clicked (object sender, EventArgs e){
+
+        logout_window.ShowAll();
+    }
+
+
+
+    // Nav Bar help
+
+    private void dashboard_button_help_window_clicked(object sender, EventArgs e){
+        help_window.Hide();
+        main_window.ShowAll();
+
+    }
+    private void p2p_button_help_window_clicked(object sender, EventArgs e){
+        help_window.Hide();
+        p2p_window1.ShowAll();
+
+    }
+    private void portfolio_button_help_window_clicked (object sender, EventArgs e){
+        help_window.Hide();
+        portfolio_window.ShowAll();
+
+    }
+    private void transactions_button_help_window_clicked (object sender, EventArgs e){
+        help_window.Hide();
+        transactions_window.ShowAll();
+
+    }
+    private void miner_button_help_window_clicked (object sender, EventArgs e){
+        help_window.Hide();
+        miner_window.Show();
+
+    }
+    private void settings_button_help_window_clicked (object sender, EventArgs e){
+        help_window.Hide();
+        settings_window.ShowAll();
+
+    }
+    private void help_button_help_window_clicked (object sender, EventArgs e){
+        help_window.Hide();
+        help_window.ShowAll();
+
+    }
+    private void logout_button_help_window_clicked (object sender, EventArgs e){
+
+        logout_window.ShowAll();
+    }
+
+
+
+
 
 
     // Sorting and adding ;
@@ -800,139 +1651,126 @@ namespace GladeFunctions
 
 
         // Add the frame to the transactions_box
-        transactions_box.Add(currencyFrame);
-        transactions_box.ShowAll();
+        market_values_box_main_window.Add(currencyFrame);
+        market_values_box_main_window.ShowAll();
     }
 
     // -------------------- Add Mini PortFolio --------------------
 
+    private void FillPortfolioBoxMainWindow(){
 
+        var userDataDictionary = accountPortfolio.GetUserPortfolioAsDictionary();
 
-    private void AddFrameToPortfolioBoxMainWindow(int index)
-    {
-    // Create the GtkFrame
-            // Create a new frame
-            Frame portfolioItemFrame = new Frame("");
-            Frame currencyFrame = new Frame("");
+        int limit = 0;
 
-            // Create the frame
-            currencyFrame.Visible = true;
-            currencyFrame.CanFocus = false;
-            //currencyFrame.MarginTop = 10;
-            //currencyFrame.MarginBottom = 10;
-            currencyFrame.LabelXalign = 0;
-            currencyFrame.ShadowType = ShadowType.None;
+        foreach (var kvp in userDataDictionary)
+        {
 
-            // Create the alignment
-            Alignment alignment = new Alignment(0, 0, 0, 0);
-            alignment.Visible = true;
-            alignment.CanFocus = false;
-            //alignment.LeftPadding = 12;
-
-
-            // Create the inner grid
-            Grid innerGrid = new Grid();
-            innerGrid.Visible = false;
-            innerGrid.CanFocus = false;
-            //innerGrid.RowSpacing = 10;
-            //innerGrid.ColumnSpacing = 10;
-            innerGrid.RowHomogeneous = true;
-            innerGrid.ColumnHomogeneous = true;
-
-
-
-
-
-
-
-            // Create the inner grid
-            Grid currencyNameGrid = new Grid();
-            //currencyNameGrid.MarginBottom = 9;
-            //currencyNameGrid.MarginLeft = 30;
-            currencyNameGrid.Visible = true;
-            currencyNameGrid.CanFocus = false;
-            currencyNameGrid.RowSpacing = 0;
-            //currencyNameGrid.ColumnSpacing = 10;
-            currencyNameGrid.RowHomogeneous = true;
-            currencyNameGrid.ColumnHomogeneous = true;
-
-
-            // Add child widgets to the inner grid (similar to your provided XML structure)
-            // Here, you'd create and add GtkImage, GtkLabel, GtkButton, etc., to the innerGrid
-
-
-            // Icon Image
-
-            Image currencyIconImage = new Image(currencyIcons[index]);
-            currencyIconImage.Visible = true;
-            currencyIconImage.CanFocus = false;
-            //currencyIconImage.MarginLeft = 40;
-            currencyNameGrid.Attach(currencyIconImage, 0, 0, 1, 1);
-
-            // Name Label
-
-            Label currencyNameLabel = new Label(currencyName[index]);
-            currencyNameLabel.Name = $"CurrencyName_{index}";
-            currencyNameLabel.Visible = true;
-            currencyNameLabel.CanFocus = false;
-            currencyNameLabel.Halign = Align.Start; // Adjust horizontal alignment
-        currencyNameLabel.Valign = Align.Center; // Adjust vertical alignment
-            //currencyNameLabel.MarginRight = 30;
-
-
-            currencyNameGrid.Attach(currencyNameLabel, 1, 0, 1, 1);
-
-
-
-
-            // inner frame for currency name
-            Frame currencyNameFrame= new Frame("");
-            currencyNameFrame.ShadowType = ShadowType.None;
-            currencyNameFrame.Add(currencyNameGrid);
-
-            // Set fixed width for the currency Frame
-            int fixedWidth = 200; // Set your desired fixed width
-            currencyNameFrame.SetSizeRequest(fixedWidth, -1);
-
-            innerGrid.Attach(currencyNameFrame, 0, 0, 1, 1);
-
-
-
-
-            // Price Label
-
-            Label currencyPriceLabel = new Label(currencyPrice[index]);
-            currencyPriceLabel.Name = $"CurrencyPrice_{index}";
-            currencyPriceLabel.Visible = true;
-            currencyPriceLabel.CanFocus = false;
-            //currencyPriceLabel.MarginBottom = 9;
-            //currencyPriceLabel.Halign = Align.End;
-
-            // inner frame for price
-            Frame priceFrame= new Frame("");
-            priceFrame.ShadowType = ShadowType.None;
-            priceFrame.Add(currencyPriceLabel);
-
-            // Set fixed width for the priceFrame
-            //int fixedWidth = 150; // Set your desired fixed width
-            priceFrame.SetSizeRequest(fixedWidth, -1);
-
-            innerGrid.Attach(priceFrame, 1, 0, 1, 1);
-
-            // Attach Outermost Grid to Alignment
-            alignment.Add(innerGrid);
-
-            // Attach Alignment to Frame
-            portfolioItemFrame.Add(alignment);
-
-
-
-            //portfolio_items_box.PackStart(portfolioItemFrame, false, false, 0);
-
-            // Add the frame to the market_values_box
-            portfolio_items_box.Add(portfolioItemFrame);
-            portfolio_items_box.ShowAll();
+            if (limit == 0){
+                limit++;
+                continue;
             }
+
+            AddFrameToPortfolioBoxMainWindow(kvp.Key, kvp.Value);
+
+            limit++;
+            if (limit == 5){
+                break;
+            }
+
+
+        }
+
+    }
+
+    private void AddFrameToPortfolioBoxMainWindow(string userPortfolioCurrencyName, object userPortfolioCurrencyPrice)
+    {
+        Frame portfolioItemFrame = new Frame("");
+        portfolioItemFrame.ShadowType = ShadowType.None;
+        Frame currencyFrame = new Frame("");
+
+        currencyFrame.Visible = true;
+        currencyFrame.CanFocus = false;
+        currencyFrame.LabelXalign = 0;
+        currencyFrame.ShadowType = ShadowType.None;
+
+        Alignment alignment = new Alignment(0, 0, 0, 0);
+        alignment.Visible = true;
+        alignment.CanFocus = false;
+
+        Grid portfolioItemGrid = new Grid();
+        portfolioItemGrid.Visible = false;
+        portfolioItemGrid.CanFocus = false;
+        portfolioItemGrid.RowHomogeneous = true;
+        portfolioItemGrid.ColumnHomogeneous = true;
+
+        Grid currencyInfoGrid = new Grid();
+        currencyInfoGrid.Visible = true;
+        currencyInfoGrid.CanFocus = false;
+        currencyInfoGrid.RowSpacing = 0;
+        currencyInfoGrid.RowHomogeneous = true;
+        currencyInfoGrid.ColumnHomogeneous = true;
+
+        Image currencyIconImage = new Image($"GUI/Glade/images/icons/{userPortfolioCurrencyName}.png");
+        currencyIconImage.Visible = true;
+        currencyIconImage.CanFocus = false;
+
+        Label currencyNameLabel = new Label($"{userPortfolioCurrencyName}");
+        currencyNameLabel.Name = $"CurrencyName_{userPortfolioCurrencyName}";
+        currencyNameLabel.Visible = true;
+        currencyNameLabel.CanFocus = false;
+        currencyNameLabel.Halign = Align.Start;
+        currencyNameLabel.Valign = Align.Center;
+
+        Frame currencyNameFrame = new Frame("");
+        currencyNameFrame.ShadowType = ShadowType.None;
+        currencyNameFrame.Add(currencyNameLabel);
+        currencyNameFrame.SetSizeRequest(100, -1);
+
+        currencyInfoGrid.Attach(currencyIconImage, 0, 0, 1, 2);
+        currencyInfoGrid.Attach(currencyNameFrame, 1, 0, 1, 1);
+
+
+        int index = Array.IndexOf(currencyName, userPortfolioCurrencyName);
+
+        decimal priceValue = (decimal)currencyPrice[index];
+        decimal volumeValue = (decimal) userPortfolioCurrencyPrice;
+
+        decimal priceOfCurrency = priceValue * volumeValue;
+        Label currencyPriceLabel = new Label($"{priceOfCurrency }");
+        currencyPriceLabel.Name = $"CurrencyPrice_{userPortfolioCurrencyName}";
+        currencyPriceLabel.Visible = true;
+        currencyPriceLabel.CanFocus = false;
+        currencyPriceLabel.Halign = Align.Start;
+        currencyPriceLabel.Valign = Align.Center;
+
+        Frame priceFrame = new Frame("");
+        priceFrame.ShadowType = ShadowType.None;
+        priceFrame.Add(currencyPriceLabel);
+        priceFrame.SetSizeRequest(100,-1);
+
+        currencyInfoGrid.Attach(priceFrame, 1, 1, 1, 1);
+
+        Label currencyVolumeLabel = new Label($"{userPortfolioCurrencyPrice}");
+        currencyVolumeLabel.Name = $"CurrencyVolume_{userPortfolioCurrencyName}";
+        currencyVolumeLabel.Visible = true;
+        currencyVolumeLabel.CanFocus = false;
+
+        Frame volumeFrame = new Frame("");
+        volumeFrame.ShadowType = ShadowType.None;
+        volumeFrame.Add(currencyVolumeLabel);
+        volumeFrame.SetSizeRequest(100,-1);
+
+        currencyInfoGrid.Attach(volumeFrame, 2, 0, 1, 1);
+
+        alignment.Add(currencyInfoGrid);
+        portfolioItemFrame.Add(alignment);
+        portfolioItemFrame.MarginStart = 20;
+
+        portfolio_items_box.Add(portfolioItemFrame);
+        portfolio_items_box.ShowAll();
+    }
+
 
 
 //----------------Sort with Labels---------------------------
@@ -1426,7 +2264,10 @@ private int ExtractVolumeFromLabel(string volume)
                 main_window.ShowAll();
                 requestShowServerAssets();
                 requestUserPortfolio();
-               // sendMiningUserDetails();
+                requestTransactionList();
+                FillPortfolioBoxMainWindow();
+                FillTransactionWindow();
+
 
 
             }
@@ -1649,6 +2490,14 @@ private int ExtractVolumeFromLabel(string volume)
 
 // Transactions Window
 
+    private void FillTransactionWindow(){
+
+        for (int i = 0; i < userTransactionsList.Count; i++){
+            AddFrameToTransactionWindow(i);
+        }
+
+    }
+
     private void AddFrameToTransactionWindow(int index)
     {
 
@@ -1838,12 +2687,6 @@ private int ExtractVolumeFromLabel(string volume)
 
 // Navigation bar functions
 
-        private void transactions_button_main_window_clicked(object sender, EventArgs args){
-            main_window.Hide();
-
-            transactions_window.ShowAll();
-            requestTransactionList();
-        }
 
 // Main Functions
 
