@@ -11,6 +11,7 @@ public class AppDbContext : DbContext
     public DbSet<UserOffer> UserOffers { get; set; }
     public DbSet<Miner> Miners { get; set; }
     public DbSet<Block> Blocks { get; set; }
+    public DbSet<Admin> Admins { get; set; }
     
     protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
     {

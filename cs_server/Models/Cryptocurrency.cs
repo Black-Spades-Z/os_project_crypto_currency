@@ -63,6 +63,8 @@ public class Cryptocurrency
 			{
 				if(c.Name == var.Name)
 				{
+					var.Fee = c.Fee;
+					var.Price = c.Price;
 					var.Amount = c.Amount;
 				}
 			}

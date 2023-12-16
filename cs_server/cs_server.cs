@@ -313,6 +313,28 @@ class CSharpServer
             			SendMessageToClient(stream, message);
         		}
         		break;
+        		
+        	case string _ when data.Contains("GetFullTransactionList") :
+        		if (HandleFullTransactionListRequest(data, out message))
+        		{
+        	    		SendMessageToClient(stream, message);
+        		}
+        		else
+        		{
+            			SendMessageToClient(stream, message);
+        		}
+        		break;
+        	
+        	case string _ when data.Contains("GetUserList") :
+        		if (HandleFullUserListRequest(data, out message))
+        		{
+        	    		SendMessageToClient(stream, message);
+        		}
+        		else
+        		{
+            			SendMessageToClient(stream, message);
+        		}
+        		break;
 
     		default:
         		Console.WriteLine("Unknown object type or missing ObjectType property.");
