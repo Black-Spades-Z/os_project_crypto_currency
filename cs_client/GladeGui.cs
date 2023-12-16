@@ -65,7 +65,7 @@ namespace GladeFunctions
 
         private Window main_window;
         private Frame card;
-        private Box market_values_box;
+
         private Button exchange_button_main_window;
         private EventBox rank_event_box;
         private EventBox price_event_box;
@@ -397,7 +397,7 @@ namespace GladeFunctions
 
             // Retrieve objects from Glade for main_window
             card = (Frame)builder.GetObject("card");
-            market_values_box = (Box)builder.GetObject("market_values_box");
+            transactions_box = (Box)builder.GetObject("transactions_box");
             exchange_button_main_window = (Button)builder.GetObject("exchange_button_main_window");
             rank_event_box = (EventBox)builder.GetObject("rank_event");
             price_event_box = (EventBox)builder.GetObject("price_event");
@@ -799,10 +799,141 @@ namespace GladeFunctions
 
 
 
-        // Add the frame to the market_values_box
-        market_values_box.Add(currencyFrame);
-        market_values_box.ShowAll();
+        // Add the frame to the transactions_box
+        transactions_box.Add(currencyFrame);
+        transactions_box.ShowAll();
     }
+
+    // -------------------- Add Mini PortFolio --------------------
+
+
+
+    private void AddFrameToPortfolioBoxMainWindow(int index)
+    {
+    // Create the GtkFrame
+            // Create a new frame
+            Frame portfolioItemFrame = new Frame("");
+            Frame currencyFrame = new Frame("");
+
+            // Create the frame
+            currencyFrame.Visible = true;
+            currencyFrame.CanFocus = false;
+            //currencyFrame.MarginTop = 10;
+            //currencyFrame.MarginBottom = 10;
+            currencyFrame.LabelXalign = 0;
+            currencyFrame.ShadowType = ShadowType.None;
+
+            // Create the alignment
+            Alignment alignment = new Alignment(0, 0, 0, 0);
+            alignment.Visible = true;
+            alignment.CanFocus = false;
+            //alignment.LeftPadding = 12;
+
+
+            // Create the inner grid
+            Grid innerGrid = new Grid();
+            innerGrid.Visible = false;
+            innerGrid.CanFocus = false;
+            //innerGrid.RowSpacing = 10;
+            //innerGrid.ColumnSpacing = 10;
+            innerGrid.RowHomogeneous = true;
+            innerGrid.ColumnHomogeneous = true;
+
+
+
+
+
+
+
+            // Create the inner grid
+            Grid currencyNameGrid = new Grid();
+            //currencyNameGrid.MarginBottom = 9;
+            //currencyNameGrid.MarginLeft = 30;
+            currencyNameGrid.Visible = true;
+            currencyNameGrid.CanFocus = false;
+            currencyNameGrid.RowSpacing = 0;
+            //currencyNameGrid.ColumnSpacing = 10;
+            currencyNameGrid.RowHomogeneous = true;
+            currencyNameGrid.ColumnHomogeneous = true;
+
+
+            // Add child widgets to the inner grid (similar to your provided XML structure)
+            // Here, you'd create and add GtkImage, GtkLabel, GtkButton, etc., to the innerGrid
+
+
+            // Icon Image
+
+            Image currencyIconImage = new Image(currencyIcons[index]);
+            currencyIconImage.Visible = true;
+            currencyIconImage.CanFocus = false;
+            //currencyIconImage.MarginLeft = 40;
+            currencyNameGrid.Attach(currencyIconImage, 0, 0, 1, 1);
+
+            // Name Label
+
+            Label currencyNameLabel = new Label(currencyName[index]);
+            currencyNameLabel.Name = $"CurrencyName_{index}";
+            currencyNameLabel.Visible = true;
+            currencyNameLabel.CanFocus = false;
+            currencyNameLabel.Halign = Align.Start; // Adjust horizontal alignment
+        currencyNameLabel.Valign = Align.Center; // Adjust vertical alignment
+            //currencyNameLabel.MarginRight = 30;
+
+
+            currencyNameGrid.Attach(currencyNameLabel, 1, 0, 1, 1);
+
+
+
+
+            // inner frame for currency name
+            Frame currencyNameFrame= new Frame("");
+            currencyNameFrame.ShadowType = ShadowType.None;
+            currencyNameFrame.Add(currencyNameGrid);
+
+            // Set fixed width for the currency Frame
+            int fixedWidth = 200; // Set your desired fixed width
+            currencyNameFrame.SetSizeRequest(fixedWidth, -1);
+
+            innerGrid.Attach(currencyNameFrame, 0, 0, 1, 1);
+
+
+
+
+            // Price Label
+
+            Label currencyPriceLabel = new Label(currencyPrice[index]);
+            currencyPriceLabel.Name = $"CurrencyPrice_{index}";
+            currencyPriceLabel.Visible = true;
+            currencyPriceLabel.CanFocus = false;
+            //currencyPriceLabel.MarginBottom = 9;
+            //currencyPriceLabel.Halign = Align.End;
+
+            // inner frame for price
+            Frame priceFrame= new Frame("");
+            priceFrame.ShadowType = ShadowType.None;
+            priceFrame.Add(currencyPriceLabel);
+
+            // Set fixed width for the priceFrame
+            //int fixedWidth = 150; // Set your desired fixed width
+            priceFrame.SetSizeRequest(fixedWidth, -1);
+
+            innerGrid.Attach(priceFrame, 1, 0, 1, 1);
+
+            // Attach Outermost Grid to Alignment
+            alignment.Add(innerGrid);
+
+            // Attach Alignment to Frame
+            portfolioItemFrame.Add(alignment);
+
+
+
+            //portfolio_items_box.PackStart(portfolioItemFrame, false, false, 0);
+
+            // Add the frame to the market_values_box
+            portfolio_items_box.Add(portfolioItemFrame);
+            portfolio_items_box.ShowAll();
+            }
+
 
 //----------------Sort with Labels---------------------------
 
@@ -820,8 +951,8 @@ private void OnSortCurrencyName(object sender, ButtonPressEventArgs args)
 
 private void SortFramesByCurrencyName()
 {
-    // Get all child frames in market_values_box
-    var frames = market_values_box.Children
+    // Get all child frames in transactions_box
+    var frames = transactions_box.Children
         .OfType<Frame>()
         .ToList();
 
@@ -838,19 +969,19 @@ private void SortFramesByCurrencyName()
     });
 
     // Clear existing components in the box
-    foreach (var child in market_values_box.Children.ToList())
+    foreach (var child in transactions_box.Children.ToList())
     {
-        market_values_box.Remove(child);
+        transactions_box.Remove(child);
     }
 
     // Add the frames back to the box in the sorted order
     foreach (var frame in frames)
     {
-        market_values_box.Add(frame);
+        transactions_box.Add(frame);
     }
 
     // Show all widgets in the box
-    market_values_box.ShowAll();
+    transactions_box.ShowAll();
 }
 
 private string GetCurrencyNameFromFrame(Frame frame)
@@ -924,8 +1055,8 @@ private void OnSortButtonPrice(object sender, ButtonPressEventArgs args)
 
 private void SortFramesByPrice()
 {
-    // Get all child frames in market_values_box
-    var frames = market_values_box.Children
+    // Get all child frames in transactions_box
+    var frames = transactions_box.Children
         .OfType<Frame>()
         .ToList();
 
@@ -949,19 +1080,19 @@ private void SortFramesByPrice()
     });
 
     // Clear existing components in the box
-    foreach (var child in market_values_box.Children.ToList())
+    foreach (var child in transactions_box.Children.ToList())
     {
-        market_values_box.Remove(child);
+        transactions_box.Remove(child);
     }
 
     // Add the frames back to the box in the sorted order
     foreach (var frame in frames)
     {
-        market_values_box.Add(frame);
+        transactions_box.Add(frame);
     }
 
     // Show all widgets in the box
-    market_values_box.ShowAll();
+    transactions_box.ShowAll();
 }
 
 private string GetPriceLabelFromFrame(Frame frame)
@@ -1044,8 +1175,8 @@ private void OnSortButtonRank(object sender, ButtonPressEventArgs args){
 
 private void SortFramesByRank()
 {
-    // Get all child frames in market_values_box
-var frames = market_values_box.Children
+    // Get all child frames in transactions_box
+var frames = transactions_box.Children
     .OfType<Frame>()  // Use OfType<T> for better readability
     .ToList();
 
@@ -1066,19 +1197,19 @@ frames.Sort((frame1, frame2) =>
 });
 
 // Clear existing components in the box
-foreach (var child in market_values_box.Children.ToList())
+foreach (var child in transactions_box.Children.ToList())
 {
-    market_values_box.Remove(child);
+    transactions_box.Remove(child);
 }
 
 // Add the frames back to the box in the sorted order
 foreach (var frame in frames)
 {
-    market_values_box.Add(frame);
+    transactions_box.Add(frame);
 }
 
 // Show all widgets in the box
-market_values_box.ShowAll();
+transactions_box.ShowAll();
 
 }
 
@@ -1163,8 +1294,8 @@ private void OnSortVolume(object sender, ButtonPressEventArgs args){
 
 private void SortFramesByVolume()
 {
-    // Get all child frames in market_values_box
-var frames = market_values_box.Children
+    // Get all child frames in transactions_box
+var frames = transactions_box.Children
     .OfType<Frame>()  // Use OfType<T> for better readability
     .ToList();
 
@@ -1187,19 +1318,19 @@ frames.Sort((frame1, frame2) =>
 });
 
 // Clear existing components in the box
-foreach (var child in market_values_box.Children.ToList())
+foreach (var child in transactions_box.Children.ToList())
 {
-    market_values_box.Remove(child);
+    transactions_box.Remove(child);
 }
 
 // Add the frames back to the box in the sorted order
 foreach (var frame in frames)
 {
-    market_values_box.Add(frame);
+    transactions_box.Add(frame);
 }
 
 // Show all widgets in the box
-market_values_box.ShowAll();
+transactions_box.ShowAll();
 
 }
 
@@ -1295,7 +1426,7 @@ private int ExtractVolumeFromLabel(string volume)
                 main_window.ShowAll();
                 requestShowServerAssets();
                 requestUserPortfolio();
-                sendMiningUserDetails();
+               // sendMiningUserDetails();
 
 
             }
@@ -1504,173 +1635,207 @@ private int ExtractVolumeFromLabel(string volume)
             login_window2.ShowAll();
         }
 
+            //
+            //
+            //
+            // // Icon Image
+            //
+            //
+            //
+            //
+            //
+
+
 
 // Transactions Window
 
-        private void AddFrameToTransactionWindow(int index)
-        {
+    private void AddFrameToTransactionWindow(int index)
+    {
 
 
 
 
-            // Create a new frame
-            Frame currencyFrame = new Frame("");
+        // Create a new frame
+        Frame transactionFrame = new Frame("");
 
-            // Create the frame
-            currencyFrame.Visible = true;
-            currencyFrame.CanFocus = false;
-            //currencyFrame.MarginTop = 10;
-            //currencyFrame.MarginBottom = 10;
-            currencyFrame.LabelXalign = 0;
-            currencyFrame.ShadowType = ShadowType.None;
+        // Create the frame
+        transactionFrame.Visible = true;
+        transactionFrame.CanFocus = false;
+        //transactionFrame.MarginTop = 10;
+        //transactionFrame.MarginBottom = 10;
+        transactionFrame.LabelXalign = 0;
+        transactionFrame.ShadowType = ShadowType.None;
 
-            // Create the alignment
-            Alignment alignment = new Alignment(0, 0, 0, 0);
-            alignment.Visible = true;
-            alignment.CanFocus = false;
-            //alignment.LeftPadding = 12;
-
-
-            // Create the inner grid
-            Grid innerGrid = new Grid();
-            innerGrid.Visible = false;
-            innerGrid.CanFocus = false;
-            //innerGrid.RowSpacing = 10;
-            //innerGrid.ColumnSpacing = 10;
-            innerGrid.RowHomogeneous = true;
-            innerGrid.ColumnHomogeneous = true;
+        // Create the alignment
+        Alignment alignment = new Alignment(0, 0, 0, 0);
+        alignment.Visible = true;
+        alignment.CanFocus = false;
+        //alignment.LeftPadding = 12;
 
 
+        // Create the inner grid
+    	Grid innerGrid = new Grid();
+    	innerGrid.Visible = false;
+ 	   innerGrid.CanFocus = false;
+ 	   //innerGrid.RowSpacing = 10;
+ 	   //innerGrid.ColumnSpacing = 10;
+ 	   innerGrid.RowHomogeneous = true;
+ 	   innerGrid.ColumnHomogeneous = true;
 
 
 
 
 
-            // Create the inner grid
-            Grid currencyNameGrid = new Grid();
-            //currencyNameGrid.MarginBottom = 9;
-            //currencyNameGrid.MarginLeft = 30;
-            currencyNameGrid.Visible = true;
-            currencyNameGrid.CanFocus = false;
-            currencyNameGrid.RowSpacing = 0;
-            //currencyNameGrid.ColumnSpacing = 10;
-            currencyNameGrid.RowHomogeneous = true;
-            currencyNameGrid.ColumnHomogeneous = true;
 
 
-            // Add child widgets to the inner grid (similar to your provided XML structure)
-            // Here, you'd create and add GtkImage, GtkLabel, GtkButton, etc., to the innerGrid
+        // Create the inner grid
+        Grid currencyNameGrid = new Grid();
+        //currencyNameGrid.MarginBottom = 9;
+        //currencyNameGrid.MarginLeft = 30;
+        currencyNameGrid.Visible = true;
+        currencyNameGrid.CanFocus = false;
+        currencyNameGrid.RowSpacing = 0;
+        //currencyNameGrid.ColumnSpacing = 10;
+        currencyNameGrid.RowHomogeneous = true;
+        currencyNameGrid.ColumnHomogeneous = true;
 
 
-            // Icon Image
-
-            Image currencyIconImage = new Image($"GUI/Glade/images/icons/{userTransactionsList[index].CryptocurrencyName}.png");
-            currencyIconImage.Visible = true;
-            currencyIconImage.CanFocus = false;
-            //currencyIconImage.MarginLeft = 40;
-            currencyNameGrid.Attach(currencyIconImage, 0, 0, 1, 1);
-
-            // Name Label
-
-            Label currencyNameLabel = new Label(userTransactionsList[index].CryptocurrencyName);
-            currencyNameLabel.Name = $"CurrencyName_{index}";
-            currencyNameLabel.Visible = true;
-            currencyNameLabel.CanFocus = false;
-            currencyNameLabel.Halign = Align.Start; // Adjust horizontal alignment
-            currencyNameLabel.Valign = Align.Center; // Adjust vertical alignment
-            //currencyNameLabel.MarginRight = 30;
+        // Add child widgets to the inner grid (similar to your provided XML structure)
+        // Here, you'd create and add GtkImage, GtkLabel, GtkButton, etc., to the innerGrid
 
 
-            currencyNameGrid.Attach(currencyNameLabel, 1, 0, 1, 1);
+        // Icon Image
+
+        Image currencyIconImage = new Image($"GUI/Glade/images/icons/{userTransactionsList[index].CryptocurrencyName}.png");
+        currencyIconImage.Visible = true;
+        currencyIconImage.CanFocus = false;
+        //currencyIconImage.MarginLeft = 40;
+        currencyNameGrid.Attach(currencyIconImage, 0, 0, 1, 1);
+
+        // Name Label
+
+        Label currencyNameLabel = new Label($"{userTransactionsList[index].CryptocurrencyName}");
+        currencyNameLabel.Name = $"CurrencyName_{index}";
+        currencyNameLabel.Visible = true;
+        currencyNameLabel.CanFocus = false;
+        currencyNameLabel.Halign = Align.Start; // Adjust horizontal alignment
+        currencyNameLabel.Valign = Align.Center; // Adjust vertical alignment
+        //currencyNameLabel.MarginRight = 30;
 
 
-            // inner frame for currency name
-
-            Frame currencyNameFrame= new Frame("");
-            currencyNameFrame.ShadowType = ShadowType.None;
-            currencyNameFrame.Add(currencyNameGrid);
-
-            // Set fixed width for the currency Frame
-            int fixedWidth = 200; // Set your desired fixed width
-            currencyNameFrame.SetSizeRequest(fixedWidth, -1);
-
-            innerGrid.Attach(currencyNameFrame, 0, 0, 1, 1);
+        currencyNameGrid.Attach(currencyNameLabel, 1, 0, 1, 1);
 
 
+        // inner frame for currency name
+        Frame currencyNameFrame= new Frame("");
+        currencyNameFrame.ShadowType = ShadowType.None;
+        currencyNameFrame.Add(currencyNameGrid);
 
+        // Set fixed width for the currency Frame
+        int fixedWidth = 200; // Set your desired fixed width
+        currencyNameFrame.SetSizeRequest(fixedWidth, -1);
 
-            // Date Label
-
-            DateTime transactionDateTime = userTransactionsList[index].DateTime;
-
-            Label currencyDateLabel = new Label($"{transactionDateTime}");
-            currencyDateLabel.Name = $"CurrencyDate_{index}";
-            currencyDateLabel.Visible = true;
-            currencyDateLabel.CanFocus = false;
-            //currencyDateLabel.MarginBottom = 9;
-            //currencyDateLabel.Halign = Align.End;
-
-            // inner frame for Date
-            Frame DateFrame= new Frame("");
-            DateFrame.ShadowType = ShadowType.None;
-            DateFrame.Add(currencyDateLabel);
-
-            // Set fixed width for the DateFrame
-            //int fixedWidth = 150; // Set your desired fixed width
-            DateFrame.SetSizeRequest(fixedWidth, -1);
-
-            innerGrid.Attach(DateFrame, 1, 0, 1, 1);
-
-            // Volume Label
-
-            Label currencyVolumeLabel = new Label(userTransactionsList[index].CryptoValue);
-            currencyVolumeLabel.Name = $"Volume_{index}";
-            currencyVolumeLabel.Visible = true;
-            currencyVolumeLabel.CanFocus = false;
-            //currencyVolumeLabel.MarginBottom = 9;
-            //currencyVolumeLabel.Halign = Align.End;
-
-            // inner frame for volume
-            Frame volumeFrame= new Frame("");
-            volumeFrame.ShadowType = ShadowType.None;
-            volumeFrame.Add(currencyVolumeLabel);
-
-            innerGrid.Attach(volumeFrame, 2, 0, 1, 1);
-
-            // Fee Label
-
-            Label currencyFeeLabel = new Label($"{userTransactionsList[index].TransactionFee}");
-            currencyFeeLabel.Name = $"CurrencyFee_{index}";
-            currencyFeeLabel.Visible = true;
-            currencyFeeLabel.CanFocus = false;
-            //currencyFeeLabel.MarginBottom = 9;
-            //currencyFeeLabel.Halign = Align.End;
-
-            // inner frame for Fee
-            Frame FeeFrame= new Frame("");
-            FeeFrame.ShadowType = ShadowType.None;
-            FeeFrame.Add(currencyFeeLabel);
-
-            innerGrid.Attach(FeeFrame, 3, 0, 1, 1);
+        innerGrid.Attach(currencyNameFrame, 0, 0, 1, 1);
 
 
 
-            // Add the inner grid to the alignment
-            alignment.Add(innerGrid);
 
-            // Add the alignment to the frame
-            currencyFrame.Add(alignment);
+        // DateTime Label
 
-            // Align Frame
+        DateTime transactionDateTime = userTransactionsList[index].DateTime;
 
-            currencyFrame.MarginEnd = 20;
+        Label currencyDateTimeLabel = new Label($"{transactionDateTime}");
+        currencyDateTimeLabel.Name = $"CurrencyDateTime_{index}";
+        currencyDateTimeLabel.Visible = true;
+        currencyDateTimeLabel.CanFocus = false;
+        //currencyDateTimeLabel.MarginBottom = 9;
+        //currencyDateTimeLabel.Halign = Align.End;
+
+        // inner frame for DateTime
+        Frame dateTimeFrame= new Frame("");
+        dateTimeFrame.ShadowType = ShadowType.None;
+        dateTimeFrame.Add(currencyDateTimeLabel);
+
+        // Set fixed width for the DateTimeFrame
+        //int fixedWidth = 150; // Set your desired fixed width
+        dateTimeFrame.SetSizeRequest(fixedWidth, -1);
+
+        innerGrid.Attach(dateTimeFrame, 1, 0, 1, 1);
+
+        // CashValue Label
+
+        Label currencyCashValueLabel = new Label($"${userTransactionsList[index].CashValue}");
+        currencyCashValueLabel.Name = $"CurrencyCashValue_{index}";
+        currencyCashValueLabel.Visible = true;
+        currencyCashValueLabel.CanFocus = false;
+        //currencyCashValueLabel.MarginBottom = 9;
+        //currencyCashValueLabel.Halign = Align.End;
+
+        // inner frame for cashValue
+        Frame cashValueFrame= new Frame("");
+        cashValueFrame.ShadowType = ShadowType.None;
+        cashValueFrame.Add(currencyCashValueLabel);
+
+        innerGrid.Attach(cashValueFrame, 2, 0, 1, 1);
+
+        // CryptoValue Label
+
+        Label currencyCryptoValueLabel = new Label($"{userTransactionsList[index].CryptoValue}");
+        currencyCryptoValueLabel.Name = $"CurrencyCryptoValue_{index}";
+        currencyCryptoValueLabel.Visible = true;
+        currencyCryptoValueLabel.CanFocus = false;
+        //currencyCryptoValueLabel.MarginBottom = 9;
+        //currencyCryptoValueLabel.Halign = Align.End;
+
+        // inner frame for cryptoValue
+        Frame cryptoValueFrame= new Frame("");
+        cryptoValueFrame.ShadowType = ShadowType.None;
+        cryptoValueFrame.Add(currencyCryptoValueLabel);
+
+        innerGrid.Attach(cryptoValueFrame, 3, 0, 1, 1);
+
+
+        // transactionFee Label
+
+        Label currencyTransactionFeeLabel = new Label($"{userTransactionsList[index].TransactionFee}");
+        currencyTransactionFeeLabel.Name = $"TransactionFee_{index}";
+        currencyTransactionFeeLabel.Visible = true;
+        currencyTransactionFeeLabel.CanFocus = false;
+        //currencyTransactionFeeLabel.MarginBottom = 9;
+        //currencyTransactionFeeLabel.Halign = Align.End;
 
 
 
-            // Add the frame to the market_values_box
-            transactions_box.Add(currencyFrame);
-            transactions_box.ShowAll();
-        }
+        // inner frame for transactionFee
+        Frame transactionFeeFrame= new Frame("");
+        transactionFeeFrame.ShadowType = ShadowType.None;
+        transactionFeeFrame.Add(currencyTransactionFeeLabel);
+
+        innerGrid.Attach(transactionFeeFrame, 4, 0, 1, 1);
+
+
+
+
+
+
+        // Add the inner grid to the alignment
+        alignment.Add(innerGrid);
+
+        // Add the alignment to the frame
+        transactionFrame.Add(alignment);
+
+        // Align Frame
+
+        transactionFrame.MarginEnd = 20;
+
+
+
+        // Add the frame to the transactions_box
+        transactions_box.Add(transactionFrame);
+        transactions_box.ShowAll();
+    }
+
+
 // Navigation bar functions
 
         private void transactions_button_main_window_clicked(object sender, EventArgs args){

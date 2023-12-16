@@ -117,7 +117,7 @@ public class Transaction
 
 		string response = Encoding.ASCII.GetString(buffer, 0, bytesRead);
 		List<Transaction> userTransactions = JsonConvert.DeserializeObject<List<Transaction>>(response);
-		Console.WriteLine(userTransactions.Count);
+		Console.WriteLine(response);
 		
 		return userTransactions;
 	    }

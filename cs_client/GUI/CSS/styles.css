@@ -186,8 +186,7 @@
 	outline : 2px solid #00BFFF;
 	box-shadow:0 0 10px rgba(0, 0, 0, 0.5);
 }
-.portfolio-button-portfolio {
-  background-color: #FFFFFF; 
+.navbar-button {
   color: #000000; 
   padding: 10px 20px; 
   border: 2px solid white;
@@ -195,12 +194,12 @@
   text-decoration: none; 
   transition: background-color 0.1s ease; 
 }
-.portfolio-button-portfolio:hover {
+.navbar-button:hover {
   background-color: #DCDCDC; 
   border: 2px solid #76b2e9;
 }
 
-.dashboard-button-portfolio {
+/* .dashboard-button-portfolio {
    background-color: #FFFFFF; 
   color: #000000; 
   padding: 10px 20px; 
@@ -268,7 +267,7 @@
 .help-button-porftolio:hover {
   	background-color: #DCDCDC; 
   	  border: 2px solid #76b2e9;
-}
+} */
 .logout-button-portfolio {
 
   color: #000000;
