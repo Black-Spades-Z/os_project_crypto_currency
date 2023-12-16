@@ -52,7 +52,7 @@ public class Transaction
 
 	    Console.Write("From Address: ");
 	    //string fromAddress = Console.ReadLine();
-	    string fromAddress = "F99E527860ECB668DEA0F2E8840335F9648600D1E0937E9F047C1714A27505D0";
+	    string fromAddress = "server";
 
 	    Console.Write("To Address: ");
 	    //string toAddress = Console.ReadLine();

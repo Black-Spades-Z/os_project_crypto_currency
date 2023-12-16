@@ -7,6 +7,7 @@ using System.Reflection;
 using System.Security.Cryptography;
 
 using static UserPortfolio;
+using static Cryptocurrency;
 
 public static class MinerUtil
 {	
@@ -144,24 +145,83 @@ public static class MinerUtil
 		return true;
 	}
 	
-	public static decimal FindCryptoCurrency(string CryptoCurrencyName, UserPortfolio userPortfolio)
+	public static bool ValidateServerTransaction(List<Cryptocurrency> assets, Wallet buyer, UserPortfolio pBuyer, Transaction transaction, out Cryptocurrency crypto)
 	{
-		Type userPortfolioType = typeof(UserPortfolio);
-		
-		
-		// Iterate over the properties of UserPortfolio
-		foreach (PropertyInfo propertyInfo in userPortfolioType.GetProperties())
+		Cryptocurrency varCrypto = new();
+	
+		if(buyer.Balance < transaction.CashValue)
 		{
+			//message = "Cash Balance of buyer is not sufficient ! ";
+			crypto = varCrypto;
+			return false;
+		}
+		
+		Console.WriteLine($"Checking seller assets");
+		decimal buyerCryptoAmount = FindCryptoCurrency(transaction.CryptocurrencyName, pBuyer);	
+		decimal selletCryptoAmount;
+		
+		foreach(Cryptocurrency c in assets)
+		{
+			if(c.Name == transaction.CryptocurrencyName)
+			{
+				varCrypto = c;
+			}
+		}
+		
+		
+		if(varCrypto.Amount < transaction.CryptoValue)
+		{
+			//message = "Crypto Balance of server is not sufficient ! ";
+			crypto = varCrypto;
+			return false;
+		}
+		
+		buyer.Balance -= transaction.CashValue;
+		//seller.Balance += transaction.CashValue;
+		
+		varCrypto.Amount = varCrypto.Amount - transaction.CryptoValue - transaction.TransactionFee;
+		
+		
+		PropertyInfo property = typeof(UserPortfolio).GetProperty(transaction.CryptocurrencyName);
+		property.SetValue(pBuyer, buyerCryptoAmount + transaction.CryptoValue);
+		
+		//message = "Valid";
+		crypto = varCrypto;
+		return true;
+	}
+	
+	public static decimal FindCryptoCurrency(string CryptoCurrencyName, UserPortfolio userPortfolio)
+
+	{
+
+		Type userPortfolioType = typeof(UserPortfolio);	
+
+		// Iterate over the properties of UserPortfolio
+
+		foreach (PropertyInfo propertyInfo in userPortfolioType.GetProperties())
+
+		{
+
 		    // Check if the property name matches the CryptocurrencyName
+
 		    if (propertyInfo.Name == CryptoCurrencyName)
+
 		    {
+
 		        // Get the value of the matched property
+
 		        decimal cryptocurrencyAmount = (decimal)propertyInfo.GetValue(userPortfolio);
+
 		        Console.WriteLine($"{CryptoCurrencyName} amount: {cryptocurrencyAmount}");
+
 		        return cryptocurrencyAmount;
+
 		    }
+
         	}
+
         	return 0;
+
 	}
 	
 	public static void HashBlock(Block block)

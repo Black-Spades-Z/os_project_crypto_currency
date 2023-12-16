@@ -302,6 +302,17 @@ class CSharpServer
             			SendMessageToClient(stream, message);
         		}
         		break;
+        		
+        	case string _ when data.Contains("\"ObjectType\":\"Crypto\"") && data.Contains("\"Purpose\":\"UpdateInServerAssets\"") :
+        		if (HandleReceivedCryptocurrency(data, out message))
+        		{
+        	    		SendMessageToClient(stream, message);
+        		}
+        		else
+        		{
+            			SendMessageToClient(stream, message);
+        		}
+        		break;
 
     		default:
         		Console.WriteLine("Unknown object type or missing ObjectType property.");

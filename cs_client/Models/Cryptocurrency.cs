@@ -9,13 +9,28 @@ using System.ComponentModel.DataAnnotations;
 
 public class Cryptocurrency
 {
+	[NotMapped]
+    	public string ObjectType => "Crypto";
+	[NotMapped]
+	public string Purpose { get; set; }
+
 	[Key]
 	public string Name { get; set; }
 	public decimal Price { get; set; }
 	public decimal Fee { get; set; }
 	public decimal Amount { get; set; }
 	
-	public static void WaitForServerAssets(NetworkStream stream)
+	public string Serialize()
+    {
+        return JsonConvert.SerializeObject(this);
+    }
+
+    public static Cryptocurrency Deserialize(string json)
+    {
+        return JsonConvert.DeserializeObject<Cryptocurrency>(json);
+    }
+	
+	public static List<Cryptocurrency> WaitForServerAssets(NetworkStream stream)
 	{
 	    try
 	    {
@@ -31,10 +46,12 @@ public class Cryptocurrency
 		string response = Encoding.ASCII.GetString(buffer, 0, bytesRead);
 		List<Cryptocurrency> serverAssets = JsonConvert.DeserializeObject<List<Cryptocurrency>>(response);
 		Console.WriteLine(serverAssets.Count);
+		return serverAssets;
 	    }
 	    catch (Exception e)
 	    {
 		Console.WriteLine($"Error in waiting for response: {e}");
 	    }
+	    return null;
 	}
 }

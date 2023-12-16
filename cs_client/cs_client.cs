@@ -168,7 +168,7 @@ class CSharpClient
                         
                     case "6":
                         Wallet userWallet = new();
-                        userWallet.WalletAddress = "qwe";
+                        userWallet.WalletAddress = "F99E527860ECB668DEA0F2E8840335F9648600D1E0937E9F047C1714A27505D0";
                         userWallet.Purpose = "GetTransactionList";
                         string serializedWallet = userWallet.Serialize();
 
@@ -234,92 +234,167 @@ class CSharpClient
 
                             if(WaitForValidationResponse(stream))
                             {
-                                //Get Transaction List
+                                //Get Transaction
                             	RequestMessage = "GetTransactionForValidation";
                                 SendMessage(stream, RequestMessage);
                                 Transaction userTransaction = WaitForTransactionForValidation(stream);
                                 
-                                //Get Wallet of Seller
-                            	Wallet senderWallet = new();
-                            	senderWallet.Purpose = "GetWallet";
-                            	senderWallet.WalletAddress = userTransaction.FromAddress;
-                            	serializedWallet = senderWallet.Serialize();
-                      
-                                SendMessage(stream, serializedWallet);
-                                senderWallet = WaitForWallet(stream);
                                 
-                                //Get Portfolio of Seller
-                                User senderUser = new();
-		                senderUser.Purpose = "GetPortfolio";
-		                senderUser.UserId = senderWallet.UserId;
-		                serializedUser = senderUser.Serialize();
-
-		                SendMessage(stream, serializedUser);
-		                UserPortfolio senderPortfolioUser = WaitForAccountPortfolio(stream);
-                        
-                                //Get Wallet of Buyer
-                                Wallet recipientWallet = new();
-                            	recipientWallet.Purpose = "GetWallet";
-                            	recipientWallet.WalletAddress = userTransaction.ToAddress;
-                            	serializedWallet = recipientWallet.Serialize();
-                      
-                                SendMessage(stream, serializedWallet);
-                                recipientWallet = WaitForWallet(stream);
                                 
-                                //Get Portfolio of Buyer
-                                User recipientUser = new();
-		                recipientUser.Purpose = "GetPortfolio";
-		                recipientUser.UserId = recipientWallet.UserId;
-		                serializedUser = recipientUser.Serialize();
-
-		                SendMessage(stream, serializedUser);
-		                UserPortfolio recipientPortfolioUser = WaitForAccountPortfolio(stream);                          
-                            	
-                            	string message = "";
-                            	if(ValidateTransaction(senderWallet, recipientWallet, senderPortfolioUser, recipientPortfolioUser, userTransaction, out message))
-                            	{
-				        recipientWallet.Purpose = "UpdateWallet";
-				        serializedWallet = recipientWallet.Serialize();
-				        SendMessage(stream, serializedWallet);
-				        WaitForResponse(stream);
-				        
-				        serializedUser = senderPortfolioUser.Serialize();
-				        SendMessage(stream, serializedUser);
-				        WaitForResponse(stream);
-				        
-				        senderWallet.Purpose = "UpdateWallet";
-				        serializedWallet = senderWallet.Serialize();
-				        SendMessage(stream, serializedWallet);
-				        WaitForResponse(stream);
-				        
-				        serializedUser = recipientPortfolioUser.Serialize();
-				        SendMessage(stream, serializedUser);
-				        WaitForResponse(stream);
-				        
-                            		
-                            		// Create a Transaction object and serialize it
-				        userTransaction.Purpose = "Valid";
-				        userTransaction.MinerId = 11; // this userId
-				        string validatedSerializedTransaction = userTransaction.Serialize();
+                                if(userTransaction.FromAddress == "server")
+                                {
+                                	RequestMessage = "GetServerAssetsList";
 
 				        // Send the serialized Transaction object to C client
-				        SendMessage(stream, validatedSerializedTransaction);
+				        SendMessage(stream, RequestMessage);
 
 				        // Wait for a response from the server
-				        WaitForValidationResponse(stream);
-                            	}
-                            	else
-                            	{
-                            		// Create a Transaction object and serialize it
-				        userTransaction.Purpose = "NotValid";
-				        string validatedSerializedTransaction = userTransaction.Serialize();
+				        List<Cryptocurrency> assets= WaitForServerAssets(stream);
+				        
+				        //Get Wallet of Buyer
+		                        Wallet recipientWallet = new();
+		                    	recipientWallet.Purpose = "GetWallet";
+		                    	recipientWallet.WalletAddress = userTransaction.ToAddress;
+		                    	serializedWallet = recipientWallet.Serialize();
+		              
+		                        SendMessage(stream, serializedWallet);
+		                        recipientWallet = WaitForWallet(stream);
+		                        
+		                        //Get Portfolio of Buyer
+		                        User recipientUser = new();
+				        recipientUser.Purpose = "GetPortfolio";
+				        recipientUser.UserId = recipientWallet.UserId;
+				        serializedUser = recipientUser.Serialize();
 
-				        // Send the serialized Transaction object to C client
-				        SendMessage(stream, validatedSerializedTransaction);
+				        SendMessage(stream, serializedUser);
+				        UserPortfolio recipientPortfolioUser = WaitForAccountPortfolio(stream);
+				        
+				        Cryptocurrency crypto = new();
+				        if(ValidateServerTransaction(assets, recipientWallet, recipientPortfolioUser, userTransaction, out crypto))
+		                    	{
+		                    		crypto.Purpose = "UpdateInServerAssets";
+		                    		string serializedCrypto = crypto.Serialize();
+		                    		SendMessage(stream, serializedCrypto);
+						WaitForResponse(stream);
+		                    	
+		                    		recipientWallet.Purpose = "UpdateWallet";
+						serializedWallet = recipientWallet.Serialize();
+						SendMessage(stream, serializedWallet);
+						WaitForResponse(stream);
+						
+						serializedUser = recipientPortfolioUser.Serialize();
+						SendMessage(stream, serializedUser);
+						WaitForResponse(stream);
+						
+						// Create a Transaction object and serialize it
+						userTransaction.Purpose = "Valid";
+						userTransaction.MinerId = 11; // this userId
+						string validatedSerializedTransaction = userTransaction.Serialize();
 
-				        // Wait for a response from the server
-				        WaitForResponse(stream);
-                            	}
+						// Send the serialized Transaction object to C client
+						SendMessage(stream, validatedSerializedTransaction);
+
+						// Wait for a response from the server
+						WaitForValidationResponse(stream);
+		                    	}
+		                    	else
+		                    	{
+		                    		// Create a Transaction object and serialize it
+						userTransaction.Purpose = "NotValid";
+						string validatedSerializedTransaction = userTransaction.Serialize();
+
+						// Send the serialized Transaction object to C client
+						SendMessage(stream, validatedSerializedTransaction);
+
+						// Wait for a response from the server
+						WaitForResponse(stream);
+		                    	}                          
+                                }
+                                else
+                                {
+                                	//Get Wallet of Seller
+		                    	Wallet senderWallet = new();
+		                    	senderWallet.Purpose = "GetWallet";
+		                    	senderWallet.WalletAddress = userTransaction.FromAddress;
+		                    	serializedWallet = senderWallet.Serialize();
+		              
+		                        SendMessage(stream, serializedWallet);
+		                        senderWallet = WaitForWallet(stream);
+                                	
+		                        //Get Portfolio of Seller
+		                        User senderUser = new();
+				        senderUser.Purpose = "GetPortfolio";
+				        senderUser.UserId = senderWallet.UserId;
+				        serializedUser = senderUser.Serialize();
+
+				        SendMessage(stream, serializedUser);
+				        UserPortfolio senderPortfolioUser = WaitForAccountPortfolio(stream);
+		                
+		                        //Get Wallet of Buyer
+		                        Wallet recipientWallet = new();
+		                    	recipientWallet.Purpose = "GetWallet";
+		                    	recipientWallet.WalletAddress = userTransaction.ToAddress;
+		                    	serializedWallet = recipientWallet.Serialize();
+		              
+		                        SendMessage(stream, serializedWallet);
+		                        recipientWallet = WaitForWallet(stream);
+		                        
+		                        //Get Portfolio of Buyer
+		                        User recipientUser = new();
+				        recipientUser.Purpose = "GetPortfolio";
+				        recipientUser.UserId = recipientWallet.UserId;
+				        serializedUser = recipientUser.Serialize();
+
+				        SendMessage(stream, serializedUser);
+				        UserPortfolio recipientPortfolioUser = WaitForAccountPortfolio(stream);      
+				                            
+		                    	
+		                        string message = "";
+		                    	if(ValidateTransaction(senderWallet, recipientWallet, senderPortfolioUser, recipientPortfolioUser, userTransaction, out message))
+		                    	{
+						recipientWallet.Purpose = "UpdateWallet";
+						serializedWallet = recipientWallet.Serialize();
+						SendMessage(stream, serializedWallet);
+						WaitForResponse(stream);
+						
+						serializedUser = senderPortfolioUser.Serialize();
+						SendMessage(stream, serializedUser);
+						WaitForResponse(stream);
+						
+						senderWallet.Purpose = "UpdateWallet";
+						serializedWallet = senderWallet.Serialize();
+						SendMessage(stream, serializedWallet);
+						WaitForResponse(stream);
+						
+						serializedUser = recipientPortfolioUser.Serialize();
+						SendMessage(stream, serializedUser);
+						WaitForResponse(stream);
+						
+		                    		
+		                    		// Create a Transaction object and serialize it
+						userTransaction.Purpose = "Valid";
+						userTransaction.MinerId = 11; // this userId
+						string validatedSerializedTransaction = userTransaction.Serialize();
+
+						// Send the serialized Transaction object to C client
+						SendMessage(stream, validatedSerializedTransaction);
+
+						// Wait for a response from the server
+						WaitForValidationResponse(stream);
+		                    	}
+		                    	else
+		                    	{
+		                    		// Create a Transaction object and serialize it
+						userTransaction.Purpose = "NotValid";
+						string validatedSerializedTransaction = userTransaction.Serialize();
+
+						// Send the serialized Transaction object to C client
+						SendMessage(stream, validatedSerializedTransaction);
+
+						// Wait for a response from the server
+						WaitForResponse(stream);
+		                    	}
+                                }
                             }
                         }
                         break;
