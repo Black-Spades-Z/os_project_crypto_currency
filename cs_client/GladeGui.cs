@@ -52,9 +52,11 @@ namespace GladeFunctions
 
         // Buy from Server
 
-        private int cashValue = 100;
-        private int cryptoValue = 20;
-        private string cryptoCurrencyName = "Bitcoin";
+        private int cashValue;
+        private int cryptoValue;
+        private string cryptoCurrencyName;
+        private string temporaryCryptoName;
+        private float temporaryCryptoPrice;
 
 
         // Main Window
@@ -509,6 +511,11 @@ namespace GladeFunctions
             help_window.DefaultSize = new Gdk.Size(1440, 968);
             logout_window = (Window)builder.GetObject("logout_window");
             logout_window.DefaultSize = new Gdk.Size(600, 200);
+            p2p_sell_window = (Window)builder.GetObject("p2p_sell_window");
+            p2p_sell_window.DefaultSize = new Gdk.Size(600, 200);
+            p2p_buy_window = (Window)builder.GetObject("p2p_buy_window");
+            p2p_buy_window.DefaultSize = new Gdk.Size(600, 200);
+
 
             // Retrieve objects from Glade for main_window
             card = (Frame)builder.GetObject("card");
@@ -602,6 +609,21 @@ namespace GladeFunctions
             settings_button_p2p_window2 = (Button)builder.GetObject("settings_button_p2p_window2");
             help_button_p2p_window2 = (Button)builder.GetObject("help_button_p2p_window2");
             logout_button_p2p_window2 = (Button)builder.GetObject("logout_button_p2p_window2");
+
+            // Window p2p buy
+
+            buy_button_p2p_buy_window = (Button)builder.GetObject("buy_button_p2p_buy_window");
+            cancel_button_p2p_buy_window = (Button)builder.GetObject("cancel_button_p2p_buy_window");
+            buy_entry_p2p_buy_window = (Entry)builder.GetObject("buy_entry_p2p_buy_window");
+            value_label_p2p_window = (Label)builder.GetObject("value_label_p2p_window");
+
+            // Window p2p sell
+
+            sell_button_p2p_sell_window = (Button)builder.GetObject("sell_button_p2p_sell_window");
+            cancel_button_p2p_sell_window = (Button)builder.GetObject("cancel_button_p2p_sell_window");
+            available_label_p2p_sell_window = (Label)builder.GetObject("available_label_p2p_sell_window");
+            limit_label_p2p_sell_window = (Label)builder.GetObject("limit_label_p2p_sell_window");
+            price_label_p2p_sell_window = (Label)builder.GetObject("price_label_p2p_sell_window");
 
 
             // Window miner
@@ -726,6 +748,18 @@ namespace GladeFunctions
             settings_button_help_window.Clicked += settings_button_help_window_clicked;
             help_button_help_window.Clicked += help_button_help_window_clicked;
             logout_button_help_window.Clicked += logout_button_help_window_clicked;
+
+            // Window buy p2p
+
+            buy_button_p2p_buy_window.Clicked += buy_button_p2p_buy_window_clicked;
+            cancel_button_p2p_buy_window.Clicked += cancel_button_p2p_buy_window_clicked;
+            buy_entry_p2p_buy_window.Changed += buy_entry_p2p_buy_window_changed;
+
+            // Window sell p2p
+
+            sell_button_p2p_sell_window.Clicked += sell_button_p2p_sell_window_clicked;
+            cancel_button_p2p_sell_window.Clicked += cancel_button_p2p_sell_window_clicked;
+
 
 
 
@@ -1459,6 +1493,61 @@ namespace GladeFunctions
         logout_window.ShowAll();
     }
 
+    private void buy_button_p2p_buy_window_clicked (object sender, EventArgs e) {
+
+
+        cryptoCurrencyName = temporaryCryptoName;
+
+        buyFromServer();
+
+        p2p_buy_window.Hide();
+        buy_entry_p2p_buy_window.Text = "";
+        value_label_p2p_window.Text = "0";
+
+
+    }
+
+    private void buy_entry_p2p_buy_window_changed(object sender, EventArgs args)
+    {
+        string entryText = buy_entry_p2p_buy_window.Text;
+        string filteredText = FilterNonInteger(entryText);
+        buy_entry_p2p_buy_window.Text = filteredText;
+
+        // Update the label or perform any computation with the filtered integer
+        if (int.TryParse(filteredText, out int intValue))
+        {
+            int intPriceValue = (int)temporaryCryptoPrice;
+            cryptoValue = intValue;
+            cashValue = intValue * intPriceValue;
+            value_label_p2p_window.Text = $"{temporaryCryptoName} price : {cashValue}";
+        }
+        else{
+            value_label_p2p_window.Text = $"{temporaryCryptoName} price : 0";
+        }
+    }
+
+    private string FilterNonInteger(string input)
+    {
+        string filtered = string.Concat(input.Where(char.IsDigit));
+        return filtered;
+    }
+
+
+
+    private void cancel_button_p2p_buy_window_clicked (object sender, EventArgs e) {
+        p2p_buy_window.Hide();
+        buy_entry_p2p_buy_window.Text = "";
+        value_label_p2p_window.Text = $"{temporaryCryptoName} price : 0";
+
+    }
+
+    private void sell_button_p2p_sell_window_clicked (object sender, EventArgs e){
+
+    }
+    private void cancel_button_p2p_sell_window_clicked (object sender, EventArgs e){
+        p2p_sell_window.Hide();
+
+    }
 
 
 
@@ -1467,10 +1556,16 @@ namespace GladeFunctions
     // Sorting and adding ;
     //---------Add Market Values in Main---------------
     	// index counter
-    private void exchange_button_main_window_clicked(object sender, EventArgs e){
+    private void exchange_button_main_window_clicked(string frameCurrencyName, float frameCurrencyPrice){
 
-            buyFromServer();
+        temporaryCryptoName = frameCurrencyName;
+        temporaryCryptoPrice = frameCurrencyPrice;
 
+        buy_entry_p2p_buy_window.Text = "";
+        value_label_p2p_window.Text = $"{temporaryCryptoName} price : 0";
+
+
+        p2p_buy_window.ShowAll();
 
     }
 
@@ -1633,7 +1728,7 @@ namespace GladeFunctions
         innerGrid.Attach(echangeFrame, 4, 0, 1, 1);
 
         // Connect button click events for main_window
-        exchangeButton.Clicked += exchange_button_main_window_clicked;
+        exchangeButton.Clicked += (sender, args) => exchange_button_main_window_clicked(currencyName[index], currencyPrice[index]);
 
 
 

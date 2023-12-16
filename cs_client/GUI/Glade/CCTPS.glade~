@@ -4650,6 +4650,7 @@ Our support team is ready to help.</property>
     <property name="width-request">354</property>
     <property name="height-request">324</property>
     <property name="can-focus">False</property>
+    <property name="decorated">False</property>
     <child>
       <object class="GtkFrame">
         <property name="width-request">354</property>
@@ -4705,7 +4706,6 @@ Our support team is ready to help.</property>
                           <object class="GtkLabel" id="value_label_p2p_window">
                             <property name="visible">True</property>
                             <property name="can-focus">False</property>
-                            <property name="label" translatable="yes">label</property>
                           </object>
                         </child>
                       </object>
@@ -4802,6 +4802,7 @@ Our support team is ready to help.</property>
     <property name="width-request">354</property>
     <property name="height-request">384</property>
     <property name="can-focus">False</property>
+    <property name="decorated">False</property>
     <child>
       <object class="GtkFrame">
         <property name="visible">True</property>
