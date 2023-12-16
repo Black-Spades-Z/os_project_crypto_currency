@@ -5557,7 +5557,7 @@ entered data</property>
             <property name="label-xalign">0</property>
             <property name="shadow-type">none</property>
             <child>
-              <!-- n-columns=2 n-rows=2 -->
+              <!-- n-columns=2 n-rows=3 -->
               <object class="GtkGrid">
                 <property name="visible">True</property>
                 <property name="can-focus">False</property>
@@ -5581,7 +5581,20 @@ entered data</property>
                             <property name="visible">True</property>
                             <property name="can-focus">False</property>
                             <child>
-                              <placeholder/>
+                              <object class="GtkBox" id="p2p_list_box">
+                                <property name="visible">True</property>
+                                <property name="can-focus">False</property>
+                                <property name="orientation">vertical</property>
+                                <child>
+                                  <placeholder/>
+                                </child>
+                                <child>
+                                  <placeholder/>
+                                </child>
+                                <child>
+                                  <placeholder/>
+                                </child>
+                              </object>
                             </child>
                           </object>
                         </child>
@@ -5590,12 +5603,12 @@ entered data</property>
                   </object>
                   <packing>
                     <property name="left-attach">0</property>
-                    <property name="top-attach">1</property>
+                    <property name="top-attach">2</property>
                     <property name="width">2</property>
                   </packing>
                 </child>
                 <child>
-                  <object class="GtkButton" id="bu_button_p2p_window1">
+                  <object class="GtkButton" id="buy_button_p2p_window1">
                     <property name="width-request">132</property>
                     <property name="height-request">40</property>
                     <property name="visible">True</property>
@@ -5644,6 +5657,159 @@ entered data</property>
                   <packing>
                     <property name="left-attach">1</property>
                     <property name="top-attach">0</property>
+                  </packing>
+                </child>
+                <child>
+                  <object class="GtkFrame">
+                    <property name="visible">True</property>
+                    <property name="can-focus">False</property>
+                    <property name="margin-left">60</property>
+                    <property name="margin-start">60</property>
+                    <property name="margin-top">25</property>
+                    <property name="label-xalign">0</property>
+                    <property name="shadow-type">none</property>
+                    <child>
+                      <object class="GtkAlignment">
+                        <property name="visible">True</property>
+                        <property name="can-focus">False</property>
+                        <property name="left-padding">12</property>
+                        <child>
+                          <!-- n-columns=5 n-rows=1 -->
+                          <object class="GtkGrid">
+                            <property name="visible">True</property>
+                            <property name="can-focus">False</property>
+                            <property name="row-homogeneous">True</property>
+                            <property name="column-homogeneous">True</property>
+                            <child>
+                              <object class="GtkEventBox" id="currency_name_p2p_event3">
+                                <property name="width-request">200</property>
+                                <property name="visible">True</property>
+                                <property name="can-focus">False</property>
+                                <child>
+                                  <object class="GtkLabel" id="currency_name_main_lbl1">
+                                    <property name="visible">True</property>
+                                    <property name="can-focus">False</property>
+                                    <property name="halign">center</property>
+                                    <property name="label" translatable="yes">CURRENCY NAME</property>
+                                    <attributes>
+                                      <attribute name="font-desc" value="Lohit Malayalam 12"/>
+                                      <attribute name="foreground" value="#9a9a99999696"/>
+                                    </attributes>
+                                  </object>
+                                </child>
+                              </object>
+                              <packing>
+                                <property name="left-attach">0</property>
+                                <property name="top-attach">0</property>
+                              </packing>
+                            </child>
+                            <child>
+                              <object class="GtkEventBox" id="available_p2p_event3">
+                                <property name="width-request">200</property>
+                                <property name="visible">True</property>
+                                <property name="can-focus">False</property>
+                                <child>
+                                  <object class="GtkLabel" id="price_name_main_lbl3">
+                                    <property name="visible">True</property>
+                                    <property name="can-focus">False</property>
+                                    <property name="halign">center</property>
+                                    <property name="valign">center</property>
+                                    <property name="label" translatable="yes">AVAILABLE</property>
+                                    <attributes>
+                                      <attribute name="font-desc" value="Lohit Malayalam 12"/>
+                                      <attribute name="foreground" value="#9a9a99999696"/>
+                                    </attributes>
+                                  </object>
+                                </child>
+                              </object>
+                              <packing>
+                                <property name="left-attach">1</property>
+                                <property name="top-attach">0</property>
+                              </packing>
+                            </child>
+                            <child>
+                              <object class="GtkEventBox" id="price_p2p_event3">
+                                <property name="width-request">200</property>
+                                <property name="visible">True</property>
+                                <property name="can-focus">False</property>
+                                <child>
+                                  <object class="GtkLabel" id="volume_name_main_lbl3">
+                                    <property name="visible">True</property>
+                                    <property name="can-focus">False</property>
+                                    <property name="halign">center</property>
+                                    <property name="valign">center</property>
+                                    <property name="label" translatable="yes">PRICE</property>
+                                    <attributes>
+                                      <attribute name="font-desc" value="Lohit Malayalam 12"/>
+                                      <attribute name="foreground" value="#9a9a99999696"/>
+                                    </attributes>
+                                  </object>
+                                </child>
+                              </object>
+                              <packing>
+                                <property name="left-attach">2</property>
+                                <property name="top-attach">0</property>
+                              </packing>
+                            </child>
+                            <child>
+                              <object class="GtkEventBox" id="datetime_p2p_event3">
+                                <property name="width-request">200</property>
+                                <property name="visible">True</property>
+                                <property name="can-focus">False</property>
+                                <child>
+                                  <object class="GtkLabel" id="rank_name_main_lbl3">
+                                    <property name="visible">True</property>
+                                    <property name="can-focus">False</property>
+                                    <property name="halign">center</property>
+                                    <property name="valign">center</property>
+                                    <property name="label" translatable="yes">DATE / TIME</property>
+                                    <attributes>
+                                      <attribute name="font-desc" value="Lohit Malayalam 12"/>
+                                      <attribute name="foreground" value="#9a9a99999696"/>
+                                    </attributes>
+                                  </object>
+                                </child>
+                              </object>
+                              <packing>
+                                <property name="left-attach">3</property>
+                                <property name="top-attach">0</property>
+                              </packing>
+                            </child>
+                            <child>
+                              <object class="GtkEventBox" id="buy_p2p_event3">
+                                <property name="width-request">200</property>
+                                <property name="visible">True</property>
+                                <property name="can-focus">False</property>
+                                <child>
+                                  <object class="GtkLabel" id="exchange_name_main_lbl3">
+                                    <property name="visible">True</property>
+                                    <property name="can-focus">False</property>
+                                    <property name="halign">center</property>
+                                    <property name="label" translatable="yes">BUY</property>
+                                    <attributes>
+                                      <attribute name="font-desc" value="Lohit Malayalam 12"/>
+                                      <attribute name="foreground" value="#9a9a99999696"/>
+                                    </attributes>
+                                  </object>
+                                </child>
+                              </object>
+                              <packing>
+                                <property name="left-attach">4</property>
+                                <property name="top-attach">0</property>
+                              </packing>
+                            </child>
+                          </object>
+                        </child>
+                      </object>
+                    </child>
+                    <child type="label_item">
+                      <placeholder/>
+                    </child>
+                  </object>
+                  <packing>
+                    <property name="left-attach">0</property>
+                    <property name="top-attach">1</property>
+                    <property name="width">2</property>
                   </packing>
                 </child>
               </object>
@@ -6444,26 +6610,6 @@ entered data</property>
                         <property name="row-homogeneous">True</property>
                         <property name="column-homogeneous">True</property>
                         <child>
-                          <object class="GtkLabel" id="availavle_p2p_window1">
-                            <property name="visible">True</property>
-                            <property name="can-focus">False</property>
-                            <property name="halign">center</property>
-                            <property name="valign">start</property>
-                            <property name="margin-end">35</property>
-                            <property name="margin-top">50</property>
-                            <property name="label" translatable="yes">Available </property>
-                            <attributes>
-                              <attribute name="font-desc" value="Serif 12"/>
-                              <attribute name="foreground" value="#69696f6f7979"/>
-                            </attributes>
-                          </object>
-                          <packing>
-                            <property name="left-attach">1</property>
-                            <property name="top-attach">1</property>
-                            <property name="width">2</property>
-                          </packing>
-                        </child>
-                        <child>
                           <object class="GtkLabel">
                             <property name="visible">True</property>
                             <property name="can-focus">False</property>
@@ -6610,17 +6756,17 @@ entered data</property>
                           </packing>
                         </child>
                         <child>
-                          <object class="GtkEntry" id="available_entry_p2p_window2">
+                          <object class="GtkEntry" id="price_entry_p2p_window2">
                             <property name="visible">True</property>
                             <property name="can-focus">True</property>
                             <property name="valign">end</property>
                             <property name="margin-start">140</property>
                             <property name="margin-end">170</property>
-                            <property name="input-purpose">number</property>
+                            <property name="placeholder-text" translatable="yes">$</property>
                           </object>
                           <packing>
                             <property name="left-attach">1</property>
-                            <property name="top-attach">1</property>
+                            <property name="top-attach">3</property>
                             <property name="width">3</property>
                           </packing>
                         </child>
@@ -6640,28 +6786,50 @@ entered data</property>
                           </packing>
                         </child>
                         <child>
-                          <object class="GtkEntry" id="price_entry_p2p_window2">
+                          <object class="GtkLabel">
                             <property name="visible">True</property>
-                            <property name="can-focus">True</property>
-                            <property name="valign">end</property>
-                            <property name="margin-start">140</property>
-                            <property name="margin-end">170</property>
-                            <property name="placeholder-text" translatable="yes">$</property>
+                            <property name="can-focus">False</property>
+                            <property name="halign">center</property>
+                            <property name="valign">center</property>
+                            <property name="margin-right">62</property>
+                            <property name="margin-end">62</property>
+                            <property name="margin-top">15</property>
+                            <property name="margin-bottom">25</property>
+                            <property name="label" translatable="yes">Available Crypto-Currency</property>
+                            <attributes>
+                              <attribute name="font-desc" value="Serif 12"/>
+                              <attribute name="foreground" value="#69696f6f7979"/>
+                            </attributes>
                           </object>
                           <packing>
                             <property name="left-attach">1</property>
-                            <property name="top-attach">3</property>
+                            <property name="top-attach">0</property>
                             <property name="width">3</property>
                           </packing>
                         </child>
                         <child>
-                          <placeholder/>
-                        </child>
-                        <child>
-                          <placeholder/>
-                        </child>
-                        <child>
-                          <placeholder/>
+                          <object class="GtkComboBox" id="combo_box_p2p_window2">
+                            <property name="width-request">350</property>
+                            <property name="height-request">50</property>
+                            <property name="visible">True</property>
+                            <property name="can-focus">False</property>
+                            <property name="valign">center</property>
+                            <property name="margin-start">140</property>
+                            <property name="margin-end">170</property>
+                            <property name="margin-top">35</property>
+                            <property name="has-entry">True</property>
+                            <property name="entry-text-column">0</property>
+                            <child internal-child="entry">
+                              <object class="GtkEntry">
+                                <property name="can-focus">True</property>
+                              </object>
+                            </child>
+                          </object>
+                          <packing>
+                            <property name="left-attach">1</property>
+                            <property name="top-attach">1</property>
+                            <property name="width">3</property>
+                          </packing>
                         </child>
                         <child>
                           <placeholder/>
@@ -10118,6 +10286,7 @@ entered data</property>
                         <property name="vscroll-policy">natural</property>
                         <child>
                           <object class="GtkBox" id="transactions_box">
+                            <property name="height-request">500</property>
                             <property name="visible">True</property>
                             <property name="can-focus">False</property>
                             <property name="orientation">vertical</property>

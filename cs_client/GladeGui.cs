@@ -157,6 +157,11 @@ namespace GladeFunctions
 
         private Window p2p_window1;
 
+        private Box p2p_list_box;
+
+        private Button sell_button_p2p_window1;
+        private Button buy_button_p2p_window1;
+
         private Button dashboard_button_p2p_window1;
         private Button p2p_button_p2p_window1;
         private Button portfolio_button_p2p_window1;
@@ -168,6 +173,10 @@ namespace GladeFunctions
 
 
         private Window p2p_window2;
+        private ComboBox combo_box_p2p_window2;
+
+        private Button sell_button_p2p_window2;
+        private Button buy_button_p2p_window2;
 
         private Button dashboard_button_p2p_window2;
         private Button p2p_button_p2p_window2;
@@ -590,6 +599,9 @@ namespace GladeFunctions
 
             // Window p2p
 
+            p2p_list_box = (Box)builder.GetObject("p2p_list_box");
+            sell_button_p2p_window1 = (Button)builder.GetObject("sell_button_p2p_window1");
+            buy_button_p2p_window1 = (Button)builder.GetObject("buy_button_p2p_window1");
             dashboard_button_p2p_window1 = (Button)builder.GetObject("dashboard_button_p2p_window1");
             p2p_button_p2p_window1 = (Button)builder.GetObject("p2p_button_p2p_window1");
             portfolio_button_p2p_window1 = (Button)builder.GetObject("portfolio_button_p2p_window1");
@@ -601,6 +613,9 @@ namespace GladeFunctions
 
              // Window p2p
 
+            sell_button_p2p_window2 = (Button)builder.GetObject("sell_button_p2p_window2");
+            buy_button_p2p_window2 = (Button)builder.GetObject("buy_button_p2p_window2");
+            combo_box_p2p_window2 = (ComboBox)builder.GetObject("combo_box_p2p_window2");
             dashboard_button_p2p_window2 = (Button)builder.GetObject("dashboard_button_p2p_window2");
             p2p_button_p2p_window2 = (Button)builder.GetObject("p2p_button_p2p_window2");
             portfolio_button_p2p_window2 = (Button)builder.GetObject("portfolio_button_p2p_window2");
@@ -685,6 +700,9 @@ namespace GladeFunctions
 
             // Window p2p
 
+            sell_button_p2p_window1.Clicked += sell_button_p2p_window1_clicked;
+            buy_button_p2p_window1.Clicked += buy_button_p2p_window1_clicked;
+
             dashboard_button_p2p_window1.Clicked += dashboard_button_p2p_window1_clicked;
             p2p_button_p2p_window1.Clicked += p2p_button_p2p_window1_clicked;
             portfolio_button_p2p_window1.Clicked += portfolio_button_p2p_window1_clicked;
@@ -695,6 +713,9 @@ namespace GladeFunctions
             logout_button_p2p_window1.Clicked += logout_button_p2p_window1_clicked;
 
             // Window p2p
+
+            sell_button_p2p_window2.Clicked += sell_button_p2p_window2_clicked;
+            buy_button_p2p_window2.Clicked += buy_button_p2p_window2_clicked;
 
             dashboard_button_p2p_window2.Clicked += dashboard_button_p2p_window2_clicked;
             p2p_button_p2p_window2.Clicked += p2p_button_p2p_window2_clicked;
@@ -1169,6 +1190,8 @@ namespace GladeFunctions
     private void p2p_button_main_window_clicked(object sender, EventArgs e){
         main_window.Hide();
         p2p_window1.ShowAll();
+        requestUserOfferList();
+        FillP2PWindow();
 
     }
     private void portfolio_button_main_window_clicked (object sender, EventArgs e){
@@ -1492,6 +1515,24 @@ namespace GladeFunctions
 
         logout_window.ShowAll();
     }
+    private void sell_button_p2p_window1_clicked (object sender, EventArgs e){
+        p2p_window1.Hide();
+        p2p_window2.ShowAll();
+        fillComboBoxP2pWindow2();
+    }
+    private void buy_button_p2p_window1_clicked (object sender, EventArgs e){
+
+    }
+
+     private void sell_button_p2p_window2_clicked (object sender, EventArgs e){
+         fillComboBoxP2pWindow2();
+    }
+    private void buy_button_p2p_window2_clicked (object sender, EventArgs e){
+        p2p_window2.Hide();
+        p2p_window1.ShowAll();
+    }
+
+
 
     private void buy_button_p2p_buy_window_clicked (object sender, EventArgs e) {
 
@@ -1546,6 +1587,25 @@ namespace GladeFunctions
     }
     private void cancel_button_p2p_sell_window_clicked (object sender, EventArgs e){
         p2p_sell_window.Hide();
+
+    }
+
+    private void fillComboBoxP2pWindow2(){
+        // Create a ListStore to hold the data for the ComboBox
+        ListStore listStore = new ListStore(typeof(string));
+
+        // Add items to the ListStore
+        listStore.AppendValues("Item 1");
+        listStore.AppendValues("Item 2");
+        listStore.AppendValues("Item 3");
+
+        // Assign the model to the ComboBox
+        combo_box_p2p_window2.Model = listStore;
+
+        // Set up how the ComboBox should display the items
+        combo_box_p2p_window2.EntryTextColumn = 0;
+
+
 
     }
 
@@ -2780,13 +2840,209 @@ private int ExtractVolumeFromLabel(string volume)
     }
 
 
+// P2P Window
+
+    private void FillP2PWindow(){
+
+        for (int i = 0; i < userOffersList.Count; i++){
+            AddFrameToP2PWindow(i);
+        }
+
+    }
+
+    private void AddFrameToP2PWindow(int index)
+    {
+        // Create a new frame
+        Frame p2pFrame = new Frame("");
+
+        // Create the frame
+        p2pFrame.Visible = true;
+        p2pFrame.CanFocus = false;
+        //p2pFrame.MarginTop = 10;
+        //p2pFrame.MarginBottom = 10;
+        p2pFrame.LabelXalign = 0;
+        p2pFrame.ShadowType = ShadowType.None;
+
+        // Create the alignment
+        Alignment alignment = new Alignment(0, 0, 0, 0);
+        alignment.Visible = true;
+        alignment.CanFocus = false;
+        //alignment.LeftPadding = 12;
+
+
+        // Create the inner grid
+        Grid innerGrid = new Grid();
+        innerGrid.Visible = false;
+        innerGrid.CanFocus = false;
+        //innerGrid.RowSpacing = 10;
+        //innerGrid.ColumnSpacing = 10;
+        innerGrid.RowHomogeneous = true;
+        innerGrid.ColumnHomogeneous = true;
+
+
+
+
+
+
+
+        // Create the inner grid
+        Grid currencyNameGrid = new Grid();
+        //currencyNameGrid.MarginBottom = 9;
+        //currencyNameGrid.MarginLeft = 30;
+        currencyNameGrid.Visible = true;
+        currencyNameGrid.CanFocus = false;
+        currencyNameGrid.RowSpacing = 0;
+        //currencyNameGrid.ColumnSpacing = 10;
+        currencyNameGrid.RowHomogeneous = true;
+        currencyNameGrid.ColumnHomogeneous = true;
+
+
+        // Add child widgets to the inner grid (similar to your provided XML structure)
+        // Here, you'd create and add GtkImage, GtkLabel, GtkButton, etc., to the innerGrid
+
+
+        // Icon Image
+
+        Image currencyIconImage = new Image($"GUI/Glade/images/icons/{userOffersList[index].CryptocurrencyName}.png");
+        currencyIconImage.Visible = true;
+        currencyIconImage.CanFocus = false;
+        //currencyIconImage.MarginLeft = 40;
+        currencyNameGrid.Attach(currencyIconImage, 0, 0, 1, 1);
+
+        // Name Label
+
+        Label currencyNameLabel = new Label($"{userOffersList[index].CryptocurrencyName}");
+        currencyNameLabel.Name = $"CurrencyName_{index}";
+        currencyNameLabel.Visible = true;
+        currencyNameLabel.CanFocus = false;
+        currencyNameLabel.Halign = Align.Start; // Adjust horizontal alignment
+        currencyNameLabel.Valign = Align.Center; // Adjust vertical alignment
+        //currencyNameLabel.MarginRight = 30;
+
+
+        currencyNameGrid.Attach(currencyNameLabel, 1, 0, 1, 1);
+
+
+        // inner frame for currency name
+        Frame currencyNameFrame= new Frame("");
+        currencyNameFrame.ShadowType = ShadowType.None;
+        currencyNameFrame.Add(currencyNameGrid);
+
+        // Set fixed width for the currency Frame
+        int fixedWidth = 200; // Set your desired fixed width
+        currencyNameFrame.SetSizeRequest(fixedWidth, -1);
+
+        innerGrid.Attach(currencyNameFrame, 0, 0, 1, 1);
+
+        // CryptoValue Label
+
+        Label currencyCryptoValueLabel = new Label($"{userOffersList[index].CryptoValue}");
+        currencyCryptoValueLabel.Name = $"CurrencyCryptoValue_{index}";
+        currencyCryptoValueLabel.Visible = true;
+        currencyCryptoValueLabel.CanFocus = false;
+        //currencyCryptoValueLabel.MarginBottom = 9;
+        //currencyCryptoValueLabel.Halign = Align.End;
+
+        // inner frame for cryptoValue
+        Frame cryptoValueFrame= new Frame("");
+        cryptoValueFrame.ShadowType = ShadowType.None;
+        cryptoValueFrame.Add(currencyCryptoValueLabel);
+
+        innerGrid.Attach(cryptoValueFrame, 1, 0, 1, 1);
+
+         // CashValue Label
+
+        Label currencyCashValueLabel = new Label($"${userTransactionsList[index].CashValue}");
+        currencyCashValueLabel.Name = $"CurrencyCashValue_{index}";
+        currencyCashValueLabel.Visible = true;
+        currencyCashValueLabel.CanFocus = false;
+        //currencyCashValueLabel.MarginBottom = 9;
+        //currencyCashValueLabel.Halign = Align.End;
+
+        // inner frame for cashValue
+        Frame cashValueFrame= new Frame("");
+        cashValueFrame.ShadowType = ShadowType.None;
+        cashValueFrame.Add(currencyCashValueLabel);
+
+        innerGrid.Attach(cashValueFrame, 2, 0, 1, 1);
+
+
+        // DateTime Label
+
+        DateTime userOfferDateTime = userOffersList[index].DateTime;
+
+        Label currencyDateTimeLabel = new Label($"{userOfferDateTime}");
+        currencyDateTimeLabel.Name = $"CurrencyDateTime_{index}";
+        currencyDateTimeLabel.Visible = true;
+        currencyDateTimeLabel.CanFocus = false;
+        //currencyDateTimeLabel.MarginBottom = 9;
+        //currencyDateTimeLabel.Halign = Align.End;
+
+        // inner frame for DateTime
+        Frame dateTimeFrame= new Frame("");
+        dateTimeFrame.ShadowType = ShadowType.None;
+        dateTimeFrame.Add(currencyDateTimeLabel);
+
+        // Set fixed width for the DateTimeFrame
+        //int fixedWidth = 150; // Set your desired fixed width
+        dateTimeFrame.SetSizeRequest(fixedWidth, -1);
+
+        innerGrid.Attach(dateTimeFrame, 3, 0, 1, 1);
+
+
+
+
+
+        // Exchange Button
+        Button buyButton = new Button("Buy");
+        buyButton.Name = $"BuyButton_{index}";
+
+        //exchangeButton.MarginBottom = 9;
+        //exchangeButton.MarginRight = 10;
+        //exchangeButton.Halign = Align.End;
+
+        // inner frame for echange
+        Frame echangeFrame= new Frame("");
+        echangeFrame.ShadowType = ShadowType.None;
+        echangeFrame.Add(buyButton);
+
+        innerGrid.Attach(echangeFrame, 4, 0, 1, 1);
+
+        // Connect button click events for main_window
+        //buyButton.Clicked += (sender, args) => buy_offer_button_p2p_window_clicked(currencyName[index], currencyPrice[index]);
+
+
+
+
+        // Add the inner grid to the alignment
+        alignment.Add(innerGrid);
+
+        // Add the alignment to the frame
+        p2pFrame.Add(alignment);
+
+        // Align Frame
+
+        p2pFrame.MarginEnd = 20;
+
+
+
+        // Add the frame to the transactions_box
+        p2p_list_box.Add(p2pFrame);
+        p2p_list_box.ShowAll();
+    }
+
+
+
+
+
+
 // Navigation bar functions
 
 
 // Main Functions
 
 
-         static void Main(){
+    static void Main(){
              new CCTPSApp();
         }
 
