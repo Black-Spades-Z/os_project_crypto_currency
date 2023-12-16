@@ -8700,7 +8700,7 @@ entered data</property>
                                 <property name="can-focus">False</property>
                                 <property name="halign">start</property>
                                 <property name="valign">center</property>
-                                <property name="pixbuf">images\Settings\Email.png</property>
+                                <property name="pixbuf">images/Settings/Email.png</property>
                               </object>
                               <packing>
                                 <property name="left-attach">0</property>
@@ -8713,7 +8713,7 @@ entered data</property>
                                 <property name="can-focus">False</property>
                                 <property name="halign">start</property>
                                 <property name="valign">center</property>
-                                <property name="pixbuf">images\Settings\Username.png</property>
+                                <property name="pixbuf">images/Settings/Username.png</property>
                               </object>
                               <packing>
                                 <property name="left-attach">0</property>
@@ -8726,7 +8726,7 @@ entered data</property>
                                 <property name="can-focus">False</property>
                                 <property name="halign">start</property>
                                 <property name="valign">center</property>
-                                <property name="pixbuf">images\Settings\Phone number.png</property>
+                                <property name="pixbuf">images/Settings/Phone number.png</property>
                               </object>
                               <packing>
                                 <property name="left-attach">0</property>
@@ -8885,7 +8885,7 @@ entered data</property>
                                 <property name="can-focus">False</property>
                                 <property name="halign">start</property>
                                 <property name="valign">center</property>
-                                <property name="pixbuf">glade5\personalcard.png</property>
+                                <property name="pixbuf">images/Settings/Edit profile information.png</property>
                               </object>
                               <packing>
                                 <property name="left-attach">0</property>
@@ -8898,7 +8898,7 @@ entered data</property>
                                 <property name="can-focus">False</property>
                                 <property name="halign">start</property>
                                 <property name="valign">center</property>
-                                <property name="pixbuf">glade5\notification.png</property>
+                                <property name="pixbuf">images/Settings/Notifications.png</property>
                               </object>
                               <packing>
                                 <property name="left-attach">0</property>
@@ -8911,7 +8911,7 @@ entered data</property>
                                 <property name="can-focus">False</property>
                                 <property name="halign">start</property>
                                 <property name="valign">center</property>
-                                <property name="pixbuf">glade5\windows.png</property>
+                                <property name="pixbuf">images/Settings/Theme.png</property>
                               </object>
                               <packing>
                                 <property name="left-attach">0</property>
@@ -9029,7 +9029,7 @@ entered data</property>
                                 <property name="can-focus">False</property>
                                 <property name="halign">start</property>
                                 <property name="valign">center</property>
-                                <property name="pixbuf">glade5\message-question.png</property>
+                                <property name="pixbuf">images/Settings/Help &amp; Support.png</property>
                               </object>
                               <packing>
                                 <property name="left-attach">0</property>
@@ -9042,7 +9042,7 @@ entered data</property>
                                 <property name="can-focus">False</property>
                                 <property name="halign">start</property>
                                 <property name="valign">center</property>
-                                <property name="pixbuf">glade5\24-support.png</property>
+                                <property name="pixbuf">images/Settings/Contact us.png</property>
                               </object>
                               <packing>
                                 <property name="left-attach">0</property>
@@ -9055,7 +9055,7 @@ entered data</property>
                                 <property name="can-focus">False</property>
                                 <property name="halign">start</property>
                                 <property name="valign">center</property>
-                                <property name="pixbuf">glade5\finger-scan.png</property>
+                                <property name="pixbuf">images/Settings/Privacy policy.png</property>
                               </object>
                               <packing>
                                 <property name="left-attach">0</property>
