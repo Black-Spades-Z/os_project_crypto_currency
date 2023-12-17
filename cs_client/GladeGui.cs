@@ -82,6 +82,8 @@ namespace GladeFunctions
         private Button help_button_main_window;
         private Button logout_button_main_window;
         private Box market_values_box_main_window;
+        private Button deposit_button_main_window;
+        private Button withdraw_button_main_window;
 
 
 
@@ -256,6 +258,22 @@ namespace GladeFunctions
         private Label price_label_p2p_sell_window;
         private Button sell_button_p2p_sell_window;
         private Button cancel_button_p2p_sell_window;
+
+        // Window Deposit
+
+        private Window deposit_window;
+        private Entry deposit_entry_deposit_window;
+        private Image qr_code;
+        private Button cancel_button_deposit_window;
+        private Button deposit_button_deposit_window;
+
+        // Window Withdraw
+
+        private Window withdraw_window;
+        private Entry withdraw_entry_withdraw_window;
+        private Button cancel_button_withdraw_window;
+        private Entry card_number_entry_withdraw_window;
+        private Button withdraw_button_withdraw_window;
 
 
 
@@ -524,6 +542,10 @@ namespace GladeFunctions
             p2p_sell_window.DefaultSize = new Gdk.Size(600, 200);
             p2p_buy_window = (Window)builder.GetObject("p2p_buy_window");
             p2p_buy_window.DefaultSize = new Gdk.Size(600, 200);
+            deposit_window =  (Window)builder.GetObject("deposit_window");
+
+            withdraw_window = (Window)builder.GetObject("withdraw_window");
+
 
 
             // Retrieve objects from Glade for main_window
@@ -544,6 +566,8 @@ namespace GladeFunctions
             help_button_main_window = (Button)builder.GetObject("help_button_main_window");
             logout_button_main_window = (Button)builder.GetObject("logout_button_main_window");
             market_values_box_main_window = (Box)builder.GetObject("market_values_box_main_window");
+            deposit_button_main_window = (Button)builder.GetObject("deposit_button_main_window");
+            withdraw_button_main_window = (Button)builder.GetObject("withdraw_button_main_window");
 
 
 
@@ -675,6 +699,20 @@ namespace GladeFunctions
             logout_button_help_window = (Button)builder.GetObject("logout_button_help_window");
             transactions_box = (Box)builder.GetObject("transactions_box");
 
+            // Window deposit
+            deposit_entry_deposit_window = (Entry)builder.GetObject("deposit_entry_deposit_window");
+            qr_code = (Image)builder.GetObject("qr_code");
+            cancel_button_deposit_window = (Button)builder.GetObject("cancel_button_deposit_window");
+            deposit_button_deposit_window = (Button)builder.GetObject("deposit_button_deposit_window");
+
+            // Window Withdraw
+
+            withdraw_entry_withdraw_window = (Entry)builder.GetObject("withdraw_entry_withdraw_window");
+            cancel_button_withdraw_window = (Button)builder.GetObject("cancel_button_withdraw_window");
+            card_number_entry_withdraw_window = (Entry)builder.GetObject("card_number_entry_withdraw_window");
+            withdraw_button_withdraw_window = (Button)builder.GetObject("withdraw_button_withdraw_window");
+
+
 
             // Window main
 
@@ -686,6 +724,8 @@ namespace GladeFunctions
             settings_button_main_window.Clicked += settings_button_main_window_clicked;
             help_button_main_window.Clicked += help_button_main_window_clicked;
             logout_button_main_window.Clicked += logout_button_main_window_clicked;
+            deposit_button_main_window.Clicked += deposit_button_main_window_clicked;
+            withdraw_button_main_window.Clicked += withdraw_button_main_window_clicked;
 
             // Window portfolio
 
@@ -780,6 +820,16 @@ namespace GladeFunctions
 
             sell_button_p2p_sell_window.Clicked += sell_button_p2p_sell_window_clicked;
             cancel_button_p2p_sell_window.Clicked += cancel_button_p2p_sell_window_clicked;
+
+            // Window deposit
+
+            deposit_entry_deposit_window.Activated += deposit_entry_deposit_window_enter;
+            cancel_button_deposit_window.Clicked += cancel_button_deposit_window_clicked;
+            deposit_button_deposit_window.Clicked += deposit_button_deposit_window_clicked;
+
+            // Window withdraw
+
+            cancel_button_withdraw_window.Clicked += cancel_button_withdraw_window_clicked;
 
 
 
@@ -1530,6 +1580,38 @@ namespace GladeFunctions
     private void buy_button_p2p_window2_clicked (object sender, EventArgs e){
         p2p_window2.Hide();
         p2p_window1.ShowAll();
+    }
+    private void deposit_button_main_window_clicked (object sender, EventArgs e){
+
+        deposit_window.ShowAll();
+        qr_code.Visible = false;
+    }
+    private void withdraw_button_main_window_clicked (object sender, EventArgs e){
+        withdraw_window.ShowAll();
+    }
+    private void cancel_button_deposit_window_clicked (object sender, EventArgs e){
+        deposit_window.Hide();
+        deposit_entry_deposit_window.Text = "";
+        qr_code.Visible = false;
+    }
+    private void cancel_button_withdraw_window_clicked (object sender, EventArgs e){
+        withdraw_window.Hide();
+        withdraw_entry_withdraw_window.Text ="";
+        card_number_entry_withdraw_window.Text ="";
+    }
+
+
+    private void deposit_entry_deposit_window_enter(object sender, EventArgs args)
+    {
+
+        if (deposit_entry_deposit_window.Text != "")
+        {
+            qr_code.Visible = true;
+        }
+
+    }
+    private void deposit_button_deposit_window_clicked (object sender, EventArgs e){
+        qr_code.Visible = false;
     }
 
 
