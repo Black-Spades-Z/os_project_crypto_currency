@@ -545,6 +545,8 @@ namespace GladeFunctions
             SendMessage(client.GetStream(), RequestMessage);
 
             userOffersList = WaitForUserOffers(client.GetStream());
+            FillP2PWindow();
+
         }
 
         private bool checkForMiner(){
@@ -3712,22 +3714,23 @@ namespace GladeFunctions
 // Nav Bar main
 
     private void dashboard_button_main_window_clicked(object sender, EventArgs e){
-
+        deleteChildren(market_values_box_main_window);
+        requestShowServerAssets();
 
     }
     private void p2p_button_main_window_clicked(object sender, EventArgs e){
         main_window.Hide();
         p2p_window1.ShowAll();
-        requestUserOfferList();
         deleteChildren(p2p_list_box);
-        FillP2PWindow();
+        requestUserOfferList();
+
 
     }
     private void portfolio_button_main_window_clicked (object sender, EventArgs e){
         main_window.Hide();
         portfolio_window.ShowAll();
         deleteChildren(portfolio_maxi_box);
-        FillPortfolioWindow();
+        requestUserPortfolio();
 
     }
     private void transactions_button_main_window_clicked (object sender, EventArgs e){
