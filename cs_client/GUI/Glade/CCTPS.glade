@@ -8058,7 +8058,7 @@ By using the Crypto app, you agree to the terms outlined in this Privacy Policy.
                             <property name="hscroll-policy">natural</property>
                             <property name="vscroll-policy">natural</property>
                             <child>
-                              <object class="GtkBox" id="market_values_box1">
+                              <object class="GtkBox" id="portfolio_maxi_box">
                                 <property name="visible">True</property>
                                 <property name="can-focus">False</property>
                                 <property name="orientation">vertical</property>
@@ -8132,6 +8132,7 @@ By using the Crypto app, you agree to the terms outlined in this Privacy Policy.
                 </child>
                 <child>
                   <object class="GtkFrame">
+                    <property name="width-request">800</property>
                     <property name="visible">True</property>
                     <property name="can-focus">False</property>
                     <property name="margin-left">60</property>
@@ -8144,7 +8145,7 @@ By using the Crypto app, you agree to the terms outlined in this Privacy Policy.
                         <property name="can-focus">False</property>
                         <property name="left-padding">12</property>
                         <child>
-                          <!-- n-columns=5 n-rows=1 -->
+                          <!-- n-columns=2 n-rows=1 -->
                           <object class="GtkGrid">
                             <property name="visible">True</property>
                             <property name="can-focus">False</property>
@@ -8154,6 +8155,7 @@ By using the Crypto app, you agree to the terms outlined in this Privacy Policy.
                               <object class="GtkEventBox" id="currency_name_event2">
                                 <property name="visible">True</property>
                                 <property name="can-focus">False</property>
+                                <property name="halign">center</property>
                                 <child>
                                   <object class="GtkLabel" id="currency_name_label_portfolio_window">
                                     <property name="visible">True</property>
@@ -8169,29 +8171,6 @@ By using the Crypto app, you agree to the terms outlined in this Privacy Policy.
                               </object>
                               <packing>
                                 <property name="left-attach">0</property>
-                                <property name="top-attach">0</property>
-                              </packing>
-                            </child>
-                            <child>
-                              <object class="GtkEventBox" id="price_event2">
-                                <property name="visible">True</property>
-                                <property name="can-focus">False</property>
-                                <child>
-                                  <object class="GtkLabel" id="price_name_main_lbl2">
-                                    <property name="visible">True</property>
-                                    <property name="can-focus">False</property>
-                                    <property name="halign">center</property>
-                                    <property name="valign">center</property>
-                                    <property name="label" translatable="yes">PRICE</property>
-                                    <attributes>
-                                      <attribute name="font-desc" value="Lohit Malayalam 12"/>
-                                      <attribute name="foreground" value="#9a9a99999696"/>
-                                    </attributes>
-                                  </object>
-                                </child>
-                              </object>
-                              <packing>
-                                <property name="left-attach">1</property>
                                 <property name="top-attach">0</property>
                               </packing>
                             </child>
@@ -8214,52 +8193,7 @@ By using the Crypto app, you agree to the terms outlined in this Privacy Policy.
                                 </child>
                               </object>
                               <packing>
-                                <property name="left-attach">2</property>
-                                <property name="top-attach">0</property>
-                              </packing>
-                            </child>
-                            <child>
-                              <object class="GtkEventBox" id="rank_event2">
-                                <property name="visible">True</property>
-                                <property name="can-focus">False</property>
-                                <child>
-                                  <object class="GtkLabel" id="rank_name_main_lbl2">
-                                    <property name="visible">True</property>
-                                    <property name="can-focus">False</property>
-                                    <property name="halign">center</property>
-                                    <property name="valign">center</property>
-                                    <property name="label" translatable="yes">EQUIVALENT</property>
-                                    <attributes>
-                                      <attribute name="font-desc" value="Lohit Malayalam 12"/>
-                                      <attribute name="foreground" value="#9a9a99999696"/>
-                                    </attributes>
-                                  </object>
-                                </child>
-                              </object>
-                              <packing>
-                                <property name="left-attach">3</property>
-                                <property name="top-attach">0</property>
-                              </packing>
-                            </child>
-                            <child>
-                              <object class="GtkEventBox" id="exchange_event1">
-                                <property name="visible">True</property>
-                                <property name="can-focus">False</property>
-                                <child>
-                                  <object class="GtkLabel" id="exchange_name_main_lbl1">
-                                    <property name="visible">True</property>
-                                    <property name="can-focus">False</property>
-                                    <property name="halign">center</property>
-                                    <property name="label" translatable="yes">RANK</property>
-                                    <attributes>
-                                      <attribute name="font-desc" value="Lohit Malayalam 12"/>
-                                      <attribute name="foreground" value="#9a9a99999696"/>
-                                    </attributes>
-                                  </object>
-                                </child>
-                              </object>
-                              <packing>
-                                <property name="left-attach">4</property>
+                                <property name="left-attach">1</property>
                                 <property name="top-attach">0</property>
                               </packing>
                             </child>
@@ -8274,7 +8208,7 @@ By using the Crypto app, you agree to the terms outlined in this Privacy Policy.
                   <packing>
                     <property name="left-attach">0</property>
                     <property name="top-attach">1</property>
-                    <property name="width">4</property>
+                    <property name="width">5</property>
                   </packing>
                 </child>
                 <child>
@@ -8288,9 +8222,6 @@ By using the Crypto app, you agree to the terms outlined in this Privacy Policy.
                     <property name="width">3</property>
                     <property name="height">11</property>
                   </packing>
-                </child>
-                <child>
-                  <placeholder/>
                 </child>
                 <child>
                   <placeholder/>
@@ -10803,11 +10734,11 @@ For questions or concerns about these Terms, contact us at [support@cryptonest.c
                         <property name="row-homogeneous">True</property>
                         <property name="column-homogeneous">True</property>
                         <child>
-                          <object class="GtkEventBox" id="currency_name_event1">
+                          <object class="GtkEventBox" id="currency_name_event_transaction">
                             <property name="visible">True</property>
                             <property name="can-focus">False</property>
                             <child>
-                              <object class="GtkLabel" id="currency_name_label_portfolio_window1">
+                              <object class="GtkLabel" id="currency_name_label_transaction">
                                 <property name="visible">True</property>
                                 <property name="can-focus">False</property>
                                 <property name="halign">center</property>
@@ -10825,11 +10756,11 @@ For questions or concerns about these Terms, contact us at [support@cryptonest.c
                           </packing>
                         </child>
                         <child>
-                          <object class="GtkEventBox" id="price_event1">
+                          <object class="GtkEventBox" id="date_event_transaction">
                             <property name="visible">True</property>
                             <property name="can-focus">False</property>
                             <child>
-                              <object class="GtkLabel" id="price_name_main_lbl1">
+                              <object class="GtkLabel" id="date_label_transaction">
                                 <property name="visible">True</property>
                                 <property name="can-focus">False</property>
                                 <property name="halign">center</property>
@@ -10848,11 +10779,11 @@ For questions or concerns about these Terms, contact us at [support@cryptonest.c
                           </packing>
                         </child>
                         <child>
-                          <object class="GtkEventBox" id="volume_event1">
+                          <object class="GtkEventBox" id="value_event_transaction">
                             <property name="visible">True</property>
                             <property name="can-focus">False</property>
                             <child>
-                              <object class="GtkLabel" id="volume_name_main_lbl1">
+                              <object class="GtkLabel" id="value_label_transaction">
                                 <property name="visible">True</property>
                                 <property name="can-focus">False</property>
                                 <property name="halign">center</property>
@@ -10871,7 +10802,7 @@ For questions or concerns about these Terms, contact us at [support@cryptonest.c
                           </packing>
                         </child>
                         <child>
-                          <object class="GtkEventBox" id="rank_event1">
+                          <object class="GtkEventBox" id="volume_event_transaction">
                             <property name="visible">True</property>
                             <property name="can-focus">False</property>
                             <child>
@@ -10894,15 +10825,16 @@ For questions or concerns about these Terms, contact us at [support@cryptonest.c
                           </packing>
                         </child>
                         <child>
-                          <object class="GtkEventBox" id="exchange_event2">
+                          <object class="GtkEventBox" id="status_event_transaction1">
                             <property name="visible">True</property>
                             <property name="can-focus">False</property>
                             <child>
-                              <object class="GtkLabel" id="exchange_name_main_lbl2">
+                              <object class="GtkLabel" id="rank_name_main_lbl2">
                                 <property name="visible">True</property>
                                 <property name="can-focus">False</property>
                                 <property name="halign">center</property>
-                                <property name="label" translatable="yes">FEE</property>
+                                <property name="valign">center</property>
+                                <property name="label" translatable="yes">STATUS</property>
                                 <attributes>
                                   <attribute name="font-desc" value="Lohit Malayalam 12"/>
                                   <attribute name="foreground" value="#9a9a99999696"/>

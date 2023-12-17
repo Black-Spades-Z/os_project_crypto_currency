@@ -44,6 +44,8 @@ namespace GladeFunctions
 
         // Server Assets
 
+        private int size;
+
         private string[] currencyName =  new string[50];
         private float[] currencyPrice =  new float[50];
         private float[] currencyVolume = new float[50];
@@ -52,9 +54,9 @@ namespace GladeFunctions
 
         // Buy from Server
 
-        private decimal cashValue;
-        private decimal cryptoValue;
-        private string cryptoCurrencyName;
+        private decimal cashValue = 100;
+        private decimal cryptoValue = 10;
+        private string cryptoCurrencyName = "Bitcoin";
         private string temporaryCryptoName;
         private float temporaryCryptoPrice;
 
@@ -71,6 +73,8 @@ namespace GladeFunctions
         private Label user_email_card_main_window;
         private Label user_address_card_main_window;
         private Label username_bar_main_window;
+        private Entry search_bar_main_window;
+        private Box portfolio_items_box;
 
 
         private Button exchange_button_main_window;
@@ -147,7 +151,8 @@ namespace GladeFunctions
         private Button settings_button_portfolio_window;
         private Button help_button_portfolio_window;
         private Button logout_button_portfolio_window;
-        private Box portfolio_items_box;
+        private Box portfolio_maxi_box;
+
 
         //Window transactions
 
@@ -162,6 +167,14 @@ namespace GladeFunctions
         private Button settings_button_transaction_window;
         private Button help_button_transaction_window;
         private Button logout_button_transaction_window;
+        private EventBox currency_name_event_transaction;
+        private EventBox date_event_transaction;
+        private EventBox value_event_transaction;
+        private EventBox volume_event_transaction;
+        private EventBox fee_event_transaction;
+
+
+
 
         //Window P2P
 
@@ -201,6 +214,8 @@ namespace GladeFunctions
 
         private Window miner_window;
 
+        private bool turnedOn = false;
+
         private Button dashboard_button_miner_window;
         private Button p2p_button_miner_window;
         private Button portfolio_button_miner_window;
@@ -209,6 +224,7 @@ namespace GladeFunctions
         private Button settings_button_miner_window;
         private Button help_button_miner_window;
         private Button logout_button_miner_window;
+        private Button mining_button_miner_window;
 
         // Window Settings
 
@@ -347,7 +363,15 @@ namespace GladeFunctions
 
             // Wait for a response from the server
             Console.WriteLine("Getting response");
-            accountDetails =  WaitForWallet(client.GetStream());
+
+
+            string message = "";
+            accountDetails =  WaitForWallet(client.GetStream(), out message);
+
+            if(message == "OpenAdmin")
+            {
+                return 2;
+            }
             Console.WriteLine("Got response");
             if (accountDetails is null){
                 return 0;
@@ -378,7 +402,7 @@ namespace GladeFunctions
 
         private void requestShowServerAssets(){
 
-            int size;
+
 
             client = getClient();
 
@@ -398,9 +422,8 @@ namespace GladeFunctions
                 return;
             }
 
-            for(int i = 0; i < size; i++){
-                AddFrameToMarketValuesMainWindow(i);
-            }
+            FillMarketValuesMainWindow();
+
 
         }
 
@@ -463,9 +486,7 @@ namespace GladeFunctions
 
             // Add this data to the window
 
-            for (int i = 0; i < userTransactionsList.Count; i++){
-                AddFrameToTransactionWindow(i);
-            }
+            FillTransactionWindow();
 
         }
 
@@ -594,6 +615,7 @@ namespace GladeFunctions
             price_event_box = (EventBox)builder.GetObject("price_event");
             currency_name_event_box = (EventBox)builder.GetObject("currency_name_event");
             volume_box = (EventBox)builder.GetObject("volume_event");
+            search_bar_main_window = (Entry)builder.GetObject("search_bar_main_window");
 
             // Card
 
@@ -613,6 +635,7 @@ namespace GladeFunctions
             market_values_box_main_window = (Box)builder.GetObject("market_values_box_main_window");
             deposit_button_main_window = (Button)builder.GetObject("deposit_button_main_window");
             withdraw_button_main_window = (Button)builder.GetObject("withdraw_button_main_window");
+            portfolio_items_box = (Box)builder.GetObject("portfolio_items_box");
 
 
 
@@ -654,7 +677,8 @@ namespace GladeFunctions
             settings_button_portfolio_window = (Button)builder.GetObject("settings_button_portfolio_window");
             help_button_portfolio_window = (Button)builder.GetObject("help_button_portfolio_window");
             logout_button_portfolio_window = (Button)builder.GetObject("logout_button_portfolio_window");
-            portfolio_items_box = (Box)builder.GetObject("portfolio_items_box");
+            portfolio_maxi_box = (Box)builder.GetObject("portfolio_maxi_box");
+
 
 
             // Window transactions
@@ -666,6 +690,11 @@ namespace GladeFunctions
             settings_button_transaction_window = (Button)builder.GetObject("settings_button_transaction_window");
             help_button_transaction_window = (Button)builder.GetObject("help_button_transaction_window");
             logout_button_transaction_window = (Button)builder.GetObject("logout_button_transaction_window");
+            currency_name_event_transaction = (EventBox)builder.GetObject("currency_name_event_transaction");
+            date_event_transaction = (EventBox)builder.GetObject("date_event_transaction");
+            value_event_transaction = (EventBox)builder.GetObject("value_event_transaction");
+            volume_event_transaction = (EventBox)builder.GetObject("volume_event_transaction");
+            fee_event_transaction = (EventBox)builder.GetObject("fee_event_transaction");
 
             // Window p2p
 
@@ -721,6 +750,7 @@ namespace GladeFunctions
             settings_button_miner_window = (Button)builder.GetObject("settings_button_miner_window");
             help_button_miner_window = (Button)builder.GetObject("help_button_miner_window");
             logout_button_miner_window = (Button)builder.GetObject("logout_button_miner_window");
+            mining_button_miner_window = (Button)builder.GetObject("mining_button_miner_window");
 
             // Window settings
 
@@ -772,6 +802,7 @@ namespace GladeFunctions
             logout_button_main_window.Clicked += logout_button_main_window_clicked;
             deposit_button_main_window.Clicked += deposit_button_main_window_clicked;
             withdraw_button_main_window.Clicked += withdraw_button_main_window_clicked;
+            search_bar_main_window.Changed += search_bar_name_main_window;
 
             // Window portfolio
 
@@ -822,6 +853,10 @@ namespace GladeFunctions
             settings_button_transaction_window.Clicked += settings_button_transaction_window_clicked;
             help_button_transaction_window.Clicked += help_button_transaction_window_clicked;
             logout_button_transaction_window.Clicked += logout_button_transaction_window_clicked;
+            currency_name_event_transaction.ButtonPressEvent += currency_name_event_transaction_clicked;
+            date_event_transaction.ButtonPressEvent += date_event_transaction_clicked;
+            value_event_transaction.ButtonPressEvent += value_event_transaction_clicked;
+            volume_event_transaction.ButtonPressEvent += volume_event_transaction_clicked;
 
             // Window settings
 
@@ -844,6 +879,7 @@ namespace GladeFunctions
             settings_button_miner_window.Clicked += settings_button_miner_window_clicked;
             help_button_miner_window.Clicked += help_button_miner_window_clicked;
             logout_button_miner_window.Clicked += logout_button_miner_window_clicked;
+            mining_button_miner_window.Clicked += mining_button_miner_window_clicked;
 
             // Window help
 
@@ -1285,356 +1321,7 @@ namespace GladeFunctions
 // Main Window
 
 
-    // Nav Bar main
 
-    private void dashboard_button_main_window_clicked(object sender, EventArgs e){
-
-
-    }
-    private void p2p_button_main_window_clicked(object sender, EventArgs e){
-        main_window.Hide();
-        p2p_window1.ShowAll();
-        requestUserOfferList();
-        FillP2PWindow();
-
-    }
-    private void portfolio_button_main_window_clicked (object sender, EventArgs e){
-        main_window.Hide();
-        portfolio_window.ShowAll();
-
-    }
-    private void transactions_button_main_window_clicked (object sender, EventArgs e){
-        main_window.Hide();
-        transactions_window.ShowAll();
-
-    }
-    private void miner_button_main_window_clicked (object sender, EventArgs e){
-        main_window.Hide();
-        miner_window.Show();
-
-    }
-    private void settings_button_main_window_clicked (object sender, EventArgs e){
-        main_window.Hide();
-        settings_window.ShowAll();
-
-    }
-    private void help_button_main_window_clicked (object sender, EventArgs e){
-        main_window.Hide();
-        help_window.ShowAll();
-
-    }
-    private void logout_button_main_window_clicked (object sender, EventArgs e){
-
-        logout_window.ShowAll();
-    }
-
-
-    // Nav Bar portfolio
-
-    private void dashboard_button_portfolio_window_clicked(object sender, EventArgs e){
-        portfolio_window.Hide();
-        main_window.ShowAll();
-
-    }
-    private void p2p_button_portfolio_window_clicked(object sender, EventArgs e){
-        portfolio_window.Hide();
-        p2p_window1.ShowAll();
-
-    }
-    private void portfolio_button_portfolio_window_clicked (object sender, EventArgs e){
-
-    }
-    private void transactions_button_portfolio_window_clicked (object sender, EventArgs e){
-        portfolio_window.Hide();
-        transactions_window.ShowAll();
-
-    }
-    private void miner_button_portfolio_window_clicked (object sender, EventArgs e){
-        portfolio_window.Hide();
-        miner_window.Show();
-
-    }
-    private void settings_button_portfolio_window_clicked (object sender, EventArgs e){
-        portfolio_window.Hide();
-        settings_window.ShowAll();
-
-    }
-    private void help_button_portfolio_window_clicked (object sender, EventArgs e){
-        portfolio_window.Hide();
-        help_window.ShowAll();
-
-    }
-    private void logout_button_portfolio_window_clicked (object sender, EventArgs e){
-
-        logout_window.ShowAll();
-    }
-
-    // Nav Bar p2p
-
-    private void dashboard_button_p2p_window1_clicked(object sender, EventArgs e){
-        p2p_window1.Hide();
-        main_window.ShowAll();
-
-    }
-    private void p2p_button_p2p_window1_clicked(object sender, EventArgs e){
-
-
-    }
-    private void portfolio_button_p2p_window1_clicked (object sender, EventArgs e){
-        p2p_window1.Hide();
-        portfolio_window.ShowAll();
-
-    }
-    private void transactions_button_p2p_window1_clicked (object sender, EventArgs e){
-        p2p_window1.Hide();
-        transactions_window.ShowAll();
-
-    }
-    private void miner_button_p2p_window1_clicked (object sender, EventArgs e){
-        p2p_window1.Hide();
-        miner_window.Show();
-
-    }
-    private void settings_button_p2p_window1_clicked (object sender, EventArgs e){
-        p2p_window1.Hide();
-        settings_window.ShowAll();
-
-    }
-    private void help_button_p2p_window1_clicked (object sender, EventArgs e){
-        p2p_window1.Hide();
-        help_window.ShowAll();
-
-    }
-    private void logout_button_p2p_window1_clicked (object sender, EventArgs e){
-
-        logout_window.ShowAll();
-    }
-
-    // Nav Bar p2p
-
-    private void dashboard_button_p2p_window2_clicked(object sender, EventArgs e){
-        p2p_window2.Hide();
-        main_window.ShowAll();
-
-    }
-    private void p2p_button_p2p_window2_clicked(object sender, EventArgs e){
-
-
-    }
-    private void portfolio_button_p2p_window2_clicked (object sender, EventArgs e){
-        p2p_window2.Hide();
-        portfolio_window.ShowAll();
-
-    }
-    private void transactions_button_p2p_window2_clicked (object sender, EventArgs e){
-        p2p_window2.Hide();
-        transactions_window.ShowAll();
-
-    }
-    private void miner_button_p2p_window2_clicked (object sender, EventArgs e){
-        p2p_window2.Hide();
-        miner_window.Show();
-
-    }
-    private void settings_button_p2p_window2_clicked (object sender, EventArgs e){
-        p2p_window2.Hide();
-        settings_window.ShowAll();
-
-    }
-    private void help_button_p2p_window2_clicked (object sender, EventArgs e){
-        p2p_window2.Hide();
-        help_window.ShowAll();
-
-    }
-    private void logout_button_p2p_window2_clicked (object sender, EventArgs e){
-
-        logout_window.ShowAll();
-    }
-
-    // Nav Bar transaction
-
-    private void dashboard_button_transaction_window_clicked(object sender, EventArgs e){
-        transactions_window.Hide();
-        main_window.ShowAll();
-
-    }
-    private void p2p_button_transaction_window_clicked(object sender, EventArgs e){
-        transactions_window.Hide();
-        p2p_window1.ShowAll();
-
-    }
-    private void portfolio_button_transaction_window_clicked (object sender, EventArgs e){
-        transactions_window.Hide();
-        portfolio_window.ShowAll();
-
-    }
-    private void transactions_button_transaction_window_clicked (object sender, EventArgs e){
-
-
-    }
-    private void miner_button_transaction_window_clicked (object sender, EventArgs e){
-        transactions_window.Hide();
-        miner_window.Show();
-
-    }
-    private void settings_button_transaction_window_clicked (object sender, EventArgs e){
-        transactions_window.Hide();
-        settings_window.ShowAll();
-
-    }
-    private void help_button_transaction_window_clicked (object sender, EventArgs e){
-        transactions_window.Hide();
-        help_window.ShowAll();
-
-    }
-    private void logout_button_transaction_window_clicked (object sender, EventArgs e){
-
-        logout_window.ShowAll();
-    }
-
-     // Nav Bar miner
-
-    private void dashboard_button_miner_window_clicked(object sender, EventArgs e){
-        miner_window.Hide();
-        main_window.ShowAll();
-
-    }
-    private void p2p_button_miner_window_clicked(object sender, EventArgs e){
-        miner_window.Hide();
-        p2p_window1.ShowAll();
-
-    }
-    private void portfolio_button_miner_window_clicked (object sender, EventArgs e){
-        miner_window.Hide();
-        portfolio_window.ShowAll();
-
-    }
-    private void transactions_button_miner_window_clicked (object sender, EventArgs e){
-        miner_window.Hide();
-        transactions_window.ShowAll();
-
-    }
-    private void miner_button_miner_window_clicked (object sender, EventArgs e){
-        miner_window.Hide();
-        miner_window.Show();
-
-    }
-    private void settings_button_miner_window_clicked (object sender, EventArgs e){
-        miner_window.Hide();
-        settings_window.ShowAll();
-
-    }
-    private void help_button_miner_window_clicked (object sender, EventArgs e){
-        miner_window.Hide();
-        help_window.ShowAll();
-
-    }
-    private void logout_button_miner_window_clicked (object sender, EventArgs e){
-
-        logout_window.ShowAll();
-    }
-
-    // Nav Bar settings
-
-    private void dashboard_button_settings_window_clicked(object sender, EventArgs e){
-        settings_window.Hide();
-        main_window.ShowAll();
-
-    }
-    private void p2p_button_settings_window_clicked(object sender, EventArgs e){
-        settings_window.Hide();
-        p2p_window1.ShowAll();
-
-    }
-    private void portfolio_button_settings_window_clicked (object sender, EventArgs e){
-        settings_window.Hide();
-        portfolio_window.ShowAll();
-
-    }
-    private void transactions_button_settings_window_clicked (object sender, EventArgs e){
-        settings_window.Hide();
-        transactions_window.ShowAll();
-
-    }
-    private void miner_button_settings_window_clicked (object sender, EventArgs e){
-        settings_window.Hide();
-        miner_window.Show();
-
-    }
-    private void settings_button_settings_window_clicked (object sender, EventArgs e){
-        settings_window.Hide();
-        settings_window.ShowAll();
-
-    }
-    private void help_button_settings_window_clicked (object sender, EventArgs e){
-        settings_window.Hide();
-        help_window.ShowAll();
-
-    }
-    private void logout_button_settings_window_clicked (object sender, EventArgs e){
-
-        logout_window.ShowAll();
-    }
-
-
-
-    // Nav Bar help
-
-    private void dashboard_button_help_window_clicked(object sender, EventArgs e){
-        help_window.Hide();
-        main_window.ShowAll();
-
-    }
-    private void p2p_button_help_window_clicked(object sender, EventArgs e){
-        help_window.Hide();
-        p2p_window1.ShowAll();
-
-    }
-    private void portfolio_button_help_window_clicked (object sender, EventArgs e){
-        help_window.Hide();
-        portfolio_window.ShowAll();
-
-    }
-    private void transactions_button_help_window_clicked (object sender, EventArgs e){
-        help_window.Hide();
-        transactions_window.ShowAll();
-
-    }
-    private void miner_button_help_window_clicked (object sender, EventArgs e){
-        help_window.Hide();
-        miner_window.Show();
-
-    }
-    private void settings_button_help_window_clicked (object sender, EventArgs e){
-        help_window.Hide();
-        settings_window.ShowAll();
-
-    }
-    private void help_button_help_window_clicked (object sender, EventArgs e){
-        help_window.Hide();
-        help_window.ShowAll();
-
-    }
-    private void logout_button_help_window_clicked (object sender, EventArgs e){
-
-        logout_window.ShowAll();
-    }
-    private void sell_button_p2p_window1_clicked (object sender, EventArgs e){
-        p2p_window1.Hide();
-        p2p_window2.ShowAll();
-        fillComboBoxP2pWindow2();
-    }
-    private void buy_button_p2p_window1_clicked (object sender, EventArgs e){
-
-    }
-
-     private void sell_button_p2p_window2_clicked (object sender, EventArgs e){
-         fillComboBoxP2pWindow2();
-    }
-    private void buy_button_p2p_window2_clicked (object sender, EventArgs e){
-        p2p_window2.Hide();
-        p2p_window1.ShowAll();
-    }
     private void deposit_button_main_window_clicked (object sender, EventArgs e){
 
         deposit_window.ShowAll();
@@ -1758,6 +1445,12 @@ namespace GladeFunctions
         p2p_sell_window.Hide();
 
     }
+    private void deleteChildren(Box fieldBox){
+        foreach (var child in fieldBox.Children.ToList())
+        {
+            fieldBox.Remove(child);
+        }
+    }
 
     private void fill_card_details(){
 
@@ -1777,19 +1470,18 @@ namespace GladeFunctions
 
         List<KeyValuePair<string, decimal>> sortedList = sortedByValue.ToList();
 
-        int limit =0;
+
         foreach (var kvp in sortedList)
         {
 
-            if (limit == 0){
-                limit++;
+           if (kvp.Key == "UserId"){
                 continue;
             }
             if (( kvp.Value) > 0 ){
                     listStore.AppendValues($"{kvp.Key} : {kvp.Value}");
             }
 
-            limit++;
+
 
         }
 
@@ -1823,6 +1515,14 @@ namespace GladeFunctions
         p2p_buy_window.ShowAll();
 
     }
+
+
+    private void FillMarketValuesMainWindow(){
+        for(int i = 0; i < size; i++){
+            AddFrameToMarketValuesMainWindow(i);
+        }
+    }
+
 
     private void AddFrameToMarketValuesMainWindow(int index)
     {
@@ -2022,11 +1722,9 @@ namespace GladeFunctions
         foreach (var kvp in sortedList)
         {
 
-            if (limit == 0){
-                limit++;
+            if (kvp.Key == "UserId"){
                 continue;
             }
-
             AddFrameToPortfolioBoxMainWindow(kvp.Key, kvp.Value);
 
             limit++;
@@ -2133,471 +1831,815 @@ namespace GladeFunctions
 
 
 
+
 // -NAME-
-private void OnSortCurrencyName(object sender, ButtonPressEventArgs args)
-{
-    // Handle the click event
-    //var label = (Label)((EventBox)sender).Child;
-    //label.Text = "Clicked!";
-    isAscendingOrderName = !isAscendingOrderName;
-    SortFramesByCurrencyName();
-}
-
-private void SortFramesByCurrencyName()
-{
-    // Get all child frames in transactions_box
-    var frames = transactions_box.Children
-        .OfType<Frame>()
-        .ToList();
-
-    // Sort frames based on the currency name
-    frames.Sort((frame1, frame2) =>
+    private void OnSortCurrencyName(object sender, ButtonPressEventArgs args)
     {
-        // Extract currency names from the frames
-        string currencyName1 = GetCurrencyNameFromFrame(frame1);
-        string currencyName2 = GetCurrencyNameFromFrame(frame2);
-
-        // Compare currency names
-        int result = currencyName1.CompareTo(currencyName2);
-        return isAscendingOrderName? result: -result;
-    });
-
-    // Clear existing components in the box
-    foreach (var child in transactions_box.Children.ToList())
-    {
-        transactions_box.Remove(child);
+        // Handle the click event
+        //var label = (Label)((EventBox)sender).Child;
+        //label.Text = "Clicked!";
+        isAscendingOrderName = !isAscendingOrderName;
+        SortFramesByCurrencyName();
     }
 
-    // Add the frames back to the box in the sorted order
-    foreach (var frame in frames)
+    private void SortFramesByCurrencyName()
     {
-        transactions_box.Add(frame);
-    }
+        // Get all child frames in market_values_box_main_window
+        var frames = market_values_box_main_window.Children
+            .OfType<Frame>()
+            .ToList();
 
-    // Show all widgets in the box
-    transactions_box.ShowAll();
-}
-
-private string GetCurrencyNameFromFrame(Frame frame)
-{
-    // Assuming the currencyNameLabel is nested within another container within the frame
-    Container container = frame.Children.FirstOrDefault() as Container;
-
-    if (container != null)
-    {
-        Label currencyNameLabel = FindCurrencyNameLabelInGrid(container);
-        //Console.WriteLine(currencyNameLabel);
-
-        // Return the text of the label, or a default value if not found
-        return currencyNameLabel?.Text ?? "Unknown";
-    }
-
-    // No suitable container found in the children
-    return "Unknown";
-}
-
-// Helper method to find a Label widget for currency name in the children of a container
-private Label FindCurrencyNameLabelInGrid(Container container)
-{
-    foreach (var child in container.Children)
-    {
-        if (child is Label label && IsCurrencyNameLabel(label))
+        // Sort frames based on the currency name
+        frames.Sort((frame1, frame2) =>
         {
-            // Found the label representing the currency name
-            return label;
+            // Extract currency names from the frames
+            string currencyName1 = GetCurrencyNameFromFrame(frame1);
+            string currencyName2 = GetCurrencyNameFromFrame(frame2);
+
+            // Compare currency names
+            int result = currencyName1.CompareTo(currencyName2);
+            return isAscendingOrderName? result: -result;
+        });
+
+        // Clear existing components in the box
+        foreach (var child in market_values_box_main_window.Children.ToList())
+        {
+            market_values_box_main_window.Remove(child);
         }
 
-        // If the child is a container, recursively search for a currency name label
-        if (child is Container subContainer)
+        // Add the frames back to the box in the sorted order
+        foreach (var frame in frames)
         {
-            var currencyNameLabelInChildren = FindCurrencyNameLabelInGrid(subContainer);
-            if (currencyNameLabelInChildren != null)
+            market_values_box_main_window.Add(frame);
+        }
+
+        // Show all widgets in the box
+        market_values_box_main_window.ShowAll();
+    }
+
+    private string GetCurrencyNameFromFrame(Frame frame)
+    {
+        // Assuming the currencyNameLabel is nested within another container within the frame
+        Container container = frame.Children.FirstOrDefault() as Container;
+
+        if (container != null)
+        {
+            Label currencyNameLabel = FindCurrencyNameLabelInGrid(container);
+            //Console.WriteLine(currencyNameLabel);
+
+            // Return the text of the label, or a default value if not found
+            return currencyNameLabel?.Text ?? "Unknown";
+        }
+
+        // No suitable container found in the children
+        return "Unknown";
+    }
+
+    // Helper method to find a Label widget for currency name in the children of a container
+    private Label FindCurrencyNameLabelInGrid(Container container)
+    {
+        foreach (var child in container.Children)
+        {
+            if (child is Label label && IsCurrencyNameLabel(label))
             {
-                // Found a currency name label in a sub-container
-                return currencyNameLabelInChildren;
+                // Found the label representing the currency name
+                return label;
             }
-        }
 
-        // You might need to handle other widget types based on your actual hierarchy
-    }
-
-    // No currency name label found in the children
-    return null;
-}
-
-private bool IsCurrencyNameLabel(Label label)
-{
-    // Example: Check if the label's Name property matches a specific identifier
-    return label.Name.StartsWith("CurrencyName_");
-}
-
-//------------------
-
-// -PRICE-
-private void OnSortButtonPrice(object sender, ButtonPressEventArgs args)
-{
-    // Handle the click event
-    var label = (Label)((EventBox)sender).Child;
-    //label.Text = "Clicked!";
-
-    // Toggle the sorting order
-    isAscendingOrderPrice = !isAscendingOrderPrice;
-
-    // Handle the click event and sort frames by price
-    SortFramesByPrice();
-}
-
-private void SortFramesByPrice()
-{
-    // Get all child frames in transactions_box
-    var frames = transactions_box.Children
-        .OfType<Frame>()
-        .ToList();
-
-    // Sort frames based on the price label
-    frames.Sort((frame1, frame2) =>
-    {
-        // Extract price labels from the frames
-        string priceLabel1 = GetPriceLabelFromFrame(frame1);
-        string priceLabel2 = GetPriceLabelFromFrame(frame2);
-
-        // Convert price labels to integers for comparison
-        decimal price1 = ExtractPriceFromLabel(priceLabel1);
-        decimal price2 = ExtractPriceFromLabel(priceLabel2);
-
-        // Compare prices
-        //return price1.CompareTo(price2);
-        // Compare price values based on the sorting order
-        int result = price1.CompareTo(price2);
-        return isAscendingOrderPrice ? result : -result; // Reverse order if descending
-
-    });
-
-    // Clear existing components in the box
-    foreach (var child in transactions_box.Children.ToList())
-    {
-        transactions_box.Remove(child);
-    }
-
-    // Add the frames back to the box in the sorted order
-    foreach (var frame in frames)
-    {
-        transactions_box.Add(frame);
-    }
-
-    // Show all widgets in the box
-    transactions_box.ShowAll();
-}
-
-private string GetPriceLabelFromFrame(Frame frame)
-{
-    // Assuming the currencyPriceLabel is nested within another container within the frame
-    Container container = frame.Children.FirstOrDefault() as Container;
-
-    if (container != null)
-    {
-        Label currencyPriceLabel = FindPriceLabelInGrid(container);
-        //Console.WriteLine(currencyPriceLabel);
-
-        // Return the text of the label, or a default value if not found
-        return currencyPriceLabel?.Text ?? "$0.00"; // Default to "$0.00" if label not found
-    }
-
-    // No suitable container found in the children
-    return "$0.00"; // Default to "$0.00" if container not found
-}
-
-// Helper method to find a Label widget in the children of a container
-private Label FindPriceLabelInGrid(Container container)
-{
-    foreach (var child in container.Children)
-    {
-        if (child is Label label && IsPriceLabel(label))
-        {
-            // Found the label representing the price
-            return label;
-        }
-
-        // If the child is a container, recursively search for a price label
-        if (child is Container subContainer)
-        {
-            var priceLabelInChildren = FindPriceLabelInGrid(subContainer);
-            if (priceLabelInChildren != null)
+            // If the child is a container, recursively search for a currency name label
+            if (child is Container subContainer)
             {
-                // Found a price label in a sub-container
-                return priceLabelInChildren;
+                var currencyNameLabelInChildren = FindCurrencyNameLabelInGrid(subContainer);
+                if (currencyNameLabelInChildren != null)
+                {
+                    // Found a currency name label in a sub-container
+                    return currencyNameLabelInChildren;
+                }
             }
+
+            // You might need to handle other widget types based on your actual hierarchy
         }
 
-        // You might need to handle other widget types based on your actual hierarchy
+        // No currency name label found in the children
+        return null;
     }
 
-    // No price label found in the children
-    return null;
-}
-
-private bool IsPriceLabel(Label label)
-{
-    // Add your criteria to identify the price label
-    return label.Text.StartsWith("$"); // Example: Price label starts with "$"
-}
-
-private decimal ExtractPriceFromLabel(string priceLabel)
-{
-    // Assuming your price label is a string representation of a decimal
-    if (decimal.TryParse(priceLabel.TrimStart('$'), out decimal price))
+    private bool IsCurrencyNameLabel(Label label)
     {
-        return price;
+        // Example: Check if the label's Name property matches a specific identifier
+        return label.Name.StartsWith("CurrencyName_");
     }
-    return 0.00m; // Default to 0.00 if parsing fails
-}
 
-//---
+    //------------------
 
-
-// -RANK- (Should start # at start)
-private void OnSortButtonRank(object sender, ButtonPressEventArgs args){
-	// Handle the click event
+    // -PRICE-
+    private void OnSortButtonPrice(object sender, ButtonPressEventArgs args)
+    {
+        // Handle the click event
         var label = (Label)((EventBox)sender).Child;
         //label.Text = "Clicked!";
 
         // Toggle the sorting order
-    isAscendingOrderRank = !isAscendingOrderRank;
+        isAscendingOrderPrice = !isAscendingOrderPrice;
 
-	SortFramesByRank();
-}
-
-private void SortFramesByRank()
-{
-    // Get all child frames in transactions_box
-var frames = transactions_box.Children
-    .OfType<Frame>()  // Use OfType<T> for better readability
-    .ToList();
-
-// Sort frames based on the rank label
-frames.Sort((frame1, frame2) =>
-{
-    // Extract rank labels from the frames
-    string rankLabel1 = GetRankLabelFromFrame(frame1);
-    string rankLabel2 = GetRankLabelFromFrame(frame2);
-
-    // Convert rank labels to integers for comparison
-    int rank1 = ExtractRankFromLabel(rankLabel1);
-    int rank2 = ExtractRankFromLabel(rankLabel2);
-
-    // Compare ranks
-    int result = rank1.CompareTo(rank2);
-    return isAscendingOrderRank ? result : -result;
-});
-
-// Clear existing components in the box
-foreach (var child in transactions_box.Children.ToList())
-{
-    transactions_box.Remove(child);
-}
-
-// Add the frames back to the box in the sorted order
-foreach (var frame in frames)
-{
-    transactions_box.Add(frame);
-}
-
-// Show all widgets in the box
-transactions_box.ShowAll();
-
-}
-
-private string GetRankLabelFromFrame(Frame frame)
-{
-    // Assuming the currencyRankLabel is nested within another container within the frame
-    Container container = frame.Children.FirstOrDefault() as Container;
-
-    if (container != null)
-    {
-        Label currencyRankLabel = FindRankLabelInGrid(container);
-        //Console.WriteLine(currencyRankLabel);
-
-        // Return the text of the label, or a default value if not found
-        return currencyRankLabel?.Text ?? "#0";
+        // Handle the click event and sort frames by price
+        SortFramesByPrice();
     }
 
-    // No suitable container found in the children
-    return "#0";
-}
-
-
-// Helper method to find a Label widget in the children of a container
-private Label FindRankLabelInGrid(Container container)
-{
-    foreach (var child in container.Children)
+    private void SortFramesByPrice()
     {
-        if (child is Label label && IsRankLabel(label))
+        // Get all child frames in market_values_box_main_window
+        var frames = market_values_box_main_window.Children
+            .OfType<Frame>()
+            .ToList();
+
+        // Sort frames based on the price label
+        frames.Sort((frame1, frame2) =>
         {
-            // Found the label representing the rank
-            return label;
+            // Extract price labels from the frames
+            string priceLabel1 = GetPriceLabelFromFrame(frame1);
+            string priceLabel2 = GetPriceLabelFromFrame(frame2);
+
+            // Convert price labels to integers for comparison
+            decimal price1 = ExtractPriceFromLabel(priceLabel1);
+            decimal price2 = ExtractPriceFromLabel(priceLabel2);
+
+            // Compare prices
+            //return price1.CompareTo(price2);
+            // Compare price values based on the sorting order
+            int result = price1.CompareTo(price2);
+            return isAscendingOrderPrice ? result : -result; // Reverse order if descending
+
+        });
+
+        // Clear existing components in the box
+        foreach (var child in market_values_box_main_window.Children.ToList())
+        {
+            market_values_box_main_window.Remove(child);
         }
 
-        // If the child is a container, recursively search for a rank label
-        if (child is Container subContainer)
+        // Add the frames back to the box in the sorted order
+        foreach (var frame in frames)
         {
-            var rankLabelInChildren = FindRankLabelInGrid(subContainer);
-            if (rankLabelInChildren != null)
+            market_values_box_main_window.Add(frame);
+        }
+
+        // Show all widgets in the box
+        market_values_box_main_window.ShowAll();
+    }
+
+    private string GetPriceLabelFromFrame(Frame frame)
+    {
+        // Assuming the currencyPriceLabel is nested within another container within the frame
+        Container container = frame.Children.FirstOrDefault() as Container;
+
+        if (container != null)
+        {
+            Label currencyPriceLabel = FindPriceLabelInGrid(container);
+            //Console.WriteLine(currencyPriceLabel);
+
+            // Return the text of the label, or a default value if not found
+            return currencyPriceLabel?.Text ?? "$0.00"; // Default to "$0.00" if label not found
+        }
+
+        // No suitable container found in the children
+        return "$0.00"; // Default to "$0.00" if container not found
+    }
+
+    // Helper method to find a Label widget in the children of a container
+    private Label FindPriceLabelInGrid(Container container)
+    {
+        foreach (var child in container.Children)
+        {
+            if (child is Label label && IsPriceLabel(label))
             {
-                // Found a rank label in a sub-container
-                return rankLabelInChildren;
+                // Found the label representing the price
+                return label;
+            }
+
+            // If the child is a container, recursively search for a price label
+            if (child is Container subContainer)
+            {
+                var priceLabelInChildren = FindPriceLabelInGrid(subContainer);
+                if (priceLabelInChildren != null)
+                {
+                    // Found a price label in a sub-container
+                    return priceLabelInChildren;
+                }
+            }
+
+            // You might need to handle other widget types based on your actual hierarchy
+        }
+
+        // No price label found in the children
+        return null;
+    }
+
+    private bool IsPriceLabel(Label label)
+    {
+        // Add your criteria to identify the price label
+        return label.Text.StartsWith("$"); // Example: Price label starts with "$"
+    }
+
+    private decimal ExtractPriceFromLabel(string priceLabel)
+    {
+        // Assuming your price label is a string representation of a decimal
+        if (decimal.TryParse(priceLabel.TrimStart('$'), out decimal price))
+        {
+            return price;
+        }
+        return 0.00m; // Default to 0.00 if parsing fails
+    }
+
+    //---
+
+
+    // -RANK- (Should start # at start)
+    private void OnSortButtonRank(object sender, ButtonPressEventArgs args){
+        // Handle the click event
+            var label = (Label)((EventBox)sender).Child;
+            //label.Text = "Clicked!";
+
+            // Toggle the sorting order
+        isAscendingOrderRank = !isAscendingOrderRank;
+
+        SortFramesByRank();
+    }
+
+    private void SortFramesByRank()
+    {
+        // Get all child frames in market_values_box_main_window
+    var frames = market_values_box_main_window.Children
+        .OfType<Frame>()  // Use OfType<T> for better readability
+        .ToList();
+
+    // Sort frames based on the rank label
+    frames.Sort((frame1, frame2) =>
+    {
+        // Extract rank labels from the frames
+        string rankLabel1 = GetRankLabelFromFrame(frame1);
+        string rankLabel2 = GetRankLabelFromFrame(frame2);
+
+        // Convert rank labels to integers for comparison
+        int rank1 = ExtractRankFromLabel(rankLabel1);
+        int rank2 = ExtractRankFromLabel(rankLabel2);
+
+        // Compare ranks
+        int result = rank1.CompareTo(rank2);
+        return isAscendingOrderRank ? result : -result;
+    });
+
+    // Clear existing components in the box
+    foreach (var child in market_values_box_main_window.Children.ToList())
+    {
+        market_values_box_main_window.Remove(child);
+    }
+
+    // Add the frames back to the box in the sorted order
+    foreach (var frame in frames)
+    {
+        market_values_box_main_window.Add(frame);
+    }
+
+    // Show all widgets in the box
+    market_values_box_main_window.ShowAll();
+
+    }
+
+    private string GetRankLabelFromFrame(Frame frame)
+    {
+        // Assuming the currencyRankLabel is nested within another container within the frame
+        Container container = frame.Children.FirstOrDefault() as Container;
+
+        if (container != null)
+        {
+            Label currencyRankLabel = FindRankLabelInGrid(container);
+            //Console.WriteLine(currencyRankLabel);
+
+            // Return the text of the label, or a default value if not found
+            return currencyRankLabel?.Text ?? "#0";
+        }
+
+        // No suitable container found in the children
+        return "#0";
+    }
+
+
+    // Helper method to find a Label widget in the children of a container
+    private Label FindRankLabelInGrid(Container container)
+    {
+        foreach (var child in container.Children)
+        {
+            if (child is Label label && IsRankLabel(label))
+            {
+                // Found the label representing the rank
+                return label;
+            }
+
+            // If the child is a container, recursively search for a rank label
+            if (child is Container subContainer)
+            {
+                var rankLabelInChildren = FindRankLabelInGrid(subContainer);
+                if (rankLabelInChildren != null)
+                {
+                    // Found a rank label in a sub-container
+                    return rankLabelInChildren;
+                }
+            }
+
+            // You might need to handle other widget types based on your actual hierarchy
+        }
+
+        // No rank label found in the children
+        return null;
+    }
+
+    private bool IsRankLabel(Label label)
+    {
+        // Add your criteria to identify the rank label
+        return label.Text.StartsWith("#"); // Assuming rank labels start with "#"
+    }
+
+    private int ExtractRankFromLabel(string rankLabel)
+    {
+        // Assuming your rank label is in the format "#X"
+        if (rankLabel.StartsWith("#") && int.TryParse(rankLabel.Substring(1), out int rank))
+        {
+            return rank;
+        }
+        return 0; // Default to 0 if parsing fails
+    }
+
+
+    // -VOLUME-
+
+    // Event handler for the sort button click
+    private void OnSortVolume(object sender, ButtonPressEventArgs args){
+        // Handle the click event
+            var label = (Label)((EventBox)sender).Child;
+            //label.Text = "Clicked!";
+
+            // Toggle the sorting order
+        isAscendingOrderVolume = !isAscendingOrderVolume;
+
+        SortFramesByVolume();
+    }
+
+    private void SortFramesByVolume()
+    {
+        // Get all child frames in market_values_box_main_window
+    var frames = market_values_box_main_window.Children
+        .OfType<Frame>()  // Use OfType<T> for better readability
+        .ToList();
+
+    // Sort frames based on the rank label
+    frames.Sort((frame1, frame2) =>
+    {
+        // Extract rank labels from the frames
+        string volumeLabel1 = GetVolumeLabelFromFrame(frame1);
+        string volumeLabel2 = GetVolumeLabelFromFrame(frame2);
+
+        // Convert rank labels to integers for comparison
+        int volume1 = ExtractVolumeFromLabel(volumeLabel1);
+        //Console.WriteLine(volume1);
+        int volume2 = ExtractVolumeFromLabel(volumeLabel2);
+        //Console.WriteLine(volume2);
+
+        // Compare ranks
+        int result = volume1.CompareTo(volume2);
+        return isAscendingOrderVolume ? result : -result;
+    });
+
+    // Clear existing components in the box
+    foreach (var child in market_values_box_main_window.Children.ToList())
+    {
+        market_values_box_main_window.Remove(child);
+    }
+
+    // Add the frames back to the box in the sorted order
+    foreach (var frame in frames)
+    {
+        market_values_box_main_window.Add(frame);
+    }
+
+    // Show all widgets in the box
+    market_values_box_main_window.ShowAll();
+
+    }
+
+    private string GetVolumeLabelFromFrame(Frame frame)
+    {
+        // Assuming the currencyRankLabel is nested within another container within the frame
+        Container container = frame.Children.FirstOrDefault() as Container;
+
+        if (container != null)
+        {
+            Label currencyVolumeLabel = FindVolumeLabelInGrid(container);
+            //Console.WriteLine(currencyRankLabel);
+
+            // Return the text of the label, or a default value if not found
+            return currencyVolumeLabel?.Text ?? "0";
+        }
+
+        // No suitable container found in the children
+        return "0";
+    }
+
+
+    // Helper method to find a Label widget in the children of a container
+    private Label FindVolumeLabelInGrid(Container container)
+    {
+        foreach (var child in container.Children)
+        {
+            if (child is Label label && IsVolumeLabel(label))
+            {
+                // Found the label representing the volume
+                return label;
+            }
+
+            // If the child is a container, recursively search for a volume label
+            if (child is Container subContainer)
+            {
+                var volumeLabelInChildren = FindVolumeLabelInGrid(subContainer);
+                if (volumeLabelInChildren != null)
+                {
+                    // Found a rank label in a sub-container
+                    return volumeLabelInChildren;
+                }
+            }
+
+            // You might need to handle other widget types based on your actual hierarchy
+        }
+
+        // No rank label found in the children
+        return null;
+    }
+
+    private bool IsVolumeLabel(Label label)
+    {
+        // Add your criteria to identify the rank label
+        return label.Name.StartsWith("CurrencyCryptoValue_"); // Assuming rank labels start with "#"
+    }
+
+    private int ExtractVolumeFromLabel(string volume)
+    {
+        // Implement your logic to extract the numeric value from the volume string
+        // Example: Assume the numeric value is the first part of the string
+        if (int.TryParse(volume.Split(' ')[0], out int numericValue))
+        {
+
+            return numericValue;
+        }
+
+        return 0; // Default to 0 if parsing fails
+    }
+    //---
+
+//------------------------------------------------------------------------------------------
+
+// ------------------ Search Name ------------------
+
+    private void search_bar_name_main_window(object sender, EventArgs e)
+        {
+
+            if (sender is Entry entry)
+            {
+                string searchTerm = entry.Text.Trim();
+
+
+
+                // Check if the search term is not empty before searching
+                if (!string.IsNullOrEmpty(searchTerm))
+                {
+                    SearchRows(searchTerm);
+                }
+                else
+                {
+                  FillMarketValuesMainWindow();
+                }
+
+
             }
         }
 
-        // You might need to handle other widget types based on your actual hierarchy
-    }
-
-    // No rank label found in the children
-    return null;
-}
-
-private bool IsRankLabel(Label label)
-{
-    // Add your criteria to identify the rank label
-    return label.Text.StartsWith("#"); // Assuming rank labels start with "#"
-}
-
-private int ExtractRankFromLabel(string rankLabel)
-{
-    // Assuming your rank label is in the format "#X"
-    if (rankLabel.StartsWith("#") && int.TryParse(rankLabel.Substring(1), out int rank))
+    private void SearchRows(string searchTerm)
     {
-        return rank;
-    }
-    return 0; // Default to 0 if parsing fails
-}
 
+        searchTerm = searchTerm.ToLower();
+
+
+        int index = 0;
+        bool found =  false;
+        for (int i = 0; i < size; i++)
+            {
+                if (currencyName[i].ToLower() == searchTerm)
+                {
+                    index = i; // Return the index if the name is found
+                    found = true;
+
+                }
+            }
+
+        if (found){
+            // Clear existing components in the box
+        foreach (var child in market_values_box_main_window.Children.ToList())
+        {
+            market_values_box_main_window.Remove(child);
+
+        }
+        AddFrameToMarketValuesMainWindow(index);
+        }
+        else{
+
+
+        }
+    }
+
+
+// ------------------------------------------------
+
+// ----------------Transactions Sort ----------------------------------------------
+// -NAME-
+    private void currency_name_event_transaction_clicked(object sender, ButtonPressEventArgs args)
+    {
+        // Handle the click event
+        isAscendingOrderName = !isAscendingOrderName;
+        SortFramesByCurrencyNameTransaction();
+    }
+
+    private void SortFramesByCurrencyNameTransaction()
+    {
+        // Get all child frames in transactions_box
+        var frames = transactions_box.Children
+            .OfType<Frame>()
+            .ToList();
+
+        // Sort frames based on the currency name
+        frames.Sort((frame1, frame2) =>
+        {
+            // Extract currency names from the frames
+            string currencyName1 = GetCurrencyNameFromFrame(frame1);
+            string currencyName2 = GetCurrencyNameFromFrame(frame2);
+
+            // Compare currency names
+            int result = currencyName1.CompareTo(currencyName2);
+            return isAscendingOrderName? result: -result;
+        });
+
+        // Clear existing components in the box
+        foreach (var child in transactions_box.Children.ToList())
+        {
+            transactions_box.Remove(child);
+        }
+
+        // Add the frames back to the box in the sorted order
+        foreach (var frame in frames)
+        {
+            transactions_box.Add(frame);
+        }
+
+        // Show all widgets in the box
+        transactions_box.ShowAll();
+    }
+    //------------------
+
+// -Date-
+    private bool isAscendingOrderDate = false;
+    private void date_event_transaction_clicked(object sender, ButtonPressEventArgs args){
+        // Handle the click event
+            var label = (Label)((EventBox)sender).Child;
+            //label.Text = "Clicked!";
+
+            // Toggle the sorting order
+        isAscendingOrderDate = !isAscendingOrderDate;
+
+        SortFramesByDate();
+    }
+
+    private void SortFramesByDate()
+    {
+        // Get all child frames in transactions_box
+    var frames = transactions_box.Children
+        .OfType<Frame>()  // Use OfType<T> for better readability
+        .ToList();
+
+    // Sort frames based on the Date label
+    frames.Sort((frame1, frame2) =>
+    {
+        // Extract Date labels from the frames
+        string DateLabel1 = GetDateLabelFromFrame(frame1);
+        string DateLabel2 = GetDateLabelFromFrame(frame2);
+
+        // Convert Date labels to integers for comparison
+        long Date1 = ExtractDateFromLabel(DateLabel1);
+        long Date2 = ExtractDateFromLabel(DateLabel2);
+
+        // Compare Dates
+        int result = Date1.CompareTo(Date2);
+        return isAscendingOrderDate ? result : -result;
+    });
+
+    // Clear existing components in the box
+    foreach (var child in transactions_box.Children.ToList())
+    {
+        transactions_box.Remove(child);
+    }
+
+    // Add the frames back to the box in the sorted order
+    foreach (var frame in frames)
+    {
+        transactions_box.Add(frame);
+    }
+
+    // Show all widgets in the box
+    transactions_box.ShowAll();
+
+    }
+
+    private string GetDateLabelFromFrame(Frame frame)
+    {
+        // Assuming the currencyDateLabel is nested within another container within the frame
+        Container container = frame.Children.FirstOrDefault() as Container;
+
+        if (container != null)
+        {
+            Label currencyDateLabel = FindDateLabelInGrid(container);
+            //Console.WriteLine(currencyDateLabel);
+
+            // Return the text of the label, or a default value if not found
+            return currencyDateLabel?.Text ?? "0000-00-00";;
+        }
+
+        // No suitable container found in the children
+        return "0000-00-00";
+    }
+    // Helper method to find a Label widget in the children of a container
+    private Label FindDateLabelInGrid(Container container)
+    {
+        foreach (var child in container.Children)
+        {
+            if (child is Label label && IsDateLabel(label))
+            {
+                // Found the label representing the Date
+                return label;
+            }
+
+            // If the child is a container, recursively search for a Date label
+            if (child is Container subContainer)
+            {
+                var DateLabelInChildren = FindDateLabelInGrid(subContainer);
+                if (DateLabelInChildren != null)
+                {
+                    // Found a Date label in a sub-container
+                    return DateLabelInChildren;
+                }
+            }
+
+            // You might need to handle other widget types based on your actual hierarchy
+        }
+
+        // No Date label found in the children
+        return null;
+    }
+
+    private bool IsDateLabel(Label label)
+    {
+        // Example: Check if the label's Name property matches a specific identifier
+        return label.Name.StartsWith("CurrencyDateTime_");
+    }
+
+    private long ExtractDateFromLabel(string DateLabel)
+    {
+        string digitsOnly = new string(DateLabel.Where(char.IsDigit).ToArray());
+        digitsOnly = digitsOnly.Trim();
+        //Console.WriteLine($"{digitsOnly}");
+        if (long.TryParse(digitsOnly, out long result))
+        {
+       // Console.WriteLine($"Resulting Integer2: {result}");
+            return result;
+        }
+        return 0; // Default to 0 if parsing fails
+    }
+    //------------------
+
+// -VALUE-
+    private void value_event_transaction_clicked(object sender, ButtonPressEventArgs args)
+    {
+        // Handle the click event
+        var label = (Label)((EventBox)sender).Child;
+        //label.Text = "Clicked!";
+
+        // Toggle the sorting order
+        isAscendingOrderPrice = !isAscendingOrderPrice;
+
+        // Handle the click event and sort frames by price
+        SortFramesByValue();
+    }
+
+    private void SortFramesByValue()
+    {
+        // Get all child frames in transactions_box
+        var frames = transactions_box.Children
+            .OfType<Frame>()
+            .ToList();
+
+        // Sort frames based on the price label
+        frames.Sort((frame1, frame2) =>
+        {
+            // Extract price labels from the frames
+            string priceLabel1 = GetPriceLabelFromFrame(frame1);
+            string priceLabel2 = GetPriceLabelFromFrame(frame2);
+
+            // Convert price labels to integers for comparison
+            decimal price1 = ExtractPriceFromLabel(priceLabel1);
+            decimal price2 = ExtractPriceFromLabel(priceLabel2);
+
+            // Compare prices
+            //return price1.CompareTo(price2);
+            // Compare price values based on the sorting order
+            int result = price1.CompareTo(price2);
+            return isAscendingOrderPrice ? result : -result; // Reverse order if descending
+
+        });
+
+        // Clear existing components in the box
+        foreach (var child in transactions_box.Children.ToList())
+        {
+            transactions_box.Remove(child);
+        }
+
+        // Add the frames back to the box in the sorted order
+        foreach (var frame in frames)
+        {
+            transactions_box.Add(frame);
+        }
+
+        // Show all widgets in the box
+        transactions_box.ShowAll();
+    }
+    // -------------
 
 // -VOLUME-
 
-// Event handler for the sort button click
-private void OnSortVolume(object sender, ButtonPressEventArgs args){
-	// Handle the click event
-        var label = (Label)((EventBox)sender).Child;
-        //label.Text = "Clicked!";
+    private void volume_event_transaction_clicked(object sender, ButtonPressEventArgs args){
+        // Handle the click event
+            var label = (Label)((EventBox)sender).Child;
+            //label.Text = "Clicked!";
 
-        // Toggle the sorting order
-    isAscendingOrderVolume = !isAscendingOrderVolume;
+            // Toggle the sorting order
+        isAscendingOrderVolume = !isAscendingOrderVolume;
 
-	SortFramesByVolume();
-}
-
-private void SortFramesByVolume()
-{
-    // Get all child frames in transactions_box
-var frames = transactions_box.Children
-    .OfType<Frame>()  // Use OfType<T> for better readability
-    .ToList();
-
-// Sort frames based on the rank label
-frames.Sort((frame1, frame2) =>
-{
-    // Extract rank labels from the frames
-    string volumeLabel1 = GetVolumeLabelFromFrame(frame1);
-    string volumeLabel2 = GetVolumeLabelFromFrame(frame2);
-
-    // Convert rank labels to integers for comparison
-    int volume1 = ExtractVolumeFromLabel(volumeLabel1);
-    //Console.WriteLine(volume1);
-    int volume2 = ExtractVolumeFromLabel(volumeLabel2);
-	//Console.WriteLine(volume2);
-
-    // Compare ranks
-    int result = volume1.CompareTo(volume2);
-    return isAscendingOrderVolume ? result : -result;
-});
-
-// Clear existing components in the box
-foreach (var child in transactions_box.Children.ToList())
-{
-    transactions_box.Remove(child);
-}
-
-// Add the frames back to the box in the sorted order
-foreach (var frame in frames)
-{
-    transactions_box.Add(frame);
-}
-
-// Show all widgets in the box
-transactions_box.ShowAll();
-
-}
-
-private string GetVolumeLabelFromFrame(Frame frame)
-{
-    // Assuming the currencyRankLabel is nested within another container within the frame
-    Container container = frame.Children.FirstOrDefault() as Container;
-
-    if (container != null)
-    {
-        Label currencyVolumeLabel = FindVolumeLabelInGrid(container);
-        //Console.WriteLine(currencyRankLabel);
-
-        // Return the text of the label, or a default value if not found
-        return currencyVolumeLabel?.Text ?? "0";
+        SortFramesByVolumeTransaction();
     }
 
-    // No suitable container found in the children
-    return "0";
-}
-
-
-// Helper method to find a Label widget in the children of a container
-private Label FindVolumeLabelInGrid(Container container)
-{
-    foreach (var child in container.Children)
+    private void SortFramesByVolumeTransaction()
     {
-        if (child is Label label && IsVolumeLabel(label))
-        {
-            // Found the label representing the volume
-            return label;
-        }
+        // Get all child frames in transactions_box
+    var frames = transactions_box.Children
+        .OfType<Frame>()  // Use OfType<T> for better readability
+        .ToList();
 
-        // If the child is a container, recursively search for a volume label
-        if (child is Container subContainer)
-        {
-            var volumeLabelInChildren = FindVolumeLabelInGrid(subContainer);
-            if (volumeLabelInChildren != null)
-            {
-                // Found a rank label in a sub-container
-                return volumeLabelInChildren;
-            }
-        }
+    // Sort frames based on the rank label
+    frames.Sort((frame1, frame2) =>
+    {
+        // Extract rank labels from the frames
+        string volumeLabel1 = GetVolumeLabelFromFrame(frame1);
+        string volumeLabel2 = GetVolumeLabelFromFrame(frame2);
 
-        // You might need to handle other widget types based on your actual hierarchy
+        // Convert rank labels to integers for comparison
+        int volume1 = ExtractVolumeFromLabel(volumeLabel1);
+        //Console.WriteLine(volume1);
+        int volume2 = ExtractVolumeFromLabel(volumeLabel2);
+        //Console.WriteLine(volume2);
+
+        // Compare ranks
+        int result = volume1.CompareTo(volume2);
+        return isAscendingOrderVolume ? result : -result;
+    });
+
+    // Clear existing components in the box
+    foreach (var child in transactions_box.Children.ToList())
+    {
+        transactions_box.Remove(child);
     }
 
-    // No rank label found in the children
-    return null;
-}
-
-private bool IsVolumeLabel(Label label)
-{
-    // Add your criteria to identify the rank label
-    return label.Name.StartsWith("Volume_"); // Assuming rank labels start with "#"
-}
-
-private int ExtractVolumeFromLabel(string volume)
-{
-    // Implement your logic to extract the numeric value from the volume string
-    // Example: Assume the numeric value is the first part of the string
-    if (int.TryParse(volume.Split(' ')[0], out int numericValue))
+    // Add the frames back to the box in the sorted order
+    foreach (var frame in frames)
     {
-
-        return numericValue;
+        transactions_box.Add(frame);
     }
 
-    return 0; // Default to 0 if parsing fails
-}
-//---
-//------------------------------------------------------------------------------------------
+    // Show all widgets in the box
+    transactions_box.ShowAll();
+
+    }
+    // ------------
 
 
+
+
+
+//-------------------------------------------------------
 
 
 
@@ -2628,10 +2670,10 @@ private int ExtractVolumeFromLabel(string volume)
                 main_window.ShowAll();
                 requestShowServerAssets();
                 requestUserPortfolio();
-                requestTransactionList();
+                //requestTransactionList();
                 FillPortfolioBoxMainWindow();
                 fill_card_details();
-                FillTransactionWindow();
+
 
 
 
@@ -2858,6 +2900,7 @@ private int ExtractVolumeFromLabel(string volume)
     private void FillTransactionWindow(){
 
         for (int i = 0; i < userTransactionsList.Count; i++){
+
             AddFrameToTransactionWindow(i);
         }
 
@@ -2895,11 +2938,6 @@ private int ExtractVolumeFromLabel(string volume)
  	   //innerGrid.ColumnSpacing = 10;
  	   innerGrid.RowHomogeneous = true;
  	   innerGrid.ColumnHomogeneous = true;
-
-
-
-
-
 
 
         // Create the inner grid
@@ -3008,24 +3046,24 @@ private int ExtractVolumeFromLabel(string volume)
 
         innerGrid.Attach(cryptoValueFrame, 3, 0, 1, 1);
 
+        // CryptoStatus Label
 
-        // transactionFee Label
+        Label currencyCryptoStatusLabel = new Label($"{userTransactionsList[index].ValidationStatus}");
+        currencyCryptoStatusLabel.Name = $"CurrencyCryptoStatus_{index}";
+        currencyCryptoStatusLabel.Visible = true;
+        currencyCryptoStatusLabel.CanFocus = false;
+        //currencyCryptoStatusLabel.MarginBottom = 9;
+        //currencyCryptoStatusLabel.Halign = Align.End;
 
-        Label currencyTransactionFeeLabel = new Label($"{userTransactionsList[index].TransactionFee}");
-        currencyTransactionFeeLabel.Name = $"TransactionFee_{index}";
-        currencyTransactionFeeLabel.Visible = true;
-        currencyTransactionFeeLabel.CanFocus = false;
-        //currencyTransactionFeeLabel.MarginBottom = 9;
-        //currencyTransactionFeeLabel.Halign = Align.End;
+        // inner frame for cryptoStatus
+        Frame cryptoStatusFrame= new Frame("");
+        cryptoStatusFrame.ShadowType = ShadowType.None;
+        cryptoStatusFrame.Add(currencyCryptoStatusLabel);
+
+        innerGrid.Attach(cryptoStatusFrame, 4, 0, 1, 1);
 
 
 
-        // inner frame for transactionFee
-        Frame transactionFeeFrame= new Frame("");
-        transactionFeeFrame.ShadowType = ShadowType.None;
-        transactionFeeFrame.Add(currencyTransactionFeeLabel);
-
-        innerGrid.Attach(transactionFeeFrame, 4, 0, 1, 1);
 
 
 
@@ -3053,6 +3091,7 @@ private int ExtractVolumeFromLabel(string volume)
 // P2P Window
 
     private void FillP2PWindow(){
+
 
         for (int i = 0; i < userOffersList.Count; i++){
             AddFrameToP2PWindow(i);
@@ -3162,7 +3201,7 @@ private int ExtractVolumeFromLabel(string volume)
 
          // CashValue Label
 
-        Label currencyCashValueLabel = new Label($"${userTransactionsList[index].CashValue}");
+        Label currencyCashValueLabel = new Label($"${userOffersList[index].CashValue}");
         currencyCashValueLabel.Name = $"CurrencyCashValue_{index}";
         currencyCashValueLabel.Visible = true;
         currencyCashValueLabel.CanFocus = false;
@@ -3241,12 +3280,759 @@ private int ExtractVolumeFromLabel(string volume)
         p2p_list_box.ShowAll();
     }
 
+// PortFolio Window
 
 
+
+    private void FillPortfolioWindow(){
+
+
+        var userDataDictionary = accountPortfolio.GetUserPortfolioAsDictionary();
+        var sortedByValue = userDataDictionary.OrderBy(x => x.Value);
+
+
+        List<KeyValuePair<string, decimal>> sortedList = sortedByValue.ToList();
+
+
+
+
+        foreach (var kvp in sortedList)
+        {
+
+
+            if (kvp.Key == "UserId"){
+                continue;
+            }
+            AddFrameToPortfolioWindow(kvp.Key, kvp.Value);
+
+
+
+
+        }
+
+    }
+
+
+    private void AddFrameToPortfolioWindow( string userPortfolioCurrencyName, decimal userPortfolioCurrencyPrice)
+    {
+        // Create a new frame
+        Frame p2pFrame = new Frame("");
+
+        // Create the frame
+        p2pFrame.Visible = true;
+        p2pFrame.CanFocus = false;
+        //p2pFrame.MarginTop = 10;
+        //p2pFrame.MarginBottom = 10;
+        p2pFrame.LabelXalign = 0;
+        p2pFrame.ShadowType = ShadowType.None;
+
+        // Create the alignment
+        Alignment alignment = new Alignment(0, 0, 0, 0);
+        alignment.Visible = true;
+        alignment.CanFocus = false;
+        //alignment.LeftPadding = 12;
+
+
+        // Create the inner grid
+        Grid innerGrid = new Grid();
+        innerGrid.Visible = false;
+        innerGrid.CanFocus = false;
+        //innerGrid.RowSpacing = 10;
+        innerGrid.ColumnSpacing = 100;
+        innerGrid.RowHomogeneous = true;
+        innerGrid.ColumnHomogeneous = true;
+
+
+
+
+
+
+
+        // Create the inner grid
+        Grid currencyNameGrid = new Grid();
+        //currencyNameGrid.MarginBottom = 9;
+        //currencyNameGrid.MarginLeft = 30;
+        currencyNameGrid.Visible = true;
+        currencyNameGrid.CanFocus = false;
+        currencyNameGrid.RowSpacing = 0;
+        //currencyNameGrid.ColumnSpacing = 10;
+        currencyNameGrid.RowHomogeneous = true;
+        currencyNameGrid.ColumnHomogeneous = true;
+
+
+        // Add child widgets to the inner grid (similar to your provided XML structure)
+        // Here, you'd create and add GtkImage, GtkLabel, GtkButton, etc., to the innerGrid
+
+
+        // Icon Image
+
+        Image currencyIconImage = new Image($"GUI/Glade/images/icons/{userPortfolioCurrencyName}.png");
+        currencyIconImage.Visible = true;
+        currencyIconImage.CanFocus = false;
+        //currencyIconImage.MarginLeft = 40;
+        currencyNameGrid.Attach(currencyIconImage, 0, 0, 1, 1);
+
+        // Name Label
+
+        Label currencyNameLabel = new Label($"{userPortfolioCurrencyName}");
+        currencyNameLabel.Name = $"CurrencyName_{userPortfolioCurrencyName}";
+        currencyNameLabel.Visible = true;
+        currencyNameLabel.CanFocus = false;
+        currencyNameLabel.Halign = Align.Start; // Adjust horizontal alignment
+        currencyNameLabel.Valign = Align.Center; // Adjust vertical alignment
+        //currencyNameLabel.MarginRight = 30;
+
+
+        currencyNameGrid.Attach(currencyNameLabel, 1, 0, 1, 1);
+
+
+        // inner frame for currency name
+        Frame currencyNameFrame= new Frame("");
+        currencyNameFrame.ShadowType = ShadowType.None;
+        currencyNameFrame.Add(currencyNameGrid);
+
+        // Set fixed width for the currency Frame
+        currencyNameFrame.MarginStart = 110;
+        int fixedWidth = 200; // Set your desired fixed width
+        currencyNameFrame.SetSizeRequest(fixedWidth, -1);
+
+        innerGrid.Attach(currencyNameFrame, 0, 0, 1, 1);
+
+        // CryptoValue Label
+
+        Label currencyCryptoValueLabel = new Label($"{userPortfolioCurrencyPrice}");
+        currencyCryptoValueLabel.Name = $"CurrencyCryptoValue_{userPortfolioCurrencyName}";
+        currencyCryptoValueLabel.Visible = true;
+        currencyCryptoValueLabel.CanFocus = false;
+        //currencyCryptoValueLabel.MarginBottom = 9;
+        //currencyCryptoValueLabel.Halign = Align.End;
+
+        // inner frame for cryptoValue
+        Frame cryptoValueFrame= new Frame("");
+        cryptoValueFrame.ShadowType = ShadowType.None;
+        cryptoValueFrame.Add(currencyCryptoValueLabel);
+        cryptoValueFrame.MarginStart = 69;
+
+        innerGrid.Attach(cryptoValueFrame, 1, 0, 1, 1);
+
+        // Add the inner grid to the alignment
+        alignment.Add(innerGrid);
+
+        // Add the alignment to the frame
+        p2pFrame.Add(alignment);
+
+        // Align Frame
+
+        p2pFrame.MarginEnd = 20;
+
+
+
+        // Add the frame to the transactions_box
+        portfolio_maxi_box.Add(p2pFrame);
+        portfolio_maxi_box.ShowAll();
+    }
+
+
+// Miner Window
+
+    private void mining_button_miner_window_clicked( object sender, EventArgs e){
+
+        Thread miningThread;
+
+         if (turnedOn)
+        {
+            turnedOn = false; // Stop the mining loop
+            // Additional logic to handle stopping the mining process
+        }
+        else
+        {
+            turnedOn = true; // Start the mining loop
+            miningThread = new Thread(startMining);
+            miningThread.Start();
+        }
+
+
+    }
+
+    private void startMining()
+    {
+        client = getClient();
+        string justMessage;
+        var stream = client.GetStream();
+
+        while(turnedOn){
+            Thread.Sleep(5);
+
+
+            string RequestMessage = "TransactionValidationStatusForMiner";
+
+            SendMessage(stream, RequestMessage);
+
+            if(WaitForValidationResponse(stream))
+            {
+                //Get Transaction
+                RequestMessage = "GetTransactionForValidation";
+                SendMessage(stream, RequestMessage);
+                Transaction userTransaction = WaitForTransactionForValidation(stream);
+
+
+
+                if(userTransaction.FromAddress == "server")
+                {
+                    RequestMessage = "GetServerAssetsList";
+
+                    // Send the serialized Transaction object to C client
+                    SendMessage(stream, RequestMessage);
+
+                    // Wait for a response from the server
+                    List<Cryptocurrency> assets= WaitForServerAssets(stream);
+
+                    //Get Wallet of Buyer
+                    Wallet recipientWallet = new();
+                    recipientWallet.Purpose = "GetWallet";
+                    recipientWallet.WalletAddress = userTransaction.ToAddress;
+                    string serializedWallet = recipientWallet.Serialize();
+
+                    SendMessage(stream, serializedWallet);
+
+                    recipientWallet = WaitForWallet(stream, out justMessage);
+
+                    //Get Portfolio of Buyer
+                    User recipientUser = new();
+                    recipientUser.Purpose = "GetPortfolio";
+                    recipientUser.UserId = recipientWallet.UserId;
+                    string serializedUser = recipientUser.Serialize();
+
+                    SendMessage(stream, serializedUser);
+                    UserPortfolio recipientPortfolioUser = WaitForAccountPortfolio(stream);
+
+                    Cryptocurrency crypto = new();
+                    if(ValidateServerTransaction(assets, recipientWallet, recipientPortfolioUser, userTransaction, out crypto))
+                    {
+                        crypto.Purpose = "UpdateInServerAssets";
+                        string serializedCrypto = crypto.Serialize();
+                        SendMessage(stream, serializedCrypto);
+                        WaitForResponse(stream);
+                        recipientWallet.Purpose = "UpdateWallet";
+                        serializedWallet = recipientWallet.Serialize();
+                        SendMessage(stream, serializedWallet);
+                        WaitForResponse(stream);
+
+                        serializedUser = recipientPortfolioUser.Serialize();
+                        SendMessage(stream, serializedUser);
+                        WaitForResponse(stream);
+
+                        // Create a Transaction object and serialize it
+                        userTransaction.Purpose = "Valid";
+                        userTransaction.MinerId = 11; // this userId
+                        string validatedSerializedTransaction = userTransaction.Serialize();
+
+                        // Send the serialized Transaction object to C client
+                        SendMessage(stream, validatedSerializedTransaction);
+
+                        // Wait for a response from the server
+                        WaitForValidationResponse(stream);
+                    }
+                    else
+                    {
+                        // Create a Transaction object and serialize it
+                        userTransaction.Purpose = "NotValid";
+                        string validatedSerializedTransaction = userTransaction.Serialize();
+
+                        // Send the serialized Transaction object to C client
+                        SendMessage(stream, validatedSerializedTransaction);
+
+                        // Wait for a response from the server
+                        WaitForResponse(stream);
+                    }
+                }
+                else
+                {
+                    //Get Wallet of Seller
+                    Wallet senderWallet = new();
+                    senderWallet.Purpose = "GetWallet";
+                    senderWallet.WalletAddress = userTransaction.FromAddress;
+                    string serializedWallet = senderWallet.Serialize();
+
+                    SendMessage(stream, serializedWallet);
+                    senderWallet = WaitForWallet(stream, out justMessage);
+
+                    //Get Portfolio of Seller
+                    User senderUser = new();
+                    senderUser.Purpose = "GetPortfolio";
+                    senderUser.UserId = senderWallet.UserId;
+                    string serializedUser = senderUser.Serialize();
+
+                    SendMessage(stream, serializedUser);
+                    UserPortfolio senderPortfolioUser = WaitForAccountPortfolio(stream);
+
+                    //Get Wallet of Buyer
+                    Wallet recipientWallet = new();
+                    recipientWallet.Purpose = "GetWallet";
+                    recipientWallet.WalletAddress = userTransaction.ToAddress;
+                    serializedWallet = recipientWallet.Serialize();
+
+                    SendMessage(stream, serializedWallet);
+                    recipientWallet = WaitForWallet(stream,out justMessage);
+
+                    //Get Portfolio of Buyer
+                    User recipientUser = new();
+                    recipientUser.Purpose = "GetPortfolio";
+                    recipientUser.UserId = recipientWallet.UserId;
+                    serializedUser = recipientUser.Serialize();
+
+                    SendMessage(stream, serializedUser);
+                    UserPortfolio recipientPortfolioUser = WaitForAccountPortfolio(stream);
+
+
+                    string message = "";
+                    if(ValidateTransaction(senderWallet, recipientWallet, senderPortfolioUser, recipientPortfolioUser, userTransaction, out message))
+                    {
+                        recipientWallet.Purpose = "UpdateWallet";
+                        serializedWallet = recipientWallet.Serialize();
+                        SendMessage(stream, serializedWallet);
+                        WaitForResponse(stream);
+
+                        serializedUser = senderPortfolioUser.Serialize();
+                        SendMessage(stream, serializedUser);
+                        WaitForResponse(stream);
+
+                        senderWallet.Purpose = "UpdateWallet";
+                        serializedWallet = senderWallet.Serialize();
+                        SendMessage(stream, serializedWallet);
+                        WaitForResponse(stream);
+
+                        serializedUser = recipientPortfolioUser.Serialize();
+                        SendMessage(stream, serializedUser);
+                        WaitForResponse(stream);
+
+
+                        // Create a Transaction object and serialize it
+                        userTransaction.Purpose = "Valid";
+                        userTransaction.MinerId = 11; // this userId
+                        string validatedSerializedTransaction = userTransaction.Serialize();
+
+                        // Send the serialized Transaction object to C client
+                        SendMessage(stream, validatedSerializedTransaction);
+
+                        // Wait for a response from the server
+                        WaitForValidationResponse(stream);
+                    }
+                    else
+                    {
+                        // Create a Transaction object and serialize it
+                        userTransaction.Purpose = "NotValid";
+                        string validatedSerializedTransaction = userTransaction.Serialize();
+
+                        // Send the serialized Transaction object to C client
+                        SendMessage(stream, validatedSerializedTransaction);
+
+                        // Wait for a response from the server
+                        WaitForResponse(stream);
+                    }
+                }
+            }
+        }
+    }
 
 
 
 // Navigation bar functions
+
+// Nav Bar main
+
+    private void dashboard_button_main_window_clicked(object sender, EventArgs e){
+
+
+    }
+    private void p2p_button_main_window_clicked(object sender, EventArgs e){
+        main_window.Hide();
+        p2p_window1.ShowAll();
+        publishUserOffer();
+        requestUserOfferList();
+        deleteChildren(p2p_list_box);
+        FillP2PWindow();
+
+    }
+    private void portfolio_button_main_window_clicked (object sender, EventArgs e){
+        main_window.Hide();
+        portfolio_window.ShowAll();
+        deleteChildren(portfolio_maxi_box);
+        FillPortfolioWindow();
+
+    }
+    private void transactions_button_main_window_clicked (object sender, EventArgs e){
+        main_window.Hide();
+        transactions_window.ShowAll();
+        deleteChildren(transactions_box);
+        requestTransactionList();
+
+    }
+    private void miner_button_main_window_clicked (object sender, EventArgs e){
+        main_window.Hide();
+        miner_window.Show();
+
+    }
+    private void settings_button_main_window_clicked (object sender, EventArgs e){
+        main_window.Hide();
+        settings_window.ShowAll();
+
+    }
+    private void help_button_main_window_clicked (object sender, EventArgs e){
+        main_window.Hide();
+        help_window.ShowAll();
+
+    }
+    private void logout_button_main_window_clicked (object sender, EventArgs e){
+
+        logout_window.ShowAll();
+    }
+
+
+    // Nav Bar portfolio
+
+    private void dashboard_button_portfolio_window_clicked(object sender, EventArgs e){
+        portfolio_window.Hide();
+        main_window.ShowAll();
+
+    }
+    private void p2p_button_portfolio_window_clicked(object sender, EventArgs e){
+        portfolio_window.Hide();
+        p2p_window1.ShowAll();
+        deleteChildren(p2p_list_box);
+        requestUserOfferList();
+        FillP2PWindow();
+
+    }
+    private void portfolio_button_portfolio_window_clicked (object sender, EventArgs e){
+        deleteChildren(portfolio_maxi_box);
+        FillPortfolioWindow();
+
+    }
+    private void transactions_button_portfolio_window_clicked (object sender, EventArgs e){
+        portfolio_window.Hide();
+        transactions_window.ShowAll();
+        deleteChildren(transactions_box);
+        requestTransactionList();
+
+    }
+    private void miner_button_portfolio_window_clicked (object sender, EventArgs e){
+        portfolio_window.Hide();
+        miner_window.Show();
+
+    }
+    private void settings_button_portfolio_window_clicked (object sender, EventArgs e){
+        portfolio_window.Hide();
+        settings_window.ShowAll();
+
+    }
+    private void help_button_portfolio_window_clicked (object sender, EventArgs e){
+        portfolio_window.Hide();
+        help_window.ShowAll();
+
+    }
+    private void logout_button_portfolio_window_clicked (object sender, EventArgs e){
+
+        logout_window.ShowAll();
+    }
+
+    // Nav Bar p2p
+
+    private void dashboard_button_p2p_window1_clicked(object sender, EventArgs e){
+        p2p_window1.Hide();
+        main_window.ShowAll();
+
+    }
+    private void p2p_button_p2p_window1_clicked(object sender, EventArgs e){
+
+
+    }
+    private void portfolio_button_p2p_window1_clicked (object sender, EventArgs e){
+        p2p_window1.Hide();
+        portfolio_window.ShowAll();
+        deleteChildren(portfolio_maxi_box);
+        FillPortfolioWindow();
+
+    }
+    private void transactions_button_p2p_window1_clicked (object sender, EventArgs e){
+        p2p_window1.Hide();
+        transactions_window.ShowAll();
+        deleteChildren(transactions_box);
+        requestTransactionList();
+
+    }
+    private void miner_button_p2p_window1_clicked (object sender, EventArgs e){
+        p2p_window1.Hide();
+        miner_window.Show();
+
+    }
+    private void settings_button_p2p_window1_clicked (object sender, EventArgs e){
+        p2p_window1.Hide();
+        settings_window.ShowAll();
+
+    }
+    private void help_button_p2p_window1_clicked (object sender, EventArgs e){
+        p2p_window1.Hide();
+        help_window.ShowAll();
+
+    }
+    private void logout_button_p2p_window1_clicked (object sender, EventArgs e){
+
+        logout_window.ShowAll();
+    }
+
+    // Nav Bar p2p
+
+    private void dashboard_button_p2p_window2_clicked(object sender, EventArgs e){
+        p2p_window2.Hide();
+        main_window.ShowAll();
+
+    }
+    private void p2p_button_p2p_window2_clicked(object sender, EventArgs e){
+
+
+    }
+    private void portfolio_button_p2p_window2_clicked (object sender, EventArgs e){
+        p2p_window2.Hide();
+        portfolio_window.ShowAll();
+        deleteChildren(portfolio_maxi_box);
+        FillPortfolioWindow();
+
+    }
+    private void transactions_button_p2p_window2_clicked (object sender, EventArgs e){
+        p2p_window2.Hide();
+        transactions_window.ShowAll();
+        deleteChildren(transactions_box);
+        requestTransactionList();
+
+    }
+    private void miner_button_p2p_window2_clicked (object sender, EventArgs e){
+        p2p_window2.Hide();
+        miner_window.Show();
+
+    }
+    private void settings_button_p2p_window2_clicked (object sender, EventArgs e){
+        p2p_window2.Hide();
+        settings_window.ShowAll();
+
+    }
+    private void help_button_p2p_window2_clicked (object sender, EventArgs e){
+        p2p_window2.Hide();
+        help_window.ShowAll();
+
+    }
+    private void logout_button_p2p_window2_clicked (object sender, EventArgs e){
+
+        logout_window.ShowAll();
+    }
+
+    // Nav Bar transaction
+
+    private void dashboard_button_transaction_window_clicked(object sender, EventArgs e){
+        transactions_window.Hide();
+        main_window.ShowAll();
+
+    }
+    private void p2p_button_transaction_window_clicked(object sender, EventArgs e){
+        transactions_window.Hide();
+        p2p_window1.ShowAll();
+        requestUserOfferList();
+        deleteChildren(p2p_list_box);
+        FillP2PWindow();
+
+    }
+    private void portfolio_button_transaction_window_clicked (object sender, EventArgs e){
+        transactions_window.Hide();
+        portfolio_window.ShowAll();
+        deleteChildren(portfolio_maxi_box);
+        FillPortfolioWindow();
+
+    }
+    private void transactions_button_transaction_window_clicked (object sender, EventArgs e){
+        deleteChildren(transactions_box);
+        requestTransactionList();
+    }
+    private void miner_button_transaction_window_clicked (object sender, EventArgs e){
+        transactions_window.Hide();
+        miner_window.Show();
+
+    }
+    private void settings_button_transaction_window_clicked (object sender, EventArgs e){
+        transactions_window.Hide();
+        settings_window.ShowAll();
+
+    }
+    private void help_button_transaction_window_clicked (object sender, EventArgs e){
+        transactions_window.Hide();
+        help_window.ShowAll();
+
+    }
+    private void logout_button_transaction_window_clicked (object sender, EventArgs e){
+
+        logout_window.ShowAll();
+    }
+
+     // Nav Bar miner
+
+    private void dashboard_button_miner_window_clicked(object sender, EventArgs e){
+        miner_window.Hide();
+        main_window.ShowAll();
+
+    }
+    private void p2p_button_miner_window_clicked(object sender, EventArgs e){
+        miner_window.Hide();
+        p2p_window1.ShowAll();
+        requestUserOfferList();
+        deleteChildren(p2p_list_box);
+        FillP2PWindow();
+
+    }
+    private void portfolio_button_miner_window_clicked (object sender, EventArgs e){
+        miner_window.Hide();
+        portfolio_window.ShowAll();
+        deleteChildren(portfolio_maxi_box);
+        FillPortfolioWindow();
+
+    }
+    private void transactions_button_miner_window_clicked (object sender, EventArgs e){
+        miner_window.Hide();
+        transactions_window.ShowAll();
+        deleteChildren(transactions_box);
+        requestTransactionList();
+
+    }
+    private void miner_button_miner_window_clicked (object sender, EventArgs e){
+        miner_window.Hide();
+        miner_window.Show();
+
+    }
+    private void settings_button_miner_window_clicked (object sender, EventArgs e){
+        miner_window.Hide();
+        settings_window.ShowAll();
+
+    }
+    private void help_button_miner_window_clicked (object sender, EventArgs e){
+        miner_window.Hide();
+        help_window.ShowAll();
+
+    }
+    private void logout_button_miner_window_clicked (object sender, EventArgs e){
+
+        logout_window.ShowAll();
+    }
+
+    // Nav Bar settings
+
+    private void dashboard_button_settings_window_clicked(object sender, EventArgs e){
+        settings_window.Hide();
+        main_window.ShowAll();
+
+    }
+    private void p2p_button_settings_window_clicked(object sender, EventArgs e){
+        settings_window.Hide();
+        p2p_window1.ShowAll();
+        requestUserOfferList();
+        FillP2PWindow();
+
+    }
+    private void portfolio_button_settings_window_clicked (object sender, EventArgs e){
+        settings_window.Hide();
+        portfolio_window.ShowAll();
+        deleteChildren(portfolio_maxi_box);
+        FillPortfolioWindow();
+
+    }
+    private void transactions_button_settings_window_clicked (object sender, EventArgs e){
+        settings_window.Hide();
+        transactions_window.ShowAll();
+        deleteChildren(transactions_box);
+        requestTransactionList();
+
+    }
+    private void miner_button_settings_window_clicked (object sender, EventArgs e){
+        settings_window.Hide();
+        miner_window.Show();
+
+    }
+    private void settings_button_settings_window_clicked (object sender, EventArgs e){
+        settings_window.Hide();
+        settings_window.ShowAll();
+
+    }
+    private void help_button_settings_window_clicked (object sender, EventArgs e){
+        settings_window.Hide();
+        help_window.ShowAll();
+
+    }
+    private void logout_button_settings_window_clicked (object sender, EventArgs e){
+
+        logout_window.ShowAll();
+    }
+
+
+
+    // Nav Bar help
+
+    private void dashboard_button_help_window_clicked(object sender, EventArgs e){
+        help_window.Hide();
+        main_window.ShowAll();
+
+    }
+    private void p2p_button_help_window_clicked(object sender, EventArgs e){
+        help_window.Hide();
+        p2p_window1.ShowAll();
+        requestUserOfferList();
+        FillP2PWindow();
+
+    }
+    private void portfolio_button_help_window_clicked (object sender, EventArgs e){
+        help_window.Hide();
+        portfolio_window.ShowAll();
+        deleteChildren(portfolio_maxi_box);
+        FillPortfolioWindow();
+
+    }
+    private void transactions_button_help_window_clicked (object sender, EventArgs e){
+        help_window.Hide();
+        transactions_window.ShowAll();
+        deleteChildren(transactions_box);
+        requestTransactionList();
+
+    }
+    private void miner_button_help_window_clicked (object sender, EventArgs e){
+        help_window.Hide();
+        miner_window.Show();
+
+    }
+    private void settings_button_help_window_clicked (object sender, EventArgs e){
+        help_window.Hide();
+        settings_window.ShowAll();
+
+    }
+    private void help_button_help_window_clicked (object sender, EventArgs e){
+
+
+    }
+    private void logout_button_help_window_clicked (object sender, EventArgs e){
+
+        logout_window.ShowAll();
+    }
+    private void sell_button_p2p_window1_clicked (object sender, EventArgs e){
+        p2p_window1.Hide();
+        p2p_window2.ShowAll();
+        fillComboBoxP2pWindow2();
+    }
+    private void buy_button_p2p_window1_clicked (object sender, EventArgs e){
+
+    }
+
+     private void sell_button_p2p_window2_clicked (object sender, EventArgs e){
+         fillComboBoxP2pWindow2();
+    }
+    private void buy_button_p2p_window2_clicked (object sender, EventArgs e){
+        p2p_window2.Hide();
+        p2p_window1.ShowAll();
+    }
 
 
 // Main Functions

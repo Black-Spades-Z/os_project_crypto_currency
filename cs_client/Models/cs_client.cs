@@ -230,7 +230,7 @@ public class CSharpClient
 
                     case "11":
                     	while(true){
-                    	    Console.ReadLine();
+                    	    Thread.Sleep(5);
                             RequestMessage = "ValidationStatusForMiner";
 
                             SendMessage(stream, RequestMessage);

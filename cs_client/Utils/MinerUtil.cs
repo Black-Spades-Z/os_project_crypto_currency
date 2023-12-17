@@ -37,7 +37,7 @@ public static class MinerUtil
 	    }
 	    return false;
 	} 
-
+	
 	public static bool WaitForBlockValidationResponse(NetworkStream stream)
 	{
 	    try
@@ -89,7 +89,7 @@ public static class MinerUtil
 	    }
 	    
 	}
-
+	
 	public static Block WaitForBlockForValidation(NetworkStream stream)
 	{
 	    try
@@ -144,7 +144,7 @@ public static class MinerUtil
 		message = "Valid";
 		return true;
 	}
-
+	
 	public static bool ValidateServerTransaction(List<Cryptocurrency> assets, Wallet buyer, UserPortfolio pBuyer, Transaction transaction, out Cryptocurrency crypto)
 	{
 		Cryptocurrency varCrypto = new();
@@ -191,25 +191,39 @@ public static class MinerUtil
 	}
 	
 	public static decimal FindCryptoCurrency(string CryptoCurrencyName, UserPortfolio userPortfolio)
-	{
-		Type userPortfolioType = typeof(UserPortfolio);
-		
-		
-		// Iterate over the properties of UserPortfolio
-		foreach (PropertyInfo propertyInfo in userPortfolioType.GetProperties())
-		{
-		    // Check if the property name matches the CryptocurrencyName
-		    if (propertyInfo.Name == CryptoCurrencyName)
-		    {
-		        // Get the value of the matched property
-		        decimal cryptocurrencyAmount = (decimal)propertyInfo.GetValue(userPortfolio);
-		        Console.WriteLine($"{CryptoCurrencyName} amount: {cryptocurrencyAmount}");
-		        return cryptocurrencyAmount;
-		    }
-        	}
-        	return 0;
-	}
 
+	{
+
+		Type userPortfolioType = typeof(UserPortfolio);	
+
+		// Iterate over the properties of UserPortfolio
+
+		foreach (PropertyInfo propertyInfo in userPortfolioType.GetProperties())
+
+		{
+
+		    // Check if the property name matches the CryptocurrencyName
+
+		    if (propertyInfo.Name == CryptoCurrencyName)
+
+		    {
+
+		        // Get the value of the matched property
+
+		        decimal cryptocurrencyAmount = (decimal)propertyInfo.GetValue(userPortfolio);
+
+		        Console.WriteLine($"{CryptoCurrencyName} amount: {cryptocurrencyAmount}");
+
+		        return cryptocurrencyAmount;
+
+		    }
+
+        	}
+
+        	return 0;
+
+	}
+	
 	public static void HashBlock(Block block)
 	{
 		block.TotalAmount = CalculateTotalAmount(block);

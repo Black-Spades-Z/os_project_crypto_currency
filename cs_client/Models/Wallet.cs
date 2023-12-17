@@ -51,7 +51,7 @@ public class Wallet
         }
     }
 
-    public static Wallet WaitForWallet(NetworkStream stream)
+    public static Wallet WaitForWallet(NetworkStream stream, out string message)
 	{
 	    try
 	    {
@@ -65,15 +65,29 @@ public class Wallet
 		}
 
 		string response = Encoding.ASCII.GetString(buffer, 0, bytesRead);
-		Wallet wallet = JsonConvert.DeserializeObject<Wallet>(response);
+        if(response == "Admin approved")
+        {
+                message = "OpenAdmin";
+        }
+        else
+        {
+            message = "OpenClient";
+            Wallet wallet = JsonConvert.DeserializeObject<Wallet>(response);
+            writeJsonFile(response);
+            return wallet;
+        }
 
-		writeJsonFile(response);
-		return wallet;
+
+
 	    }
 	    catch (Exception e)
 	    {
 		Console.WriteLine($"Error in waiting for response: {e}");
-	    }
+        message = "Failed";
+
+
+        }
+
 	    return null;
 	}
 

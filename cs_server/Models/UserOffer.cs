@@ -16,10 +16,10 @@ public class UserOffer
     
     [Key]
     public int OfferId { get; set;  }
-    
+
     public string FromAddress { get; set;  }
-    public int CryptoValue { get; set;  }
-    public int CashValue { get; set;  }
+    public decimal CryptoValue { get; set;  }
+    public decimal CashValue { get; set;  }
     public string CryptocurrencyName { get; set;  }
     public DateTime DateTime { get; set; }
     public bool Available { get; set; }
