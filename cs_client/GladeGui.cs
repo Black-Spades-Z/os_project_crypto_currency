@@ -491,6 +491,8 @@ namespace GladeFunctions
 
             // Wait for a response from the server
             accountPortfolio = WaitForAccountPortfolio(client.GetStream());
+            FillPortfolioBoxMainWindow();
+            FillPortfolioWindow();
 
         }
 
@@ -542,7 +544,7 @@ namespace GladeFunctions
             userOffersList = WaitForUserOffers(client.GetStream());
         }
 
-        private void checkForMiner(){
+        private bool checkForMiner(){
 
             client = getClient();
 
@@ -557,6 +559,7 @@ namespace GladeFunctions
 
             // Wait for a response from the server
             checkMiner = WaitForMinerCheck(client.GetStream());
+            return checkMiner;
         }
 
         private void sendMiningUserDetails(){
@@ -2739,8 +2742,11 @@ namespace GladeFunctions
                 requestShowServerAssets();
                 requestUserPortfolio();
                 //requestTransactionList();
-                FillPortfolioBoxMainWindow();
+
                 fill_card_details();
+                if (!checkForMiner()){
+                    sendMiningUserDetails();
+                }
 
 
 
