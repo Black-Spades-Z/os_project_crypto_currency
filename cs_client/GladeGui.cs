@@ -201,6 +201,11 @@ namespace GladeFunctions
         private Button sell_button_p2p_window2;
         private Button buy_button_p2p_window2;
 
+        private Button sell_offer_button_p2p_window2;
+        private Entry price_entry_p2p_window2;
+        private Entry limit_entry_p2p_window2;
+
+
         private Button dashboard_button_p2p_window2;
         private Button p2p_button_p2p_window2;
         private Button portfolio_button_p2p_window2;
@@ -282,6 +287,7 @@ namespace GladeFunctions
         private Label price_label_p2p_sell_window;
         private Button sell_button_p2p_sell_window;
         private Button cancel_button_p2p_sell_window;
+
 
         // Window Deposit
 
@@ -510,7 +516,7 @@ namespace GladeFunctions
 
         }
 
-        private void publishUserOffer(){
+        private void publishUserOffer(decimal cashValue, decimal cryptoValue, string cryptoCurrencyName){
 
             client = getClient();
 
@@ -732,6 +738,10 @@ namespace GladeFunctions
 
              // Window p2p
 
+            sell_offer_button_p2p_window2 = (Button)builder.GetObject("sell_offer_button_p2p_window2");
+            price_entry_p2p_window2 = (Entry)builder.GetObject("price_entry_p2p_window2");
+            limit_entry_p2p_window2 = (Entry)builder.GetObject("limit_entry_p2p_window2");
+
             sell_button_p2p_window2 = (Button)builder.GetObject("sell_button_p2p_window2");
             buy_button_p2p_window2 = (Button)builder.GetObject("buy_button_p2p_window2");
             combo_box_p2p_window2 = (ComboBox)builder.GetObject("combo_box_p2p_window2");
@@ -854,6 +864,7 @@ namespace GladeFunctions
             sell_button_p2p_window2.Clicked += sell_button_p2p_window2_clicked;
             buy_button_p2p_window2.Clicked += buy_button_p2p_window2_clicked;
 
+            sell_offer_button_p2p_window2.Clicked += sell_offer_button_p2p_window2_clicked;
             dashboard_button_p2p_window2.Clicked += dashboard_button_p2p_window2_clicked;
             p2p_button_p2p_window2.Clicked += p2p_button_p2p_window2_clicked;
             portfolio_button_p2p_window2.Clicked += portfolio_button_p2p_window2_clicked;
@@ -1472,14 +1483,43 @@ namespace GladeFunctions
         }
     }
 
-    private void fill_card_details(){
+    private void sell_offer_button_p2p_window2_clicked(object sender, EventArgs e){
 
-        string user_address_card = ($"{accountDetails.WalletAddress}").Substring(0, 7);
-        balance_label_card_main_window.Text = $"{accountDetails.Balance}";
-        user_email_card_main_window.Text = $"{user.Email} ";
-        username_bar_main_window.Text = $"{user.Email}";
-        user_address_card_main_window.Text = $"{user_address_card}";
+        TreeIter iter;
+        string comboBoxValue = "";
+        if (combo_box_p2p_window2.GetActiveIter(out iter))
+        {
+            comboBoxValue = combo_box_p2p_window2.Model.GetValue(iter, 0).ToString();
+            // Do something with activeText
+        }
+
+        int index = comboBoxValue.IndexOf(':');
+
+        string cryptoCurrencyName = index >= 0 ? comboBoxValue.Substring(0, index) : comboBoxValue;
+
+        string cashEntry = price_entry_p2p_window2.Text;
+        string cashEntryFiltered = FilterNonInteger(cashEntry);
+        price_entry_p2p_window2.Text = cashEntryFiltered;
+
+        // Update the label or perform any computation with the filtered integer
+        if (decimal.TryParse(cashEntryFiltered, out decimal intValue)){
+            decimal cashValue = intValue;
+        }
+
+        string cryptoEntry = limit_entry_p2p_window2.Text;
+        string cryptoEntryFiltered = FilterNonInteger(cryptoEntry);
+        limit_entry_p2p_window2.Text = cryptoEntryFiltered;
+
+        // Update the label or perform any computation with the filtered integer
+        if (decimal.TryParse(cryptoEntryFiltered, out decimal decimalValue)){
+            decimal cryptoValue = decimalValue;
+        }
+
+        publishUserOffer(cashValue, cryptoValue,cryptoCurrencyName);
     }
+
+
+
 
     private void fillComboBoxP2pWindow2(){
         // Create a ListStore to hold the data for the ComboBox
@@ -1498,7 +1538,7 @@ namespace GladeFunctions
                 continue;
             }
             if (( kvp.Value) > 0 ){
-                    listStore.AppendValues($"{kvp.Key} : {kvp.Value}");
+                    listStore.AppendValues($"{kvp.Key}: {kvp.Value}");
             }
 
 
@@ -1516,6 +1556,14 @@ namespace GladeFunctions
 
     }
 
+     private void fill_card_details(){
+
+        string user_address_card = ($"{accountDetails.WalletAddress}").Substring(0, 7);
+        balance_label_card_main_window.Text = $"{accountDetails.Balance}";
+        user_email_card_main_window.Text = $"{user.Email} ";
+        username_bar_main_window.Text = $"{user.Email}";
+        user_address_card_main_window.Text = $"{user_address_card}";
+    }
 
 
 

@@ -6907,7 +6907,7 @@ entered data</property>
                           </packing>
                         </child>
                         <child>
-                          <object class="GtkButton" id="sell_button_p2p_window">
+                          <object class="GtkButton" id="sell_offer_button_p2p_window2">
                             <property name="label" translatable="yes">Sell</property>
                             <property name="width-request">95</property>
                             <property name="height-request">40</property>
