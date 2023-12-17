@@ -517,6 +517,7 @@ namespace GladeFunctions
             // Add this data to the window
 
             FillTransactionWindow();
+            SortFramesByDate();
 
         }
 
@@ -3734,6 +3735,7 @@ namespace GladeFunctions
         transactions_window.ShowAll();
         deleteChildren(transactions_box);
         requestTransactionList();
+
 
     }
     private void miner_button_main_window_clicked (object sender, EventArgs e){
