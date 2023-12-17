@@ -49,9 +49,9 @@ public class UserPortfolio
         return JsonConvert.DeserializeObject<UserPortfolio>(json);
     }
 
-    public Dictionary<string, object> GetUserPortfolioAsDictionary()
+    public Dictionary<string, decimal> GetUserPortfolioAsDictionary()
     {
-        var userPortfolioData = new Dictionary<string, object>
+        var userPortfolioData = new Dictionary<string, decimal>
         {
             { "UserId", UserId },
             { "Bitcoin", Bitcoin },

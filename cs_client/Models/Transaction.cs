@@ -19,8 +19,8 @@ public class Transaction
     public int TransactionId { get; init; }
     public string FromAddress { get; init; }
     public string ToAddress { get; init; }
-    public int CryptoValue { get; init; }
-    public int CashValue { get; init; }
+    public decimal CryptoValue { get; init; }
+    public decimal CashValue { get; init; }
     public string CryptocurrencyName { get; init; }
     public DateTime DateTime { get; init; }
     public string TransactionsHash { get; set; }
@@ -57,8 +57,8 @@ public class Transaction
 	    string toAddress = Console.ReadLine();
 
 	    Console.Write("Cash Value: ");
-	    int cashValue;
-	    while (!int.TryParse(Console.ReadLine(), out cashValue))
+	    decimal cashValue;
+	    while (!decimal.TryParse(Console.ReadLine(), out cashValue))
 	    {
 		Console.Clear(); // Clear the console to ensure a clean input prompt
 		Console.WriteLine("Invalid input. Please enter a valid integer for Value.");
@@ -66,8 +66,8 @@ public class Transaction
 	    }
 	    
 	    Console.Write("Value: ");
-	    int cryptoValue;
-	    while (!int.TryParse(Console.ReadLine(), out cryptoValue))
+	    decimal cryptoValue;
+	    while (!decimal.TryParse(Console.ReadLine(), out cryptoValue))
 	    {
 		Console.Clear(); // Clear the console to ensure a clean input prompt
 		Console.WriteLine("Invalid input. Please enter a valid integer for Value.");
@@ -88,7 +88,7 @@ public class Transaction
 	}
 
 
-	public static Transaction setTransaction(string fromAddress, string toAddress, int cashValue, int cryptoValue, string cryptoCurrencyName)
+	public static Transaction setTransaction(string fromAddress, string toAddress, decimal cashValue, decimal cryptoValue, string cryptoCurrencyName)
 	{
 
 	    return new Transaction

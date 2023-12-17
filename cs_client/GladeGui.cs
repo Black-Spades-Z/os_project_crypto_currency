@@ -52,8 +52,8 @@ namespace GladeFunctions
 
         // Buy from Server
 
-        private int cashValue;
-        private int cryptoValue;
+        private decimal cashValue;
+        private decimal cryptoValue;
         private string cryptoCurrencyName;
         private string temporaryCryptoName;
         private float temporaryCryptoPrice;
@@ -67,6 +67,11 @@ namespace GladeFunctions
 
         private Window main_window;
         private Frame card;
+        private Label balance_label_card_main_window;
+        private Label user_email_card_main_window;
+        private Label user_address_card_main_window;
+        private Label username_bar_main_window;
+
 
         private Button exchange_button_main_window;
         private EventBox rank_event_box;
@@ -89,6 +94,8 @@ namespace GladeFunctions
 
 
 
+
+
         // Window 1
         private string loginEmail;
         private string loginPassword;
@@ -98,6 +105,7 @@ namespace GladeFunctions
         private Entry password_entry_login_window1;
         private Button login_button_login_window1;
         private Button authorization_button_login_window1;
+        private Button terms_condition_login_window1;
 
         // Window 2
         private string registerEmail;
@@ -275,6 +283,11 @@ namespace GladeFunctions
         private Entry card_number_entry_withdraw_window;
         private Button withdraw_button_withdraw_window;
 
+        // Window Terms
+
+        private Window terms_window;
+        private Window policy_window;
+
 
 
 
@@ -299,13 +312,33 @@ namespace GladeFunctions
             clientThread.Start();
         }
 
-        private void sendUserLoginDetails(){
+        private void updateWallet(){
+            client = getClient();
+
+            accountDetails.Purpose = "UpdateWallet";
+
+            string serializedWallet = accountDetails.Serialize();
+
+            SendMessage(client.GetStream(), serializedWallet);
+            Console.WriteLine("Getting response");
+            WaitForResponse(client.GetStream());
+            Console.WriteLine("Got response");
+
+
+
+
+        }
+
+
+        private int sendUserLoginDetails(){
 
             client = getClient();
 
 
 
             user = SetUserLoginDetails(loginEmail, loginPassword);
+
+
             user.Purpose = "GetWallet";
             string serializedUser = user.Serialize();
 
@@ -316,6 +349,10 @@ namespace GladeFunctions
             Console.WriteLine("Getting response");
             accountDetails =  WaitForWallet(client.GetStream());
             Console.WriteLine("Got response");
+            if (accountDetails is null){
+                return 0;
+            }
+            return 1;
         }
         private void sendUserRegisterDetails(){
 
@@ -543,8 +580,9 @@ namespace GladeFunctions
             p2p_buy_window = (Window)builder.GetObject("p2p_buy_window");
             p2p_buy_window.DefaultSize = new Gdk.Size(600, 200);
             deposit_window =  (Window)builder.GetObject("deposit_window");
-
             withdraw_window = (Window)builder.GetObject("withdraw_window");
+            terms_window = (Window)builder.GetObject("terms_window");
+            policy_window = (Window)builder.GetObject("policy_window");
 
 
 
@@ -556,6 +594,13 @@ namespace GladeFunctions
             price_event_box = (EventBox)builder.GetObject("price_event");
             currency_name_event_box = (EventBox)builder.GetObject("currency_name_event");
             volume_box = (EventBox)builder.GetObject("volume_event");
+
+            // Card
+
+            balance_label_card_main_window = (Label)builder.GetObject("balance_label_card_main_window");
+            user_email_card_main_window = (Label)builder.GetObject("user_email_card_main_window");
+            user_address_card_main_window = (Label)builder.GetObject("user_address_card_main_window");
+            username_bar_main_window = (Label)builder.GetObject("username_bar_main_window");
 
             dashboard_button_main_window = (Button)builder.GetObject("dashboard_button_main_window");
             p2p_button_main_window = (Button)builder.GetObject("p2p_button_main_window");
@@ -577,6 +622,7 @@ namespace GladeFunctions
             password_entry_login_window1 = (Entry)builder.GetObject("password_entry_login_window1");
             login_button_login_window1 = (Button)builder.GetObject("login_button_login_window1");
             authorization_button_login_window1 = (Button)builder.GetObject("authorization_button_login_window1");
+            terms_condition_login_window1 = (Button)builder.GetObject("terms_condition_login_window1");
 
             // Retrieve objects from Glade for login_window2
             name_entry_login_window2 = (Entry)builder.GetObject("name_entry_login_window2");
@@ -824,12 +870,15 @@ namespace GladeFunctions
             // Window deposit
 
             deposit_entry_deposit_window.Activated += deposit_entry_deposit_window_enter;
+            deposit_entry_deposit_window.Changed += deposit_entry_deposit_window_changed;
             cancel_button_deposit_window.Clicked += cancel_button_deposit_window_clicked;
             deposit_button_deposit_window.Clicked += deposit_button_deposit_window_clicked;
 
             // Window withdraw
 
             cancel_button_withdraw_window.Clicked += cancel_button_withdraw_window_clicked;
+            withdraw_button_withdraw_window.Clicked += withdraw_button_withdraw_window_clicked;
+            withdraw_entry_withdraw_window.Changed += withdraw_entry_withdraw_window_changed;
 
 
 
@@ -837,6 +886,7 @@ namespace GladeFunctions
             // Connect button click events for login_window1
             login_button_login_window1.Clicked += login_button_login_window1_clicked;
             authorization_button_login_window1.Clicked += authorization_button_login_window1_clicked;
+            terms_condition_login_window1.Clicked += terms_condition_login_window1_clicked;
 
             // Connect button click events for login_window2
             submit_button_login_window2.Clicked += submit_button_login_window2_clicked;
@@ -859,6 +909,10 @@ namespace GladeFunctions
 
 
             // CSS Button
+
+            var terms_condition_login_window1_css = terms_condition_login_window1.StyleContext;
+            terms_condition_login_window1_css.AddProvider(cssProvider, Gtk.StyleProviderPriority.Application);
+            terms_condition_login_window1_css.AddClass("terms-conditions");
 
             var login_button_login_window1_css = login_button_login_window1.StyleContext;
             login_button_login_window1_css.AddProvider(cssProvider, Gtk.StyleProviderPriority.Application);
@@ -1601,6 +1655,12 @@ namespace GladeFunctions
     }
 
 
+    private void deposit_entry_deposit_window_changed(object sender, EventArgs args){
+        string entryText = deposit_entry_deposit_window.Text;
+        string filteredText = FilterNonInteger(entryText);
+        deposit_entry_deposit_window.Text = filteredText;
+    }
+
     private void deposit_entry_deposit_window_enter(object sender, EventArgs args)
     {
 
@@ -1611,7 +1671,33 @@ namespace GladeFunctions
 
     }
     private void deposit_button_deposit_window_clicked (object sender, EventArgs e){
-        qr_code.Visible = false;
+
+        if (decimal.TryParse(deposit_entry_deposit_window.Text, out decimal price))
+        {
+            accountDetails.Balance += price;
+        }
+        updateWallet();
+        fill_card_details();
+    }
+
+    private void withdraw_entry_withdraw_window_changed(object sender, EventArgs args){
+        string entryText = withdraw_entry_withdraw_window.Text;
+        string filteredText = FilterNonInteger(entryText);
+        withdraw_entry_withdraw_window.Text = filteredText;
+    }
+
+    private void withdraw_button_withdraw_window_clicked (object sender, EventArgs e){
+
+        if (decimal.TryParse(withdraw_entry_withdraw_window.Text, out decimal price))
+        {
+            accountDetails.Balance -= price;
+        }
+        updateWallet();
+        fill_card_details();
+    }
+
+    private void terms_condition_login_window1_clicked(object sender, EventArgs e){
+        terms_window.ShowAll();
     }
 
 
@@ -1637,9 +1723,9 @@ namespace GladeFunctions
         buy_entry_p2p_buy_window.Text = filteredText;
 
         // Update the label or perform any computation with the filtered integer
-        if (int.TryParse(filteredText, out int intValue))
+        if (decimal.TryParse(filteredText, out decimal intValue))
         {
-            int intPriceValue = (int)temporaryCryptoPrice;
+            decimal intPriceValue = (decimal)temporaryCryptoPrice;
             cryptoValue = intValue;
             cashValue = intValue * intPriceValue;
             value_label_p2p_window.Text = $"{temporaryCryptoName} price : {cashValue}";
@@ -1654,6 +1740,7 @@ namespace GladeFunctions
         string filtered = string.Concat(input.Where(char.IsDigit));
         return filtered;
     }
+
 
 
 
@@ -1672,14 +1759,40 @@ namespace GladeFunctions
 
     }
 
+    private void fill_card_details(){
+
+        string user_address_card = ($"{accountDetails.WalletAddress}").Substring(0, 7);
+        balance_label_card_main_window.Text = $"{accountDetails.Balance}";
+        user_email_card_main_window.Text = $"{user.Email} ";
+        username_bar_main_window.Text = $"{user.Email}";
+        user_address_card_main_window.Text = $"{user_address_card}";
+    }
+
     private void fillComboBoxP2pWindow2(){
         // Create a ListStore to hold the data for the ComboBox
         ListStore listStore = new ListStore(typeof(string));
+        var userDataDictionary = accountPortfolio.GetUserPortfolioAsDictionary();
+        var sortedByValue = userDataDictionary.OrderBy(x => x.Value);
 
-        // Add items to the ListStore
-        listStore.AppendValues("Item 1");
-        listStore.AppendValues("Item 2");
-        listStore.AppendValues("Item 3");
+
+        List<KeyValuePair<string, decimal>> sortedList = sortedByValue.ToList();
+
+        int limit =0;
+        foreach (var kvp in sortedList)
+        {
+
+            if (limit == 0){
+                limit++;
+                continue;
+            }
+            if (( kvp.Value) > 0 ){
+                    listStore.AppendValues($"{kvp.Key} : {kvp.Value}");
+            }
+
+            limit++;
+
+        }
+
 
         // Assign the model to the ComboBox
         combo_box_p2p_window2.Model = listStore;
@@ -1896,11 +2009,17 @@ namespace GladeFunctions
 
     private void FillPortfolioBoxMainWindow(){
 
+
         var userDataDictionary = accountPortfolio.GetUserPortfolioAsDictionary();
+        var sortedByValue = userDataDictionary.OrderBy(x => x.Value);
+
+
+        List<KeyValuePair<string, decimal>> sortedList = sortedByValue.ToList();
+
 
         int limit = 0;
 
-        foreach (var kvp in userDataDictionary)
+        foreach (var kvp in sortedList)
         {
 
             if (limit == 0){
@@ -1920,7 +2039,7 @@ namespace GladeFunctions
 
     }
 
-    private void AddFrameToPortfolioBoxMainWindow(string userPortfolioCurrencyName, object userPortfolioCurrencyPrice)
+    private void AddFrameToPortfolioBoxMainWindow(string userPortfolioCurrencyName, decimal userPortfolioCurrencyPrice)
     {
         Frame portfolioItemFrame = new Frame("");
         portfolioItemFrame.ShadowType = ShadowType.None;
@@ -2492,17 +2611,26 @@ private int ExtractVolumeFromLabel(string volume)
 
             if (IsValidEmail(loginEmail))
             {
+                int access;
+
                 Console.WriteLine($"Login successful. Email: {loginEmail}, Password: {loginPassword}");
                   // Close login_window1
-                login_window1.Hide();
 
-                sendUserLoginDetails();
+
+                access = sendUserLoginDetails();
+
+                if (access == 0){
+                    showErrorAllert("Incorrect Email or Password");
+                    return;
+                }
+                login_window1.Hide();
 
                 main_window.ShowAll();
                 requestShowServerAssets();
                 requestUserPortfolio();
                 requestTransactionList();
                 FillPortfolioBoxMainWindow();
+                fill_card_details();
                 FillTransactionWindow();
 
 

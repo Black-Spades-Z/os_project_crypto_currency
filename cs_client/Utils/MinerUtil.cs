@@ -238,9 +238,9 @@ public static class MinerUtil
         	Console.WriteLine($"{block.BlockNumber}{block.RootHash}{block.TotalAmount}{block.Timestamp}{block.TotalTransactions}{block.PreviousHash}{block.Hash}");   	
 	}
 	
-	public static int CalculateTotalAmount(Block block)
+	public static decimal CalculateTotalAmount(Block block)
 	{
-		int sum = 0;
+		decimal sum = 0;
 		foreach(Transaction t in block.BlockTransactions)
 		{
 			sum += t.CashValue;

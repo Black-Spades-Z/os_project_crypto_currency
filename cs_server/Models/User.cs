@@ -91,6 +91,25 @@ public class User
     	return true;
     }
     
+    public static bool HandleFullUserListRequest(string data, out string message)
+	{
+	    try
+	    {
+	    	using (var context = new AppDbContext())
+		{
+			var users = context.Users.ToList();
+			message = JsonConvert.SerializeObject(users);
+		}
+	    }
+	    catch (Exception ex)
+	    {
+	    	Console.WriteLine(ex.Message);
+		message = "Failure to send Server Assets";
+		return false;
+	    }
+	    return true;
+	}
+    
     public static bool HandleLoggedUser(string data, out string message)
     {
     	// Deserialize the User object
@@ -99,6 +118,14 @@ public class User
     	using (var context = new AppDbContext()) // Replace YourDbContext with your actual DbContext class
         {
     	User user = context.Users.FirstOrDefault(u => u.Email == receivedUser.Email);
+    	Admin admin = context.Admins.FirstOrDefault(u => u.Email == receivedUser.Email);
+    	
+    	if(admin is not null && VerifyPassword(receivedUser.PasswordHash, admin.PasswordHash))
+    	{
+    		message = "Admin approved";
+    		return true;
+    	}
+    	
         
         if(user is not null && VerifyPassword(receivedUser.PasswordHash, user.PasswordHash)){
         	Wallet wallet = context.Wallets

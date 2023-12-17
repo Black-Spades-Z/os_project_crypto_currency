@@ -14,8 +14,8 @@ public class UserOffer
     
     public int OfferId { get; set;  }
     public string FromAddress { get; set;  }
-    public int CryptoValue { get; set;  }
-    public int CashValue { get; set;  }
+    public decimal CryptoValue { get; set;  }
+    public decimal CashValue { get; set;  }
     public string CryptocurrencyName { get; set;  }
     public DateTime DateTime { get; set; }
     public bool Available { get; set; }
@@ -65,8 +65,8 @@ public class UserOffer
 	    string fromAddress = Console.ReadLine();
 
 	    Console.Write("Cash Value: ");
-	    int cashValue;
-	    while (!int.TryParse(Console.ReadLine(), out cashValue))
+	    decimal cashValue;
+	    while (!decimal.TryParse(Console.ReadLine(), out cashValue))
 	    {
 		Console.Clear(); // Clear the console to ensure a clean input prompt
 		Console.WriteLine("Invalid input. Please enter a valid integer for Value.");
@@ -74,8 +74,8 @@ public class UserOffer
 	    }
 	    
 	    Console.Write("Crypto Value: ");
-	    int cryptoValue;
-	    while (!int.TryParse(Console.ReadLine(), out cryptoValue))
+	    decimal cryptoValue;
+	    while (!decimal.TryParse(Console.ReadLine(), out cryptoValue))
 	    {
 		Console.Clear(); // Clear the console to ensure a clean input prompt
 		Console.WriteLine("Invalid input. Please enter a valid integer for Value.");
@@ -93,7 +93,7 @@ public class UserOffer
 		CryptocurrencyName = cryptocurrency
 	    };
 	}
-	public static UserOffer setUserOffer(string fromAddress, int cashValue, int cryptoValue, string cryptoCurrencyName)
+	public static UserOffer setUserOffer(string fromAddress, decimal cashValue, decimal cryptoValue, string cryptoCurrencyName)
 	{
 
 	    return new UserOffer

@@ -23,8 +23,8 @@ public class Transaction
     public int TransactionId { get; set; }
     public string FromAddress { get; set; }
     public string ToAddress { get; set; }
-    public int CryptoValue { get; set; }
-    public int CashValue { get; set; }
+    public decimal CryptoValue { get; set; }
+    public decimal CashValue { get; set; }
     public string CryptocurrencyName { get; set; }
     public DateTime DateTime { get; set; }
     public string TransactionsHash { get; set; }
@@ -96,6 +96,25 @@ public class Transaction
 	    	using (var context = new AppDbContext())
 		{
 			var transactionList = context.Transactions.Where(t => t.FromAddress == receivedWallet.WalletAddress ||  t.ToAddress == receivedWallet.WalletAddress).ToList();
+			message = JsonConvert.SerializeObject(transactionList);
+		}
+	    }
+	    catch (Exception ex)
+	    {
+	    	Console.WriteLine(ex.Message);
+		message = "Failure to send Server Assets";
+		return false;
+	    }
+	    return true;
+	}
+	
+	public static bool HandleFullTransactionListRequest(string data, out string message)
+	{
+	    try
+	    {
+	    	using (var context = new AppDbContext())
+		{
+			var transactionList = context.Transactions.ToList();
 			message = JsonConvert.SerializeObject(transactionList);
 		}
 	    }

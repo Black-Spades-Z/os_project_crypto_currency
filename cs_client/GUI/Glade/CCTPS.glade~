@@ -227,6 +227,7 @@
           <object class="GtkFrame">
             <property name="width-request">50</property>
             <property name="height-request">50</property>
+            <property name="visible">True</property>
             <property name="can-focus">False</property>
             <property name="halign">center</property>
             <property name="valign">center</property>
@@ -705,26 +706,6 @@
           </packing>
         </child>
         <child>
-          <object class="GtkCheckButton" id="agreement_login_window2">
-            <property name="label" translatable="yes">I agree to terms &amp; conditions</property>
-            <property name="width-request">350</property>
-            <property name="height-request">30</property>
-            <property name="visible">True</property>
-            <property name="can-focus">True</property>
-            <property name="receives-default">False</property>
-            <property name="halign">center</property>
-            <property name="valign">start</property>
-            <property name="margin-left">205</property>
-            <property name="draw-indicator">True</property>
-            <signal name="toggled" handler="agreement_login_window2_toggled" swapped="no"/>
-          </object>
-          <packing>
-            <property name="left-attach">1</property>
-            <property name="top-attach">7</property>
-            <property name="width">2</property>
-          </packing>
-        </child>
-        <child>
           <object class="GtkLabel" id="new_acc_label">
             <property name="visible">True</property>
             <property name="can-focus">False</property>
@@ -871,6 +852,53 @@
             <property name="top-attach">0</property>
             <property name="width">3</property>
             <property name="height">9</property>
+          </packing>
+        </child>
+        <child>
+          <!-- n-columns=2 n-rows=1 -->
+          <object class="GtkGrid">
+            <property name="width-request">350</property>
+            <property name="height-request">50</property>
+            <property name="visible">True</property>
+            <property name="can-focus">False</property>
+            <property name="halign">center</property>
+            <property name="valign">start</property>
+            <child>
+              <object class="GtkCheckButton" id="agreement_login_window2">
+                <property name="label" translatable="yes">I agree to</property>
+                <property name="visible">True</property>
+                <property name="can-focus">True</property>
+                <property name="receives-default">False</property>
+                <property name="halign">center</property>
+                <property name="valign">start</property>
+                <property name="margin-left">205</property>
+                <property name="margin-top">3</property>
+                <property name="draw-indicator">True</property>
+                <signal name="toggled" handler="agreement_login_window2_toggled" swapped="no"/>
+              </object>
+              <packing>
+                <property name="left-attach">0</property>
+                <property name="top-attach">0</property>
+              </packing>
+            </child>
+            <child>
+              <object class="GtkButton" id="terms_condition_login_window1">
+                <property name="label" translatable="yes">terms &amp; conditions</property>
+                <property name="visible">True</property>
+                <property name="can-focus">True</property>
+                <property name="receives-default">True</property>
+                <property name="relief">none</property>
+              </object>
+              <packing>
+                <property name="left-attach">1</property>
+                <property name="top-attach">0</property>
+              </packing>
+            </child>
+          </object>
+          <packing>
+            <property name="left-attach">1</property>
+            <property name="top-attach">7</property>
+            <property name="width">2</property>
           </packing>
         </child>
       </object>
@@ -2892,6 +2920,7 @@ Our support team is ready to help.</property>
                 </child>
                 <child>
                   <object class="GtkFrame">
+                    <property name="height-request">500</property>
                     <property name="visible">True</property>
                     <property name="can-focus">False</property>
                     <property name="margin-left">60</property>
@@ -2900,6 +2929,7 @@ Our support team is ready to help.</property>
                     <property name="shadow-type">none</property>
                     <child>
                       <object class="GtkScrolledWindow">
+                        <property name="height-request">500</property>
                         <property name="visible">True</property>
                         <property name="can-focus">True</property>
                         <property name="hscrollbar-policy">never</property>
@@ -2912,6 +2942,7 @@ Our support team is ready to help.</property>
                             <property name="vscroll-policy">natural</property>
                             <child>
                               <object class="GtkBox" id="market_values_box_main_window">
+                                <property name="height-request">500</property>
                                 <property name="visible">True</property>
                                 <property name="can-focus">False</property>
                                 <property name="orientation">vertical</property>
@@ -3043,7 +3074,7 @@ Our support team is ready to help.</property>
                                                     <property name="row-homogeneous">True</property>
                                                     <property name="column-homogeneous">True</property>
                                                     <child>
-                                                      <object class="GtkLabel">
+                                                      <object class="GtkLabel" id="user_address_card_main_window">
                                                         <property name="visible">True</property>
                                                         <property name="can-focus">False</property>
                                                         <property name="halign">start</property>
@@ -3119,7 +3150,7 @@ Our support team is ready to help.</property>
                                                       </packing>
                                                     </child>
                                                     <child>
-                                                      <object class="GtkLabel">
+                                                      <object class="GtkLabel" id="balance_label_card_main_window">
                                                         <property name="visible">True</property>
                                                         <property name="can-focus">False</property>
                                                         <property name="halign">start</property>
@@ -3136,7 +3167,7 @@ Our support team is ready to help.</property>
                                                       </packing>
                                                     </child>
                                                     <child>
-                                                      <object class="GtkLabel" id="personal_name_card">
+                                                      <object class="GtkLabel" id="user_email_card_main_window">
                                                         <property name="visible">True</property>
                                                         <property name="can-focus">False</property>
                                                         <property name="halign">start</property>
@@ -3258,6 +3289,7 @@ Our support team is ready to help.</property>
                                     <property name="can-focus">False</property>
                                     <child>
                                       <object class="GtkBox" id="portfolio_items_box">
+                                        <property name="height-request">400</property>
                                         <property name="visible">True</property>
                                         <property name="can-focus">False</property>
                                         <property name="orientation">vertical</property>
@@ -7278,6 +7310,118 @@ entered data</property>
       </object>
     </child>
   </object>
+  <object class="GtkWindow" id="policy_window ">
+    <property name="width-request">1440</property>
+    <property name="height-request">700</property>
+    <property name="can-focus">False</property>
+    <child>
+      <object class="GtkFrame">
+        <property name="width-request">1440</property>
+        <property name="height-request">700</property>
+        <property name="visible">True</property>
+        <property name="can-focus">False</property>
+        <property name="label-xalign">0</property>
+        <property name="shadow-type">none</property>
+        <child>
+          <object class="GtkBox">
+            <property name="visible">True</property>
+            <property name="can-focus">False</property>
+            <property name="orientation">vertical</property>
+            <child>
+              <object class="GtkScrolledWindow">
+                <property name="height-request">750</property>
+                <property name="visible">True</property>
+                <property name="can-focus">True</property>
+                <property name="shadow-type">in</property>
+                <child>
+                  <object class="GtkViewport">
+                    <property name="height-request">500</property>
+                    <property name="visible">True</property>
+                    <property name="can-focus">False</property>
+                    <property name="hscroll-policy">natural</property>
+                    <property name="shadow-type">none</property>
+                    <child>
+                      <object class="GtkLabel">
+                        <property name="visible">True</property>
+                        <property name="can-focus">False</property>
+                        <property name="margin-top">50</property>
+                        <property name="label" translatable="yes">Privacy Policy for Crypto App
+
+Effective Date: 16.12.2023
+
+Welcome to Crypto, the cryptocurrency application provided by Crypto Nest Inc. This Privacy Policy describes how we collect, use, and share your personal information 
+in connection with the Crypto app. By using the Crypto app, 
+you agree to the terms outlined in this policy.
+
+1. Information We Collect
+We collect various types of information to provide and improve our services.
+
+1.1 Account Information:
+    • When you create an account, we collect your name, email address, and other relevant details.
+
+1.2 Financial Information:
+    • To facilitate transactions, we may collect information related to your linked bank accounts or credit cards.
+
+1.3 Device Information:
+    • We automatically collect information about your device, including IP address, device type, and operating system.
+
+2. How We Use Your Information
+We use your information for the following purposes:
+
+2.1 Service Provision:
+    • To provide you with the Crypto app's features and services.
+
+2.2 Security:
+    • To ensure the security of your account and transactions.
+
+2.3 Improvement:
+    • To enhance and improve the functionality and user experience of the Crypto app.
+
+3. Information Sharing
+We may share your information under the following circumstances:
+
+3.1 Third-Party Service Providers:
+    • We may share your information with trusted third-party service providers for processing transactions and improving our services.
+
+3.2 Legal Compliance:
+    • We may disclose your information if required by law or in response to legal requests.
+
+4. Data Security
+We take data security seriously and employ industry-standard measures to protect your information. However, it's important to note that no method of transmission 
+over the internet or electronic storage is 100% secure.
+
+5. Your Choices
+You have the right to access, correct, or delete your personal information. Contact us at [support@cryptonest.com] for assistance.
+
+6. Changes to this Privacy Policy
+We may update this Privacy Policy periodically, and any significant changes will be communicated to you.
+
+7. Contact Us
+If you have questions or concerns about this Privacy Policy, please contact us at [support@cryptonest.com].
+
+By using the Crypto app, you agree to the terms outlined in this Privacy Policy.</property>
+                        <attributes>
+                          <attribute name="font-desc" value="Poppins 12"/>
+                        </attributes>
+                      </object>
+                    </child>
+                  </object>
+                </child>
+              </object>
+              <packing>
+                <property name="expand">False</property>
+                <property name="fill">True</property>
+                <property name="position">0</property>
+              </packing>
+            </child>
+          </object>
+        </child>
+        <child type="label_item">
+          <placeholder/>
+        </child>
+      </object>
+    </child>
+  </object>
   <object class="GtkWindow" id="portfolio_window">
     <property name="width-request">1440</property>
     <property name="height-request">968</property>
@@ -9325,7 +9469,7 @@ entered data</property>
                                   <object class="GtkLabel">
                                     <property name="visible">True</property>
                                     <property name="can-focus">False</property>
-                                    <property name="label" translatable="yes">Privacy Police</property>
+                                    <property name="label" translatable="yes">Privacy Policy</property>
                                   </object>
                                 </child>
                               </object>
@@ -9810,6 +9954,147 @@ entered data</property>
           <placeholder/>
         </child>
         <child>
+          <placeholder/>
+        </child>
+      </object>
+    </child>
+  </object>
+  <object class="GtkWindow" id="terms_window">
+    <property name="width-request">1440</property>
+    <property name="height-request">700</property>
+    <property name="can-focus">False</property>
+    <child>
+      <object class="GtkFrame">
+        <property name="width-request">1440</property>
+        <property name="height-request">700</property>
+        <property name="visible">True</property>
+        <property name="can-focus">False</property>
+        <property name="label-xalign">0</property>
+        <property name="shadow-type">none</property>
+        <child>
+          <object class="GtkBox">
+            <property name="visible">True</property>
+            <property name="can-focus">False</property>
+            <property name="orientation">vertical</property>
+            <child>
+              <object class="GtkScrolledWindow">
+                <property name="height-request">750</property>
+                <property name="visible">True</property>
+                <property name="can-focus">True</property>
+                <property name="shadow-type">in</property>
+                <child>
+                  <object class="GtkViewport">
+                    <property name="height-request">500</property>
+                    <property name="visible">True</property>
+                    <property name="can-focus">False</property>
+                    <property name="hscroll-policy">natural</property>
+                    <property name="shadow-type">none</property>
+                    <child>
+                      <object class="GtkLabel">
+                        <property name="visible">True</property>
+                        <property name="can-focus">False</property>
+                        <property name="margin-top">50</property>
+                        <property name="label" translatable="yes">Terms and Conditions for Crypto
+
+Effective Date: 15.12.2023
+
+1. Acceptance of Terms
+By accessing or using the Crypto ("the App") provided by Crypto Nest Inc., you agree to comply with and be bound by these Terms and Conditions.
+
+2. User Eligibility
+
+2.1 Age Requirement:
+    • Users must be at least 18 years old or the legal age in their jurisdiction to use the App.
+
+2.2 Legal Compliance:
+    • Users are responsible for ensuring that their use of the App complies with all applicable laws and regulations.
+
+3. Account Registration
+
+3.1 Accurate Information:
+    • Users must provide accurate and complete information during the registration process.
+
+3.2 Account Security:
+    • Users are responsible for maintaining the security of their account credentials.
+
+4. Use of the App
+
+4.1 Permitted Use:
+    • Users may use the App for its intended purposes in accordance with these Terms.
+
+4.2 Prohibited Activities:
+    • Users must not engage in any activities that violate these Terms or applicable laws.
+
+5. Privacy
+
+5.1 Privacy Policy:
+    • Users agree to the terms outlined in the Crypto Privacy.
+
+5.2 Data Collection:
+    • We may collect and process user data as outlined in the Privacy Policy.
+
+6. Transactions and Fees
+
+6.1 Transaction Authorization:
+    • Users authorize transactions initiated through the App.
+
+6.2 Fees:
+    • Users are responsible for any fees associated with transactions or the use of premium features.
+
+7. Intellectual Property
+
+7.1 Ownership:
+    • The App and its content are owned by Crypto Nest Inc. Users do not acquire any ownership rights.
+
+7.2 User Content:
+    • Users grant Crypto a non-exclusive, royalty-free license to use, modify, and distribute user-generated content within the App.
+
+8. Termination
+
+8.1 Termination by User:
+    • Users may terminate their account at any time.
+
+8.2 Termination by Crypto:
+    • Crypto Nest may terminate or suspend user accounts for violation of these Terms.
+
+9. Disclaimers and Limitation of Liability
+
+9.1 No Warranty:
+    • The App is provided "as is" without warranties of any kind.
+
+9.2 Limitation of Liability:
+    • Crypto Nest is not liable for any direct, indirect, or consequential damages arising from the use of the App.
+
+10. Governing Law and Dispute Resolution
+
+10.1 Governing Law:
+    • These Terms are governed by the laws of the Republic of Uzbekistan.
+
+10.2 Dispute Resolution:
+    • Any disputes arising from these Terms will be resolved through arbitration in accordance with the rules of the relevant arbitration organization in Uzbekistan.
+
+11. Changes to Terms
+We reserve the right to modify these Terms at any time. Users will be notified of significant changes.
+
+12. Contact Information
+For questions or concerns about these Terms, contact us at [support@cryptonest.com].</property>
+                        <attributes>
+                          <attribute name="font-desc" value="Poppins 12"/>
+                        </attributes>
+                      </object>
+                    </child>
+                  </object>
+                </child>
+              </object>
+              <packing>
+                <property name="expand">False</property>
+                <property name="fill">True</property>
+                <property name="position">0</property>
+              </packing>
+            </child>
+          </object>
+        </child>
+        <child type="label_item">
           <placeholder/>
         </child>
       </object>
