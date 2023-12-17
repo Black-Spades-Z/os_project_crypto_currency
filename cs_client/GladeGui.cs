@@ -12,6 +12,7 @@ using static UserOffer;
 using static Wallet;
 using static MinerUtil;
 using static CustomAlertWindow;
+using static GetCPUInformation;
 
 
 namespace GladeFunctions
@@ -220,6 +221,7 @@ namespace GladeFunctions
         private Window miner_window;
 
         private bool turnedOn = false;
+        private TextView cpu_text_view_miner_window;
 
         private Button dashboard_button_miner_window;
         private Button p2p_button_miner_window;
@@ -774,6 +776,8 @@ namespace GladeFunctions
 
 
             // Window miner
+
+            cpu_text_view_miner_window = (TextView)builder.GetObject("cpu_text_view_miner_window");
 
             dashboard_button_miner_window = (Button)builder.GetObject("dashboard_button_miner_window");
             p2p_button_miner_window = (Button)builder.GetObject("p2p_button_miner_window");
@@ -2957,16 +2961,6 @@ namespace GladeFunctions
             login_window2.ShowAll();
         }
 
-            //
-            //
-            //
-            // // Icon Image
-            //
-            //
-            //
-            //
-            //
-
 
 
 // Transactions Window
@@ -3745,6 +3739,7 @@ namespace GladeFunctions
     private void miner_button_main_window_clicked (object sender, EventArgs e){
         main_window.Hide();
         miner_window.Show();
+        GetCPUInfo(cpu_text_view_miner_window);
 
     }
     private void settings_button_main_window_clicked (object sender, EventArgs e){
@@ -4107,6 +4102,8 @@ namespace GladeFunctions
         p2p_window2.Hide();
         p2p_window1.ShowAll();
     }
+
+
 
 
 // Main Functions
