@@ -449,6 +449,26 @@ namespace GladeFunctions
 
         }
 
+        private void buy_offer_p2p_window(string fromAddress,decimal cashValue,decimal cryptoValue, string cryptoCurrencyName)
+        {
+            client = getClient();
+
+
+
+
+            // Create a Transaction object and serialize it
+            Transaction transaction = setTransaction(fromAddress,accountDetails.WalletAddress, cashValue, cryptoValue, cryptoCurrencyName);
+            transaction.Purpose = "Publish";
+
+            string serializedTransaction = transaction.Serialize();
+
+            // Send the serialized Transaction object to C client
+            SendMessage(client.GetStream(), serializedTransaction);
+
+            // Wait for a response from the server
+            WaitForResponse(client.GetStream());
+        }
+
         private void requestUserPortfolio(){
 
             client = getClient();
@@ -3216,11 +3236,12 @@ namespace GladeFunctions
         innerGrid.Attach(cashValueFrame, 2, 0, 1, 1);
 
 
-        // DateTime Label
+        string addressWallet = (string)(userOffersList[index].FromAddress);
+        string shortAddress = new string(addressWallet.Take(10).ToArray());
 
-        DateTime userOfferDateTime = userOffersList[index].DateTime;
 
-        Label currencyDateTimeLabel = new Label($"{userOfferDateTime}");
+
+        Label currencyDateTimeLabel = new Label($"{shortAddress}..");
         currencyDateTimeLabel.Name = $"CurrencyDateTime_{index}";
         currencyDateTimeLabel.Visible = true;
         currencyDateTimeLabel.CanFocus = false;
@@ -3258,7 +3279,7 @@ namespace GladeFunctions
         innerGrid.Attach(echangeFrame, 4, 0, 1, 1);
 
         // Connect button click events for main_window
-        //buyButton.Clicked += (sender, args) => buy_offer_button_p2p_window_clicked(currencyName[index], currencyPrice[index]);
+        buyButton.Clicked += (sender, args) => buy_offer_p2p_window(addressWallet,userOffersList[index].CashValue, userOffersList[index].CryptoValue, userOffersList[index].CryptocurrencyName);
 
 
 
@@ -3648,7 +3669,6 @@ namespace GladeFunctions
     private void p2p_button_main_window_clicked(object sender, EventArgs e){
         main_window.Hide();
         p2p_window1.ShowAll();
-        publishUserOffer();
         requestUserOfferList();
         deleteChildren(p2p_list_box);
         FillP2PWindow();
