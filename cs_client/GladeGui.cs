@@ -866,6 +866,8 @@ namespace GladeFunctions
 
             sell_button_p2p_window2.Clicked += sell_button_p2p_window2_clicked;
             buy_button_p2p_window2.Clicked += buy_button_p2p_window2_clicked;
+            price_entry_p2p_window2.Changed += price_entry_p2p_window2_changed;
+            limit_entry_p2p_window2.Changed += limit_entry_p2p_window2_changed;
 
             sell_offer_button_p2p_window2.Clicked += sell_offer_button_p2p_window2_clicked;
             dashboard_button_p2p_window2.Clicked += dashboard_button_p2p_window2_clicked;
@@ -1458,7 +1460,7 @@ namespace GladeFunctions
 
     private string FilterNonInteger(string input)
     {
-        string filtered = string.Concat(input.Where(char.IsDigit));
+        string filtered = string.Concat(input.Where(c => char.IsDigit(c) || char.IsPunctuation(c) && c != '.'));
         return filtered;
     }
 
@@ -1486,6 +1488,19 @@ namespace GladeFunctions
         }
     }
 
+    private void price_entry_p2p_window2_changed(object sender, EventArgs args){
+        string cashEntry = price_entry_p2p_window2.Text;
+        string cashEntryFiltered = FilterNonInteger(cashEntry);
+        price_entry_p2p_window2.Text = cashEntryFiltered;
+
+
+    }
+    private void limit_entry_p2p_window2_changed(object sender, EventArgs args){
+        string cryptoEntry = limit_entry_p2p_window2.Text;
+        string cryptoEntryFiltered = FilterNonInteger(cryptoEntry);
+        limit_entry_p2p_window2.Text = cryptoEntryFiltered;
+    }
+
     private void sell_offer_button_p2p_window2_clicked(object sender, EventArgs e){
 
         TreeIter iter;
@@ -1500,24 +1515,9 @@ namespace GladeFunctions
 
         string cryptoCurrencyName = index >= 0 ? comboBoxValue.Substring(0, index) : comboBoxValue;
 
-        string cashEntry = price_entry_p2p_window2.Text;
-        string cashEntryFiltered = FilterNonInteger(cashEntry);
-        price_entry_p2p_window2.Text = cashEntryFiltered;
 
-        // Update the label or perform any computation with the filtered integer
-        if (decimal.TryParse(cashEntryFiltered, out decimal intValue)){
-            decimal cashValue = intValue;
-        }
-
-        string cryptoEntry = limit_entry_p2p_window2.Text;
-        string cryptoEntryFiltered = FilterNonInteger(cryptoEntry);
-        limit_entry_p2p_window2.Text = cryptoEntryFiltered;
-
-        // Update the label or perform any computation with the filtered integer
-        if (decimal.TryParse(cryptoEntryFiltered, out decimal decimalValue)){
-            decimal cryptoValue = decimalValue;
-        }
-
+        decimal cashValue = decimal.Parse(price_entry_p2p_window2.Text);
+        decimal cryptoValue = decimal.Parse(limit_entry_p2p_window2.Text);
         publishUserOffer(cashValue, cryptoValue,cryptoCurrencyName);
     }
 
