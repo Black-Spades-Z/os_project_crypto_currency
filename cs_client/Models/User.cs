@@ -1,4 +1,6 @@
 using Newtonsoft.Json;
+using System.Net.Sockets;
+using System.Text;
 using System.ComponentModel.DataAnnotations.Schema;
 
 public class User
@@ -129,6 +131,31 @@ public class User
             PasswordHash = loginPassword,
         };
     }
+
+    public static List<User> WaitForUserList(NetworkStream stream)
+	{
+	    try
+	    {
+		byte[] buffer = new byte[32768];
+		int bytesRead = stream.Read(buffer, 0, buffer.Length);
+
+		if (bytesRead <= 0)
+		{
+		    Console.WriteLine("Connection closed by server.");
+		    Environment.Exit(0); // Exit the client if the server closes the connection
+		}
+
+		string response = Encoding.ASCII.GetString(buffer, 0, bytesRead);
+		List<User> usersList = JsonConvert.DeserializeObject<List<User>>(response);
+		Console.WriteLine(usersList.Count);
+		return usersList;
+	    }
+	    catch (Exception e)
+	    {
+		Console.WriteLine($"Error in waiting for response: {e}");
+	    }
+	    return null;
+	}
 
 
 }

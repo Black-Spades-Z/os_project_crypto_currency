@@ -1,7 +1,9 @@
 ﻿using System;
 using System.Linq;
+using System.Text;
 using System.Net.Sockets;
 using System.Diagnostics;
+using System.Threading;
 using Gtk;
 using static CSharpClient;
 using static Transaction;
@@ -13,10 +15,13 @@ using static Wallet;
 using static MinerUtil;
 using static CustomAlertWindow;
 using static GetCPUInformation;
+using static Block;
 
+using static ServerAssetsWindow;
+using static TransactionsWindow;
+using static P2PWindow;
+using static UserWindow;
 
-namespace GladeFunctions
-{
 
 
     public class CCTPSApp
@@ -24,7 +29,8 @@ namespace GladeFunctions
 
         // Socket variables
 
-        static TcpClient client = null;
+        public static TcpClient client = null;
+        public static NetworkStream _stream;
 
 
         //Global variables
@@ -61,8 +67,16 @@ namespace GladeFunctions
         private string temporaryCryptoName;
         private float temporaryCryptoPrice;
 
+        // List of Window
+
+        private List<Window> allWindows = new List<Window>();
+
+        // Admin
+        public static Window Logout_window;
 
         // Main Window
+        public static Builder builder = new ();
+
         private bool isAscendingOrderPrice = true; // Flag to track sorting order
         private bool isAscendingOrderRank = true; // Flag to track sorting order
         private bool isAscendingOrderVolume = true; // Flag to track sorting order
@@ -237,7 +251,7 @@ namespace GladeFunctions
 
         private Window settings_window;
 
-        private Label username_settings_window;
+
         private Label email_settings_window;
         private Label phone_number_settings_window;
 
@@ -270,6 +284,7 @@ namespace GladeFunctions
 
         private Button exit_button_logout_window;
         private Button cancel_button_logout_window;
+
 
 
         // Window p2p_buy_window
@@ -313,10 +328,15 @@ namespace GladeFunctions
         private Window policy_window;
 
 
+        // Usernames
 
-
-
-
+        private Label username_p2p_1_window;
+        private Label username_p2p_2_window;
+        private Label username_bar_portfolio_window;
+        private Label username_bar_transaction_window;
+        private Label username_bar_miner_window;
+        private Label username_bar_settings_window;
+        private Label username_settings_window;
         // ServerSocket functions
 
         private void startServerAndListenToIt(){
@@ -336,6 +356,34 @@ namespace GladeFunctions
             clientThread.Start();
         }
 
+        public static void SendMessage(NetworkStream stream, string message)
+        {
+            byte[] data = Encoding.ASCII.GetBytes(message);
+            stream.Write(data, 0, data.Length);
+            Console.WriteLine($"Sent to C client: {message}");
+        }
+        public static void WaitForResponse(NetworkStream stream)
+    {
+        try
+        {
+            byte[] buffer = new byte[16384];
+            int bytesRead = stream.Read(buffer, 0, buffer.Length);
+
+            if (bytesRead <= 0)
+            {
+                Console.WriteLine("Connection closed by server.");
+                Environment.Exit(0); // Exit the client if the server closes the connection
+            }
+
+            string response = Encoding.ASCII.GetString(buffer, 0, bytesRead);
+            Console.WriteLine($"Response from server: {response}");
+        }
+        catch (Exception e)
+        {
+            Console.WriteLine($"Error in waiting for response: {e}");
+        }
+    }
+
         private void updateWallet(){
             client = getClient();
 
@@ -353,10 +401,22 @@ namespace GladeFunctions
 
         }
 
+        private void deleteUserOffer(int offerId){
+
+            UserOffer uOffer = new();
+
+            uOffer.OfferId = offerId;
+            uOffer.Purpose = "DeleteUserOffer";
+
+            string serializedUserOffer = uOffer.Serialize();
+            SendMessage(_stream, serializedUserOffer);
+            WaitForResponse(_stream);
+        }
 
         private int sendUserLoginDetails(){
 
             client = getClient();
+            _stream = client.GetStream();
 
 
 
@@ -407,6 +467,17 @@ namespace GladeFunctions
             login_window3.Hide();
             login_window1.ShowAll();
         }
+        private void requestBlockChain(){
+
+            client = getClient();
+
+            string RequestMessage = "GetBlockchain";
+            SendMessage(client.GetStream(), RequestMessage);
+            WaitForBLockchain(client.GetStream());
+
+
+
+        }
 
         private void requestShowServerAssets(){
 
@@ -431,6 +502,7 @@ namespace GladeFunctions
             }
 
             FillMarketValuesMainWindow();
+            requestBlockChain();
 
 
         }
@@ -457,11 +529,11 @@ namespace GladeFunctions
 
         }
 
-        private void buy_offer_p2p_window(string fromAddress,decimal cashValue,decimal cryptoValue, string cryptoCurrencyName)
+        private void buy_offer_p2p_window(string fromAddress,decimal cashValue,decimal cryptoValue, string cryptoCurrencyName, int offerId)
         {
             client = getClient();
 
-
+            deleteUserOffer(offerId);
 
 
             // Create a Transaction object and serialize it
@@ -495,6 +567,7 @@ namespace GladeFunctions
             accountPortfolio = WaitForAccountPortfolio(client.GetStream());
             FillPortfolioBoxMainWindow();
             FillPortfolioWindow();
+             requestBlockChain();
 
         }
 
@@ -518,6 +591,7 @@ namespace GladeFunctions
 
             FillTransactionWindow();
             SortFramesByDate();
+             requestBlockChain();
 
         }
 
@@ -546,6 +620,7 @@ namespace GladeFunctions
 
             userOffersList = WaitForUserOffers(client.GetStream());
             FillP2PWindow();
+             requestBlockChain();
 
         }
 
@@ -597,7 +672,6 @@ namespace GladeFunctions
 
 
             Application.Init();
-            Builder builder = new Builder();
             builder.AddFromFile("GUI/Glade/CCTPS.glade");
 
 
@@ -640,6 +714,14 @@ namespace GladeFunctions
             policy_window = (Window)builder.GetObject("policy_window");
 
 
+            //lABELS
+            username_p2p_1_window = (Label)builder.GetObject("username_p2p_1_window");
+            username_p2p_2_window = (Label)builder.GetObject("username_p2p_2_window");
+            username_bar_portfolio_window = (Label)builder.GetObject("username_bar_portfolio_window");
+            username_bar_transaction_window = (Label)builder.GetObject("username_bar_transaction_window");
+            username_bar_miner_window = (Label)builder.GetObject("username_bar_miner_window");
+            username_bar_settings_window = (Label)builder.GetObject("username_bar_settings_window");
+            username_settings_window = (Label)builder.GetObject("username_settings_window");
 
             // Retrieve objects from Glade for main_window
             card = (Frame)builder.GetObject("card");
@@ -828,6 +910,11 @@ namespace GladeFunctions
             card_number_entry_withdraw_window = (Entry)builder.GetObject("card_number_entry_withdraw_window");
             withdraw_button_withdraw_window = (Button)builder.GetObject("withdraw_button_withdraw_window");
 
+            // Window Logout
+
+            exit_button_logout_window = (Button)builder.GetObject("exit_button_logout_window");
+            cancel_button_logout_window = (Button)builder.GetObject("cancel_button_logout_window");
+
 
 
             // Window main
@@ -958,6 +1045,11 @@ namespace GladeFunctions
             cancel_button_withdraw_window.Clicked += cancel_button_withdraw_window_clicked;
             withdraw_button_withdraw_window.Clicked += withdraw_button_withdraw_window_clicked;
             withdraw_entry_withdraw_window.Changed += withdraw_entry_withdraw_window_changed;
+
+            // Window Logout
+
+            exit_button_logout_window.Clicked += exit_button_logout_window_clicked;
+            cancel_button_logout_window.Clicked += cancel_button_logout_window_clicked;
 
 
 
@@ -1354,6 +1446,26 @@ namespace GladeFunctions
             settings_window.DeleteEvent += delegate { Application.Quit(); };
             help_window.DeleteEvent += delegate { Application.Quit(); };
 
+
+            allWindows.Add(main_window);
+            allWindows.Add(login_window1);
+            allWindows.Add(login_window2);
+            allWindows.Add(login_window3);
+            allWindows.Add(p2p_window1);
+            allWindows.Add(p2p_window2);
+            allWindows.Add(portfolio_window);
+            allWindows.Add(transactions_window);
+            allWindows.Add(miner_window);
+            allWindows.Add(settings_window);
+            allWindows.Add(help_window);
+            allWindows.Add(deposit_window);
+            allWindows.Add(withdraw_window);
+            allWindows.Add(logout_window);
+
+
+
+
+
             login_window1.ShowAll();
 
 
@@ -1438,6 +1550,7 @@ namespace GladeFunctions
         cryptoCurrencyName = temporaryCryptoName;
 
         buyFromServer();
+
 
         p2p_buy_window.Hide();
         buy_entry_p2p_buy_window.Text = "";
@@ -1573,6 +1686,13 @@ namespace GladeFunctions
         user_email_card_main_window.Text = $"{user.Email} ";
         username_bar_main_window.Text = $"{user.Email}";
         user_address_card_main_window.Text = $"{user_address_card}";
+        username_p2p_1_window.Text = $"{user.Email}";
+        username_p2p_2_window.Text = $"{user.Email}";
+        username_bar_portfolio_window.Text = $"{user.Email}";
+        username_bar_transaction_window.Text = $"{user.Email}";
+        username_bar_miner_window.Text = $"{user.Email}";
+        username_bar_settings_window.Text = $"{user.Email}";
+        username_settings_window.Text = $"{user.Email}";
     }
 
 
@@ -1789,7 +1909,7 @@ namespace GladeFunctions
 
 
         var userDataDictionary = accountPortfolio.GetUserPortfolioAsDictionary();
-        var sortedByValue = userDataDictionary.OrderBy(x => x.Value);
+        var sortedByValue = userDataDictionary.OrderByDescending(x => x.Value);
 
 
         List<KeyValuePair<string, decimal>> sortedList = sortedByValue.ToList();
@@ -2742,6 +2862,13 @@ namespace GladeFunctions
                 if (access == 0){
                     showErrorAllert("Incorrect Email or Password");
                     return;
+                }else if ( access == 2){
+
+                    Logout_window = (Window)builder.GetObject("Logout_window");
+
+                    login_window1.Hide();
+                    Admin_main_window.ShowAll();
+                    return;
                 }
                 login_window1.Hide();
 
@@ -3330,7 +3457,7 @@ namespace GladeFunctions
         innerGrid.Attach(echangeFrame, 4, 0, 1, 1);
 
         // Connect button click events for main_window
-        buyButton.Clicked += (sender, args) => buy_offer_p2p_window(addressWallet,userOffersList[index].CashValue, userOffersList[index].CryptoValue, userOffersList[index].CryptocurrencyName);
+        buyButton.Clicked += (sender, args) => buy_offer_p2p_window(addressWallet,userOffersList[index].CashValue, userOffersList[index].CryptoValue, userOffersList[index].CryptocurrencyName, userOffersList[index].OfferId);
 
 
 
@@ -3360,7 +3487,7 @@ namespace GladeFunctions
 
 
         var userDataDictionary = accountPortfolio.GetUserPortfolioAsDictionary();
-        var sortedByValue = userDataDictionary.OrderBy(x => x.Value);
+        var sortedByValue = userDataDictionary.OrderByDescending(x => x.Value);
 
 
         List<KeyValuePair<string, decimal>> sortedList = sortedByValue.ToList();
@@ -3596,7 +3723,7 @@ namespace GladeFunctions
 
                         // Create a Transaction object and serialize it
                         userTransaction.Purpose = "Valid";
-                        userTransaction.MinerId = 11; // this userId
+                        userTransaction.MinerId = user.UserId; // this userId
                         string validatedSerializedTransaction = userTransaction.Serialize();
 
                         // Send the serialized Transaction object to C client
@@ -3711,6 +3838,17 @@ namespace GladeFunctions
 
 // Navigation bar functions
 
+    private void exit_button_logout_window_clicked(object sender, EventArgs e ){
+        foreach (var window in allWindows){
+            window.Dispose();
+        }
+        Application.Quit();
+        client.Close();
+    }
+    private void cancel_button_logout_window_clicked(object sender, EventArgs e ){
+        logout_window.Hide();
+    }
+
 // Nav Bar main
 
     private void dashboard_button_main_window_clicked(object sender, EventArgs e){
@@ -3768,6 +3906,9 @@ namespace GladeFunctions
     private void dashboard_button_portfolio_window_clicked(object sender, EventArgs e){
         portfolio_window.Hide();
         main_window.ShowAll();
+        deleteChildren(market_values_box_main_window);
+        requestShowServerAssets();
+
 
     }
     private void p2p_button_portfolio_window_clicked(object sender, EventArgs e){
@@ -3775,12 +3916,12 @@ namespace GladeFunctions
         p2p_window1.ShowAll();
         deleteChildren(p2p_list_box);
         requestUserOfferList();
-        FillP2PWindow();
+
 
     }
     private void portfolio_button_portfolio_window_clicked (object sender, EventArgs e){
         deleteChildren(portfolio_maxi_box);
-        FillPortfolioWindow();
+        requestUserPortfolio();
 
     }
     private void transactions_button_portfolio_window_clicked (object sender, EventArgs e){
@@ -3793,6 +3934,7 @@ namespace GladeFunctions
     private void miner_button_portfolio_window_clicked (object sender, EventArgs e){
         portfolio_window.Hide();
         miner_window.Show();
+        GetCPUInfo(cpu_text_view_miner_window);
 
     }
     private void settings_button_portfolio_window_clicked (object sender, EventArgs e){
@@ -3815,17 +3957,19 @@ namespace GladeFunctions
     private void dashboard_button_p2p_window1_clicked(object sender, EventArgs e){
         p2p_window1.Hide();
         main_window.ShowAll();
-
+        deleteChildren(market_values_box_main_window);
+        requestShowServerAssets();
     }
     private void p2p_button_p2p_window1_clicked(object sender, EventArgs e){
-
+        deleteChildren(p2p_list_box);
+        requestUserOfferList();
 
     }
     private void portfolio_button_p2p_window1_clicked (object sender, EventArgs e){
         p2p_window1.Hide();
         portfolio_window.ShowAll();
         deleteChildren(portfolio_maxi_box);
-        FillPortfolioWindow();
+        requestUserPortfolio();
 
     }
     private void transactions_button_p2p_window1_clicked (object sender, EventArgs e){
@@ -3838,6 +3982,7 @@ namespace GladeFunctions
     private void miner_button_p2p_window1_clicked (object sender, EventArgs e){
         p2p_window1.Hide();
         miner_window.Show();
+        GetCPUInfo(cpu_text_view_miner_window);
 
     }
     private void settings_button_p2p_window1_clicked (object sender, EventArgs e){
@@ -3860,17 +4005,21 @@ namespace GladeFunctions
     private void dashboard_button_p2p_window2_clicked(object sender, EventArgs e){
         p2p_window2.Hide();
         main_window.ShowAll();
+        deleteChildren(market_values_box_main_window);
+        requestShowServerAssets();
+
 
     }
     private void p2p_button_p2p_window2_clicked(object sender, EventArgs e){
-
+        deleteChildren(p2p_list_box);
+        requestUserOfferList();
 
     }
     private void portfolio_button_p2p_window2_clicked (object sender, EventArgs e){
         p2p_window2.Hide();
         portfolio_window.ShowAll();
         deleteChildren(portfolio_maxi_box);
-        FillPortfolioWindow();
+        requestUserPortfolio();
 
     }
     private void transactions_button_p2p_window2_clicked (object sender, EventArgs e){
@@ -3883,6 +4032,8 @@ namespace GladeFunctions
     private void miner_button_p2p_window2_clicked (object sender, EventArgs e){
         p2p_window2.Hide();
         miner_window.Show();
+        GetCPUInfo(cpu_text_view_miner_window);
+
 
     }
     private void settings_button_p2p_window2_clicked (object sender, EventArgs e){
@@ -3905,21 +4056,24 @@ namespace GladeFunctions
     private void dashboard_button_transaction_window_clicked(object sender, EventArgs e){
         transactions_window.Hide();
         main_window.ShowAll();
+        deleteChildren(market_values_box_main_window);
+        requestShowServerAssets();
 
     }
     private void p2p_button_transaction_window_clicked(object sender, EventArgs e){
         transactions_window.Hide();
         p2p_window1.ShowAll();
-        requestUserOfferList();
         deleteChildren(p2p_list_box);
-        FillP2PWindow();
+        requestUserOfferList();
+
+
 
     }
     private void portfolio_button_transaction_window_clicked (object sender, EventArgs e){
         transactions_window.Hide();
         portfolio_window.ShowAll();
         deleteChildren(portfolio_maxi_box);
-        FillPortfolioWindow();
+        requestUserPortfolio();
 
     }
     private void transactions_button_transaction_window_clicked (object sender, EventArgs e){
@@ -3929,6 +4083,8 @@ namespace GladeFunctions
     private void miner_button_transaction_window_clicked (object sender, EventArgs e){
         transactions_window.Hide();
         miner_window.Show();
+        GetCPUInfo(cpu_text_view_miner_window);
+
 
     }
     private void settings_button_transaction_window_clicked (object sender, EventArgs e){
@@ -3951,21 +4107,23 @@ namespace GladeFunctions
     private void dashboard_button_miner_window_clicked(object sender, EventArgs e){
         miner_window.Hide();
         main_window.ShowAll();
+        deleteChildren(market_values_box_main_window);
+        requestShowServerAssets();
 
     }
     private void p2p_button_miner_window_clicked(object sender, EventArgs e){
         miner_window.Hide();
         p2p_window1.ShowAll();
-        requestUserOfferList();
         deleteChildren(p2p_list_box);
-        FillP2PWindow();
+        requestUserOfferList();
+
 
     }
     private void portfolio_button_miner_window_clicked (object sender, EventArgs e){
         miner_window.Hide();
         portfolio_window.ShowAll();
         deleteChildren(portfolio_maxi_box);
-        FillPortfolioWindow();
+        requestUserPortfolio();
 
     }
     private void transactions_button_miner_window_clicked (object sender, EventArgs e){
@@ -3978,6 +4136,8 @@ namespace GladeFunctions
     private void miner_button_miner_window_clicked (object sender, EventArgs e){
         miner_window.Hide();
         miner_window.Show();
+        GetCPUInfo(cpu_text_view_miner_window);
+
 
     }
     private void settings_button_miner_window_clicked (object sender, EventArgs e){
@@ -4000,20 +4160,22 @@ namespace GladeFunctions
     private void dashboard_button_settings_window_clicked(object sender, EventArgs e){
         settings_window.Hide();
         main_window.ShowAll();
+        deleteChildren(market_values_box_main_window);
+        requestShowServerAssets();
 
     }
     private void p2p_button_settings_window_clicked(object sender, EventArgs e){
         settings_window.Hide();
         p2p_window1.ShowAll();
+        deleteChildren(p2p_list_box);
         requestUserOfferList();
-        FillP2PWindow();
 
     }
     private void portfolio_button_settings_window_clicked (object sender, EventArgs e){
         settings_window.Hide();
         portfolio_window.ShowAll();
         deleteChildren(portfolio_maxi_box);
-        FillPortfolioWindow();
+        requestUserPortfolio();
 
     }
     private void transactions_button_settings_window_clicked (object sender, EventArgs e){
@@ -4026,6 +4188,7 @@ namespace GladeFunctions
     private void miner_button_settings_window_clicked (object sender, EventArgs e){
         settings_window.Hide();
         miner_window.Show();
+        GetCPUInfo(cpu_text_view_miner_window);
 
     }
     private void settings_button_settings_window_clicked (object sender, EventArgs e){
@@ -4050,21 +4213,22 @@ namespace GladeFunctions
     private void dashboard_button_help_window_clicked(object sender, EventArgs e){
         help_window.Hide();
         main_window.ShowAll();
-
+        deleteChildren(market_values_box_main_window);
+        requestShowServerAssets();
     }
     private void p2p_button_help_window_clicked(object sender, EventArgs e){
         help_window.Hide();
         p2p_window1.ShowAll();
+        deleteChildren(p2p_list_box);
         requestUserOfferList();
-        FillP2PWindow();
+
 
     }
     private void portfolio_button_help_window_clicked (object sender, EventArgs e){
         help_window.Hide();
         portfolio_window.ShowAll();
         deleteChildren(portfolio_maxi_box);
-        FillPortfolioWindow();
-
+        requestUserPortfolio();
     }
     private void transactions_button_help_window_clicked (object sender, EventArgs e){
         help_window.Hide();
@@ -4076,15 +4240,16 @@ namespace GladeFunctions
     private void miner_button_help_window_clicked (object sender, EventArgs e){
         help_window.Hide();
         miner_window.Show();
-
+        GetCPUInfo(cpu_text_view_miner_window);
     }
     private void settings_button_help_window_clicked (object sender, EventArgs e){
         help_window.Hide();
         settings_window.ShowAll();
-
+        GetCPUInfo(cpu_text_view_miner_window);
     }
     private void help_button_help_window_clicked (object sender, EventArgs e){
-
+        main_window.Hide();
+        help_window.ShowAll();
 
     }
     private void logout_button_help_window_clicked (object sender, EventArgs e){
@@ -4119,4 +4284,3 @@ namespace GladeFunctions
         }
 
     }
-}

@@ -56,12 +56,6 @@ public class CSharpClient
         Console.WriteLine($"Connected to C client at {ipAddress}:{port}");
     }
 
-    public static void SendMessage(NetworkStream stream, string message)
-    {
-        byte[] data = Encoding.ASCII.GetBytes(message);
-        stream.Write(data, 0, data.Length);
-        Console.WriteLine($"Sent to C client: {message}");
-    }
 
     public static void ListenToCServer()
     {
@@ -369,27 +363,7 @@ public class CSharpClient
     }
 
 
-    public static void WaitForResponse(NetworkStream stream)
-    {
-        try
-        {
-            byte[] buffer = new byte[16384];
-            int bytesRead = stream.Read(buffer, 0, buffer.Length);
 
-            if (bytesRead <= 0)
-            {
-                Console.WriteLine("Connection closed by server.");
-                Environment.Exit(0); // Exit the client if the server closes the connection
-            }
-
-            string response = Encoding.ASCII.GetString(buffer, 0, bytesRead);
-            Console.WriteLine($"Response from server: {response}");
-        }
-        catch (Exception e)
-        {
-            Console.WriteLine($"Error in waiting for response: {e}");
-        }
-    }
 
 
 

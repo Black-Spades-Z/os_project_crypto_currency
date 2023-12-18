@@ -45,6 +45,24 @@ public class Block
     {
         return JsonConvert.DeserializeObject<Block>(json);
     }
+    private static  void writeBlockChainJsonFile(string response){
+        string filePath = "User/blockChain.json"; // Replace with your file path
+
+        try
+        {
+            // Serialize object to JSON
+            string jsonString = JsonConvert.SerializeObject(response);
+
+            // Write JSON string to file
+            File.WriteAllText(filePath, jsonString);
+
+            Console.WriteLine("JSON data saved to file successfully.");
+        }
+        catch (Exception ex)
+        {
+            Console.WriteLine("Error saving JSON data to file: " + ex.Message);
+        }
+    }
     
     public static List<Block> WaitForBLockchain(NetworkStream stream)
 	{
@@ -60,6 +78,7 @@ public class Block
 		}
 
 		string response = Encoding.ASCII.GetString(buffer, 0, bytesRead);
+        writeBlockChainJsonFile(response);
 		List<Block> blockchain = JsonConvert.DeserializeObject<List<Block>>(response);
 		Console.WriteLine(blockchain.Count);
 		return blockchain;
