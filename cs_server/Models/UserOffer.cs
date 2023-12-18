@@ -18,8 +18,8 @@ public class UserOffer
     public int OfferId { get; set;  }
     
     public string FromAddress { get; set;  }
-    public int CryptoValue { get; set;  }
-    public int CashValue { get; set;  }
+    public decimal CryptoValue { get; set;  }
+    public decimal CashValue { get; set;  }
     public string CryptocurrencyName { get; set;  }
     public DateTime DateTime { get; set; }
     public bool Available { get; set; }
@@ -74,7 +74,32 @@ public class UserOffer
         return true;
     }
     
-        public static bool HandleReceivedUserOffer(string data, out string message)
+        public static bool HandleDeletionUserOffer(string data, out string message)
+	{
+	    // Deserialize the Transaction object
+	    UserOffer receivedUserOffer = JsonConvert.DeserializeObject<UserOffer>(data);
+	    
+	    
+	    using (var context = new AppDbContext()) 
+            {
+            	    var userOfferToRemove = context.UserOffers.FirstOrDefault(uf => uf.OfferId == receivedUserOffer.OfferId);
+		    if (userOfferToRemove != null)
+			{
+			    context.UserOffers.Remove(userOfferToRemove);
+			    context.SaveChanges();
+			    message = "Success";
+			}
+			else
+			{
+			    message = "No matching UserOffer found to remove.";
+			}
+	    }
+	    message = "Success";
+	    
+	    return true;
+	}
+	
+	public static bool HandleReceivedUserOffer(string data, out string message)
 	{
 	    // Deserialize the Transaction object
 	    UserOffer receivedUserOffer = JsonConvert.DeserializeObject<UserOffer>(data);

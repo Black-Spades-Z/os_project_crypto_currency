@@ -91,6 +91,91 @@ public class User
     	return true;
     }
     
+    public static bool HandleUpdateUser(string data, out string message)
+	{
+	    // Deserialize the User object
+	    User receivedUser = JsonConvert.DeserializeObject<User>(data);
+
+	    try
+	    {
+		using (var context = new AppDbContext())
+		{
+		    // Find the user to update
+		    var updateUser = context.Users
+		        .Where(user => user.UserId == receivedUser.UserId)
+		        .FirstOrDefault();
+
+		    if (updateUser != null)
+		    {
+		        // Update the properties with new values
+		        if(updateUser.Email != receivedUser.Email)
+		        {
+		        	updateUser.Email = receivedUser.Email;
+		        }
+		        else
+		        {
+		        	
+		        	updateUser.PasswordHash = HashPassword(receivedUser.PasswordHash);
+		        	Console.WriteLine(updateUser.PasswordHash);
+		        }
+		        
+		        
+
+		        // Save changes to the database
+		        context.SaveChanges();
+
+		        message = "Success";
+		    }
+		    else
+		    {
+		        message = "User not found for updating.";
+		    }
+		}
+	    }
+	    catch (Exception ex)
+	    {
+		message = $"Failure: {ex.Message}";
+		Console.WriteLine(ex);
+		return false;
+	    }
+
+	    return true;
+	}
+
+public static bool HandleDeleteUser(string data, out string message)
+	{
+	    // Deserialize the Transaction object
+	    User receivedUser = JsonConvert.DeserializeObject<User>(data);
+	    
+	    
+	    using (var context = new AppDbContext()) 
+            {
+            	    var user = context.Users.FirstOrDefault(uf => uf.UserId == receivedUser.UserId);
+            	    var userPort = context.AccPortfolio.FirstOrDefault(up => up.UserId == receivedUser.UserId);
+            	    var wallet = context.Wallets.FirstOrDefault(w => w.UserId == receivedUser.UserId);
+            	    
+            	    
+		    if (user != null)
+			{
+			    context.AccPortfolio.Remove(userPort);
+			    context.SaveChanges();
+			    context.Wallets.Remove(wallet);
+			    context.SaveChanges();
+			    context.Users.Remove(user);
+			    context.SaveChanges();
+			    message = "Success";
+			}
+			else
+			{
+			    message = "No matching UserOffer found to remove.";
+			}
+	    }
+	    message = "Success";
+	    
+	    return true;
+	}
+
+    
     public static bool HandleFullUserListRequest(string data, out string message)
 	{
 	    try

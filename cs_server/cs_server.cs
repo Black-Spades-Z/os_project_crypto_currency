@@ -64,7 +64,7 @@ class CSharpServer
 {
     try
     {
-        byte[] bytes = new byte[16384];
+        byte[] bytes = new byte[32768];
 
         while (true)
         {
@@ -160,6 +160,17 @@ class CSharpServer
         		}
         		break;
         		
+        	case string _ when data.Contains("\"ObjectType\":\"UserOffer\"") && data.Contains("\"Purpose\":\"DeleteUserOffer\"") :
+        		if (HandleDeletionUserOffer(data, out message))
+        		{
+        	    		SendMessageToClient(stream, message);
+        		}
+        		else
+        		{
+            			SendMessageToClient(stream, message);
+        		}
+        		break;
+        		
         	case string _ when data.Contains("GetUserOffers") :
         		if (HandleUserOffersRequest(data, out message))
         		{
@@ -184,6 +195,28 @@ class CSharpServer
         		
         	case string _ when data.Contains("\"ObjectType\":\"User\"") && data.Contains("\"Purpose\":\"MinerRegister\""):
         		if (HandleMiningUser(data, out message))
+        		{
+            			SendMessageToClient(stream, message);
+       	 		}	
+        		else
+        		{		
+            			SendMessageToClient(stream, message);
+        		}
+        	break;
+        	
+        	case string _ when data.Contains("\"ObjectType\":\"User\"") && data.Contains("\"Purpose\":\"UpdateUser\""):
+        		if (HandleUpdateUser(data, out message))
+        		{
+            			SendMessageToClient(stream, message);
+       	 		}	
+        		else
+        		{		
+            			SendMessageToClient(stream, message);
+        		}
+        	break;
+        	
+        	case string _ when data.Contains("\"ObjectType\":\"User\"") && data.Contains("\"Purpose\":\"DeleteUser\""):
+        		if (HandleDeleteUser(data, out message))
         		{
             			SendMessageToClient(stream, message);
        	 		}	

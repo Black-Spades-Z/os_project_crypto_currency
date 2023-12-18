@@ -54,26 +54,37 @@ void receiveAndPrintIncomingDataOnSeparateThread(struct AcceptedSocket *pSocket)
 
 
 void receiveAndPrintIncomingData(int socketFD) {
-     char buffer[16384];
+    char buffer[32768];
+    struct sockaddr_in clientAddress;
+    socklen_t clientAddressSize = sizeof(struct sockaddr_in);
 
-    while (true)
-    {
-        ssize_t  amountReceived = recv(socketFD,buffer,16384,0);
+    // Get client address information
+    getpeername(socketFD, (struct sockaddr*)&clientAddress, &clientAddressSize);
 
-        if(amountReceived>0)
-        {
+    while (true) {
+        ssize_t amountReceived = recv(socketFD, buffer, 32768, 0);
+
+        if (amountReceived > 0) {
             buffer[amountReceived] = 0;
-            printf("%s\n",buffer);
 
-            sendResponseToTheClient(buffer,socketFD);
+            // Print client IP and port
+            char clientIP[INET_ADDRSTRLEN];
+            inet_ntop(AF_INET, &(clientAddress.sin_addr), clientIP, INET_ADDRSTRLEN);
+            printf("Received data from %s:%d\n", clientIP, ntohs(clientAddress.sin_port));
+            printf("Data: %s\n", buffer);
+
+            sendResponseToTheClient(buffer, socketFD);
         }
 
-        if(amountReceived==0)
+        if (amountReceived == 0)
             break;
     }
 
     close(socketFD);
-}void sendResponseToTheClient(char *buffer, int socketFD) {
+}
+
+
+void sendResponseToTheClient(char *buffer, int socketFD) {
     int cSharpServerSocket = socket(AF_INET, SOCK_STREAM, 0);
     if (cSharpServerSocket < 0) {
         perror("Error in socket creation");
@@ -94,7 +105,7 @@ void receiveAndPrintIncomingData(int socketFD) {
     send(cSharpServerSocket, buffer, strlen(buffer), 0);
 
     // Receive response from the C# server
-    ssize_t bytesRead = recv(cSharpServerSocket, buffer, 16384, 0);
+    ssize_t bytesRead = recv(cSharpServerSocket, buffer, 32768, 0);
     if (bytesRead <= 0) {
         if (bytesRead == 0) {
             printf("Connection closed by C# server.\n");
