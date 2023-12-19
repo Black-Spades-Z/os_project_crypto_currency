@@ -2,6 +2,7 @@ using System;
 using System.Threading;
 using Gtk;
 
+
 public class CustomAlertWindow : Window
 {
     private Timer _timer;
@@ -12,10 +13,16 @@ public class CustomAlertWindow : Window
 
         // Load CSS provider
         var cssProvider = new CssProvider();
-        cssProvider.LoadFromData(@"#customAlertWindow { color: #DC143C; border-radius: 10px; background-color: black;} .alertLabel {font-size: 16px; border-radius: 10px; font-weight: bold; color: #333333; /* Change label text color */} ");
+        cssProvider.LoadFromData(@"#customAlertWindow { color: #FF0000; border-radius: 10px; background-color: rgba(66, 76, 85, 1);box-shadow : none; font-size:14px; font-weight: bold; font-family: Poppins;} .label {border-radius: 10px;background-color: rgba(66, 76, 85, 0);}");
+         // Set RGBA color for transparency
 
         // Apply CSS to the window
         StyleContext.AddProvider(cssProvider, StyleProviderPriority.Application);
+
+         // Set the opacity of the window
+        Gdk.RGBA rgba = new Gdk.RGBA();
+        rgba.Parse("rgba(66, 76, 85, 0.8)"); // Adjust the alpha (transparency) value here
+        this.OverrideBackgroundColor(StateFlags.Normal, rgba);
 
 
         // Set the position of the window
@@ -24,12 +31,17 @@ public class CustomAlertWindow : Window
         // Create a label to display the message
         Label label = new Label(message);
         label.Name = "alertLabel";
+        var labelcss = label.StyleContext;
+        labelcss.AddProvider(cssProvider, Gtk.StyleProviderPriority.Application);
+        labelcss.AddClass("label");
+
 
         // Add the label to the window
         Add(label);
 
         // Set window properties
         SetDefaultSize(100, 50);
+
         SetPosition(WindowPosition.Center);
 
         // Load CSS provider
@@ -62,7 +74,12 @@ public class CustomAlertWindow : Window
         // Create and show the window in a separate thread
         Thread alertThread = new Thread(() =>
         {
-            CustomAlertWindow alertWindow = new CustomAlertWindow(message, 900, 900, 3000);
+            CustomAlertWindow alertWindow = new CustomAlertWindow(message, 1247, 900, 3000);
+
+
+
+
+
             alertWindow.Show();
         });
         alertThread.Start();

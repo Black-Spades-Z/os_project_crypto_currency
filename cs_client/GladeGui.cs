@@ -551,6 +551,7 @@ using static UserWindow;
 
             // Wait for a response from the server
             WaitForResponse(client.GetStream());
+            requestUserOfferList();
         }
 
         private void requestUserPortfolio(){
@@ -624,7 +625,7 @@ using static UserWindow;
 
             userOffersList = WaitForUserOffers(client.GetStream());
             FillP2PWindow();
-             requestBlockChain();
+            requestBlockChain();
 
         }
 
@@ -3376,6 +3377,8 @@ using static UserWindow;
 
     private void FillTransactionWindow(){
 
+        deleteChildren(transactions_box);
+
         for (int i = 0; i < userTransactionsList.Count; i++){
 
             AddFrameToTransactionWindow(i);
@@ -3571,6 +3574,7 @@ using static UserWindow;
 // P2P Window
 
     private void FillP2PWindow(){
+        deleteChildren(p2p_list_box);
 
 
         for (int i = 0; i < userOffersList.Count; i++){
@@ -4198,6 +4202,7 @@ using static UserWindow;
         main_window.ShowAll();
         deleteChildren(market_values_box_main_window);
         sendUserLoginDetails();
+        fill_card_details();
 
 
     }
@@ -4249,6 +4254,7 @@ using static UserWindow;
         main_window.ShowAll();
         deleteChildren(market_values_box_main_window);
         sendUserLoginDetails();
+        fill_card_details();
     }
     private void p2p_button_p2p_window1_clicked(object sender, EventArgs e){
         deleteChildren(p2p_list_box);
@@ -4297,6 +4303,7 @@ using static UserWindow;
         main_window.ShowAll();
         deleteChildren(market_values_box_main_window);
         sendUserLoginDetails();
+        fill_card_details();
 
 
     }
@@ -4348,6 +4355,7 @@ using static UserWindow;
         main_window.ShowAll();
         deleteChildren(market_values_box_main_window);
         sendUserLoginDetails();
+        fill_card_details();
 
     }
     private void p2p_button_transaction_window_clicked(object sender, EventArgs e){
@@ -4399,6 +4407,7 @@ using static UserWindow;
         main_window.ShowAll();
         deleteChildren(market_values_box_main_window);
         sendUserLoginDetails();
+        fill_card_details();
 
     }
     private void p2p_button_miner_window_clicked(object sender, EventArgs e){
@@ -4452,6 +4461,7 @@ using static UserWindow;
         main_window.ShowAll();
         deleteChildren(market_values_box_main_window);
         sendUserLoginDetails();
+        fill_card_details();
 
     }
     private void p2p_button_settings_window_clicked(object sender, EventArgs e){
@@ -4505,6 +4515,7 @@ using static UserWindow;
         main_window.ShowAll();
         deleteChildren(market_values_box_main_window);
         sendUserLoginDetails();
+        fill_card_details();
     }
     private void p2p_button_help_window_clicked(object sender, EventArgs e){
         help_window.Hide();
@@ -4561,6 +4572,7 @@ using static UserWindow;
     private void buy_button_p2p_window2_clicked (object sender, EventArgs e){
         p2p_window2.Hide();
         p2p_window1.ShowAll();
+        requestUserOfferList();
     }
 
 
