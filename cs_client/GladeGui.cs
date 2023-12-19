@@ -330,6 +330,8 @@ using static UserWindow;
         private Window policy_window;
 
 
+
+
         // Usernames
 
         private Label username_p2p_1_window;
@@ -3145,7 +3147,7 @@ using static UserWindow;
                     return;
                 }else if ( access == 2){
 
-                    Logout_window = (Window)builder.GetObject("Logout_window");
+                    Logout_window = (Window)builder.GetObject("logout_window");
 
                     login_window1.Hide();
                     Admin_main_window.ShowAll();
@@ -3934,11 +3936,13 @@ using static UserWindow;
 
          if (turnedOn)
         {
+            Console.WriteLine("Finishing Mining");
             turnedOn = false; // Stop the mining loop
             // Additional logic to handle stopping the mining process
         }
         else
         {
+            Console.WriteLine("Starting. . . Mining");
             turnedOn = true; // Start the mining loop
             miningThread = new Thread(startMining);
             miningThread.Start();
@@ -3954,7 +3958,7 @@ using static UserWindow;
         var stream = client.GetStream();
 
         while(turnedOn){
-            Thread.Sleep(5);
+            Thread.Sleep(5000);
 
 
             string RequestMessage = "TransactionValidationStatusForMiner";

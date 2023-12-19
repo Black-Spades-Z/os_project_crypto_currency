@@ -74,7 +74,7 @@ public class CustomAlertWindow : Window
         // Create and show the window in a separate thread
         Thread alertThread = new Thread(() =>
         {
-            CustomAlertWindow alertWindow = new CustomAlertWindow(message, 1247, 900, 3000);
+            CustomAlertWindow alertWindow = new CustomAlertWindow(message, 1247, 960, 3000);
 
 
 

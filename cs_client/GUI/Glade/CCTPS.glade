@@ -1250,116 +1250,6 @@
       </object>
     </child>
   </object>
-  <object class="GtkWindow" id="Logout_window">
-    <property name="width-request">600</property>
-    <property name="height-request">200</property>
-    <property name="can-focus">False</property>
-    <property name="title" translatable="yes">Log-Out</property>
-    <child>
-      <object class="GtkFrame">
-        <property name="width-request">600</property>
-        <property name="height-request">200</property>
-        <property name="visible">True</property>
-        <property name="can-focus">False</property>
-        <property name="label-xalign">0</property>
-        <property name="shadow-type">in</property>
-        <child>
-          <object class="GtkAlignment">
-            <property name="visible">True</property>
-            <property name="can-focus">False</property>
-            <property name="left-padding">12</property>
-            <child>
-              <!-- n-columns=3 n-rows=2 -->
-              <object class="GtkGrid">
-                <property name="visible">True</property>
-                <property name="can-focus">False</property>
-                <property name="row-homogeneous">True</property>
-                <property name="column-homogeneous">True</property>
-                <child>
-                  <object class="GtkButton" id="cancel_button_p2p_buy_window1">
-                    <property name="width-request">15</property>
-                    <property name="height-request">15</property>
-                    <property name="visible">True</property>
-                    <property name="can-focus">True</property>
-                    <property name="receives-default">True</property>
-                    <property name="halign">end</property>
-                    <property name="valign">start</property>
-                    <property name="relief">none</property>
-                    <child>
-                      <object class="GtkImage">
-                        <property name="visible">True</property>
-                        <property name="can-focus">False</property>
-                        <property name="pixbuf">Close.png</property>
-                      </object>
-                    </child>
-                  </object>
-                  <packing>
-                    <property name="left-attach">2</property>
-                    <property name="top-attach">0</property>
-                  </packing>
-                </child>
-                <child>
-                  <object class="GtkButton" id="exit_button_logout_window1">
-                    <property name="label" translatable="yes">Exit</property>
-                    <property name="visible">True</property>
-                    <property name="can-focus">True</property>
-                    <property name="receives-default">True</property>
-                    <property name="valign">start</property>
-                    <property name="margin-top">30</property>
-                  </object>
-                  <packing>
-                    <property name="left-attach">1</property>
-                    <property name="top-attach">1</property>
-                  </packing>
-                </child>
-                <child>
-                  <object class="GtkLabel">
-                    <property name="visible">True</property>
-                    <property name="can-focus">False</property>
-                    <property name="valign">center</property>
-                    <property name="label" translatable="yes">Are you sure you want to exit?</property>
-                    <attributes>
-                      <attribute name="scale" value="1.25"/>
-                    </attributes>
-                  </object>
-                  <packing>
-                    <property name="left-attach">0</property>
-                    <property name="top-attach">0</property>
-                    <property name="width">3</property>
-                  </packing>
-                </child>
-                <child>
-                  <object class="GtkLabel">
-                    <property name="visible">True</property>
-                    <property name="can-focus">False</property>
-                    <property name="valign">end</property>
-                    <property name="label" translatable="yes">This action will close your account.</property>
-                    <attributes>
-                      <attribute name="scale" value="1.25"/>
-                    </attributes>
-                  </object>
-                  <packing>
-                    <property name="left-attach">0</property>
-                    <property name="top-attach">0</property>
-                    <property name="width">3</property>
-                  </packing>
-                </child>
-                <child>
-                  <placeholder/>
-                </child>
-                <child>
-                  <placeholder/>
-                </child>
-              </object>
-            </child>
-          </object>
-        </child>
-        <child type="label_item">
-          <placeholder/>
-        </child>
-      </object>
-    </child>
-  </object>
   <object class="GtkWindow" id="User_admin_window">
     <property name="width-request">1440</property>
     <property name="height-request">968</property>
@@ -4964,6 +4854,7 @@ Our support team is ready to help.</property>
     <property name="can-focus">False</property>
     <property name="resizable">False</property>
     <property name="destroy-with-parent">True</property>
+    <property name="decorated">False</property>
     <child>
       <object class="GtkFrame">
         <property name="visible">True</property>
