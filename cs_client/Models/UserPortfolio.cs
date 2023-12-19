@@ -90,7 +90,7 @@ public class UserPortfolio
 	{
 	    try
 	    {
-		byte[] buffer = new byte[16384];
+		byte[] buffer = new byte[65536];
 		int bytesRead = stream.Read(buffer, 0, buffer.Length);
 
 		if (bytesRead <= 0)

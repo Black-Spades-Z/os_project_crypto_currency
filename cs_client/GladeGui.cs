@@ -446,6 +446,8 @@ using static UserWindow;
             if (accountDetails is null){
                 return 0;
             }
+            requestShowServerAssets();
+            requestUserPortfolio();
             return 1;
         }
         private void sendUserRegisterDetails(){
@@ -569,7 +571,7 @@ using static UserWindow;
             accountPortfolio = WaitForAccountPortfolio(client.GetStream());
             FillPortfolioBoxMainWindow();
             FillPortfolioWindow();
-             requestBlockChain();
+            requestBlockChain();
 
         }
 
@@ -593,7 +595,7 @@ using static UserWindow;
 
             FillTransactionWindow();
             SortFramesByDate();
-             requestBlockChain();
+            requestBlockChain();
 
         }
 
@@ -1917,6 +1919,8 @@ using static UserWindow;
 
     private void FillPortfolioBoxMainWindow(){
 
+        deleteChildren(portfolio_items_box);
+
 
         var userDataDictionary = accountPortfolio.GetUserPortfolioAsDictionary();
         var sortedByValue = userDataDictionary.OrderByDescending(x => x.Value);
@@ -3149,8 +3153,7 @@ using static UserWindow;
                 login_window1.Hide();
 
                 main_window.ShowAll();
-                requestShowServerAssets();
-                requestUserPortfolio();
+
                 //requestTransactionList();
 
                 fill_card_details();
@@ -3770,6 +3773,8 @@ using static UserWindow;
 
     private void FillPortfolioWindow(){
 
+        deleteChildren(portfolio_maxi_box);
+
 
         var userDataDictionary = accountPortfolio.GetUserPortfolioAsDictionary();
         var sortedByValue = userDataDictionary.OrderByDescending(x => x.Value);
@@ -4138,7 +4143,7 @@ using static UserWindow;
 
     private void dashboard_button_main_window_clicked(object sender, EventArgs e){
         deleteChildren(market_values_box_main_window);
-        requestShowServerAssets();
+        sendUserLoginDetails();
 
     }
     private void p2p_button_main_window_clicked(object sender, EventArgs e){
@@ -4192,7 +4197,7 @@ using static UserWindow;
         portfolio_window.Hide();
         main_window.ShowAll();
         deleteChildren(market_values_box_main_window);
-        requestShowServerAssets();
+        sendUserLoginDetails();
 
 
     }
@@ -4243,7 +4248,7 @@ using static UserWindow;
         p2p_window1.Hide();
         main_window.ShowAll();
         deleteChildren(market_values_box_main_window);
-        requestShowServerAssets();
+        sendUserLoginDetails();
     }
     private void p2p_button_p2p_window1_clicked(object sender, EventArgs e){
         deleteChildren(p2p_list_box);
@@ -4291,7 +4296,7 @@ using static UserWindow;
         p2p_window2.Hide();
         main_window.ShowAll();
         deleteChildren(market_values_box_main_window);
-        requestShowServerAssets();
+        sendUserLoginDetails();
 
 
     }
@@ -4342,7 +4347,7 @@ using static UserWindow;
         transactions_window.Hide();
         main_window.ShowAll();
         deleteChildren(market_values_box_main_window);
-        requestShowServerAssets();
+        sendUserLoginDetails();
 
     }
     private void p2p_button_transaction_window_clicked(object sender, EventArgs e){
@@ -4393,7 +4398,7 @@ using static UserWindow;
         miner_window.Hide();
         main_window.ShowAll();
         deleteChildren(market_values_box_main_window);
-        requestShowServerAssets();
+        sendUserLoginDetails();
 
     }
     private void p2p_button_miner_window_clicked(object sender, EventArgs e){
@@ -4446,7 +4451,7 @@ using static UserWindow;
         settings_window.Hide();
         main_window.ShowAll();
         deleteChildren(market_values_box_main_window);
-        requestShowServerAssets();
+        sendUserLoginDetails();
 
     }
     private void p2p_button_settings_window_clicked(object sender, EventArgs e){
@@ -4499,7 +4504,7 @@ using static UserWindow;
         help_window.Hide();
         main_window.ShowAll();
         deleteChildren(market_values_box_main_window);
-        requestShowServerAssets();
+        sendUserLoginDetails();
     }
     private void p2p_button_help_window_clicked(object sender, EventArgs e){
         help_window.Hide();

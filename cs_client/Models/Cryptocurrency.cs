@@ -35,7 +35,7 @@ public class Cryptocurrency
 	    try
 	    {
 			int index = 0;
-			byte[] buffer = new byte[16384];
+			byte[] buffer = new byte[65536];
 			int bytesRead = stream.Read(buffer, 0, buffer.Length);
 
 			if (bytesRead <= 0)
@@ -74,7 +74,7 @@ public class Cryptocurrency
 	{
 	    try
 	    {
-		byte[] buffer = new byte[16384];
+		byte[] buffer = new byte[65536];
 		int bytesRead = stream.Read(buffer, 0, buffer.Length);
 
 		if (bytesRead <= 0)

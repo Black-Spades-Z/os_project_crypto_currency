@@ -64,7 +64,7 @@ class CSharpServer
 {
     try
     {
-        byte[] bytes = new byte[32768];
+        byte[] bytes = new byte[65536];
 
         while (true)
         {
