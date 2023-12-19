@@ -35,19 +35,23 @@ public static class MinerUtil
 	
 	public static bool HandleTransactionForValidation(string data, out string message)
 	{ 
+
 	    try
 	    {
 	    	using (var context = new AppDbContext())
 		{
 			var pendingTransaction = context.Transactions.Where(p => p.ValidationStatus == "Pending").FirstOrDefault();
+			Console.WriteLine(pendingTransaction.CryptocurrencyName);
+
 			
 			
 			decimal transactionFee = context.ServerAssets.Where(s => s.Name == pendingTransaction.CryptocurrencyName).Select(s => s.Fee).First();
-			
+
 			
 			pendingTransaction.TransactionFee +=transactionFee;
 			pendingTransaction.ValidationStatus = "...";
 			context.SaveChanges();
+			Console.WriteLine("I am here bitch 3");
 			
 			if(pendingTransaction is not null){
 				message = JsonConvert.SerializeObject(pendingTransaction);
