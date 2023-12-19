@@ -1,8 +1,7 @@
 .card{
-    background-image : url("../Glade/images/Dashboard/MyBalance.png");
+    background-image : url("../Glade/images/Dashboard/MyBalance280.png");
 	background-repeat: no-repeat;
 	background-size: cover;
-
 
 }
 .main-window{
@@ -185,7 +184,7 @@
 .search-portfolio {
     	border: 2px solid #8892a4;
   	border-radius: 12px;
-  	padding: 5px;
+
 }
 .search-portfolio:focus{
 	border: 2px solid #00BFFF;
@@ -194,7 +193,7 @@
 }
 .navbar-button {
   color: #000000; 
-  padding: 10px 20px; 
+  /*padding: 10px 20px; */
 
 
   text-decoration: none; 

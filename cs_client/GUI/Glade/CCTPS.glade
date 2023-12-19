@@ -5186,26 +5186,6 @@ Our support team is ready to help.</property>
           </object>
           <packing>
             <property name="left-attach">0</property>
-            <property name="top-attach">18</property>
-          </packing>
-        </child>
-        <child>
-          <object class="GtkLabel">
-            <property name="visible">True</property>
-            <property name="can-focus">False</property>
-          </object>
-          <packing>
-            <property name="left-attach">0</property>
-            <property name="top-attach">17</property>
-          </packing>
-        </child>
-        <child>
-          <object class="GtkLabel">
-            <property name="visible">True</property>
-            <property name="can-focus">False</property>
-          </object>
-          <packing>
-            <property name="left-attach">0</property>
             <property name="top-attach">19</property>
           </packing>
         </child>
@@ -5640,6 +5620,7 @@ Our support team is ready to help.</property>
           <object class="GtkFrame" id="Main Window">
             <property name="visible">True</property>
             <property name="can-focus">False</property>
+            <property name="margin-bottom">50</property>
             <property name="label-xalign">0</property>
             <property name="shadow-type">none</property>
             <child>
@@ -5670,16 +5651,14 @@ Our support team is ready to help.</property>
                 </child>
                 <child>
                   <object class="GtkFrame">
-                    <property name="height-request">500</property>
+                    <property name="height-request">50</property>
                     <property name="visible">True</property>
                     <property name="can-focus">False</property>
                     <property name="margin-left">60</property>
                     <property name="margin-start">60</property>
                     <property name="label-xalign">0</property>
-                    <property name="shadow-type">none</property>
                     <child>
                       <object class="GtkScrolledWindow">
-                        <property name="height-request">500</property>
                         <property name="visible">True</property>
                         <property name="can-focus">True</property>
                         <property name="hscrollbar-policy">never</property>
@@ -5692,7 +5671,6 @@ Our support team is ready to help.</property>
                             <property name="vscroll-policy">natural</property>
                             <child>
                               <object class="GtkBox" id="market_values_box_main_window">
-                                <property name="height-request">500</property>
                                 <property name="visible">True</property>
                                 <property name="can-focus">False</property>
                                 <property name="orientation">vertical</property>
@@ -5808,7 +5786,7 @@ Our support team is ready to help.</property>
                                             <property name="visible">True</property>
                                             <property name="can-focus">False</property>
                                             <property name="label-xalign">0</property>
-                                            <property name="shadow-type">in</property>
+                                            <property name="shadow-type">none</property>
                                             <child>
                                               <object class="GtkAlignment">
                                                 <property name="visible">True</property>
@@ -5907,6 +5885,8 @@ Our support team is ready to help.</property>
                                                         <property name="margin-left">5</property>
                                                         <property name="margin-start">5</property>
                                                         <property name="label" translatable="yes">150,000,000</property>
+                                                        <property name="ellipsize">end</property>
+                                                        <property name="max-width-chars">20</property>
                                                         <attributes>
                                                           <attribute name="font-desc" value="Ubuntu 20"/>
                                                         </attributes>
@@ -5924,6 +5904,8 @@ Our support team is ready to help.</property>
                                                         <property name="margin-left">5</property>
                                                         <property name="margin-start">5</property>
                                                         <property name="label" translatable="yes">Asadbek Mahmudov</property>
+                                                        <property name="ellipsize">end</property>
+                                                        <property name="max-width-chars">20</property>
                                                       </object>
                                                       <packing>
                                                         <property name="left-attach">0</property>
@@ -6027,40 +6009,54 @@ Our support team is ready to help.</property>
                               </packing>
                             </child>
                             <child>
-                              <object class="GtkScrolledWindow">
+                              <object class="GtkFrame">
+                                <property name="height-request">50</property>
                                 <property name="visible">True</property>
-                                <property name="can-focus">True</property>
-                                <property name="hscrollbar-policy">never</property>
-                                <property name="shadow-type">in</property>
-                                <property name="propagate-natural-height">True</property>
+                                <property name="can-focus">False</property>
+                                <property name="margin-start">29</property>
+                                <property name="margin-bottom">50</property>
+                                <property name="label-xalign">0</property>
+                                <property name="shadow-type">none</property>
                                 <child>
-                                  <object class="GtkViewport">
+                                  <object class="GtkScrolledWindow">
                                     <property name="visible">True</property>
-                                    <property name="can-focus">False</property>
+                                    <property name="can-focus">True</property>
+                                    <property name="hscrollbar-policy">never</property>
+                                    <property name="shadow-type">in</property>
+                                    <property name="propagate-natural-height">True</property>
                                     <child>
-                                      <object class="GtkBox" id="portfolio_items_box">
-                                        <property name="height-request">400</property>
+                                      <object class="GtkViewport">
                                         <property name="visible">True</property>
                                         <property name="can-focus">False</property>
-                                        <property name="orientation">vertical</property>
                                         <child>
-                                          <placeholder/>
-                                        </child>
-                                        <child>
-                                          <placeholder/>
-                                        </child>
-                                        <child>
-                                          <placeholder/>
-                                        </child>
-                                        <child>
-                                          <placeholder/>
-                                        </child>
-                                        <child>
-                                          <placeholder/>
+                                          <object class="GtkBox" id="portfolio_items_box">
+                                            <property name="height-request">400</property>
+                                            <property name="visible">True</property>
+                                            <property name="can-focus">False</property>
+                                            <property name="orientation">vertical</property>
+                                            <child>
+                                              <placeholder/>
+                                            </child>
+                                            <child>
+                                              <placeholder/>
+                                            </child>
+                                            <child>
+                                              <placeholder/>
+                                            </child>
+                                            <child>
+                                              <placeholder/>
+                                            </child>
+                                            <child>
+                                              <placeholder/>
+                                            </child>
+                                          </object>
                                         </child>
                                       </object>
                                     </child>
                                   </object>
+                                </child>
+                                <child type="label_item">
+                                  <placeholder/>
                                 </child>
                               </object>
                               <packing>
@@ -6295,6 +6291,12 @@ Our support team is ready to help.</property>
             <property name="left-attach">0</property>
             <property name="top-attach">10</property>
           </packing>
+        </child>
+        <child>
+          <placeholder/>
+        </child>
+        <child>
+          <placeholder/>
         </child>
         <child>
           <placeholder/>
@@ -6938,11 +6940,14 @@ Our support team is ready to help.</property>
             <property name="label-xalign">0</property>
             <property name="shadow-type">none</property>
             <child>
-              <!-- n-columns=8 n-rows=10 -->
+              <!-- n-columns=8 n-rows=2 -->
               <object class="GtkGrid">
                 <property name="visible">True</property>
                 <property name="can-focus">False</property>
-                <property name="valign">end</property>
+                <property name="halign">center</property>
+                <property name="valign">center</property>
+                <property name="row-homogeneous">True</property>
+                <property name="column-homogeneous">True</property>
                 <child>
                   <object class="GtkButton" id="mining_button_miner_window">
                     <property name="width-request">200</property>
@@ -6951,7 +6956,7 @@ Our support team is ready to help.</property>
                     <property name="can-focus">True</property>
                     <property name="receives-default">True</property>
                     <property name="halign">center</property>
-                    <property name="margin-bottom">250</property>
+                    <property name="valign">center</property>
                     <property name="relief">none</property>
                     <child>
                       <object class="GtkImage" id="turnoff_button_minerwindow">
@@ -6971,100 +6976,90 @@ Our support team is ready to help.</property>
                   </packing>
                 </child>
                 <child>
-                  <object class="GtkScrolledWindow">
-                    <property name="width-request">1030</property>
-                    <property name="height-request">100</property>
+                  <object class="GtkFrame">
                     <property name="visible">True</property>
-                    <property name="can-focus">True</property>
-                    <property name="valign">end</property>
-                    <property name="margin-start">50</property>
-                    <property name="margin-bottom">100</property>
-                    <property name="hscrollbar-policy">never</property>
-                    <property name="shadow-type">in</property>
+                    <property name="can-focus">False</property>
+                    <property name="label-xalign">0</property>
+                    <property name="shadow-type">none</property>
                     <child>
-                      <object class="GtkViewport">
+                      <object class="GtkScrolledWindow">
+                        <property name="width-request">1030</property>
+                        <property name="height-request">300</property>
                         <property name="visible">True</property>
-                        <property name="can-focus">False</property>
+                        <property name="can-focus">True</property>
+                        <property name="valign">end</property>
+                        <property name="margin-start">50</property>
+                        <property name="margin-bottom">100</property>
+                        <property name="hscrollbar-policy">never</property>
+                        <property name="shadow-type">in</property>
+                        <property name="max-content-width">100</property>
+                        <property name="max-content-height">1</property>
                         <child>
-                          <object class="GtkBox" id="cpu_info_box_miner_window">
-                            <property name="width-request">600</property>
+                          <object class="GtkViewport">
                             <property name="visible">True</property>
                             <property name="can-focus">False</property>
-                            <property name="orientation">vertical</property>
                             <child>
-                              <placeholder/>
-                            </child>
-                            <child>
-                              <placeholder/>
-                            </child>
-                            <child>
-                              <object class="GtkTextView" id="cpu_text_view_miner_window">
+                              <object class="GtkBox" id="cpu_info_box_miner_window">
                                 <property name="width-request">600</property>
                                 <property name="visible">True</property>
-                                <property name="can-focus">True</property>
+                                <property name="can-focus">False</property>
+                                <property name="orientation">vertical</property>
+                                <property name="homogeneous">True</property>
+                                <child>
+                                  <object class="GtkTextView" id="cpu_text_view_miner_window">
+                                    <property name="width-request">600</property>
+                                    <property name="visible">True</property>
+                                    <property name="can-focus">True</property>
+                                    <property name="wrap-mode">char</property>
+                                  </object>
+                                  <packing>
+                                    <property name="expand">False</property>
+                                    <property name="fill">True</property>
+                                    <property name="position">0</property>
+                                  </packing>
+                                </child>
+                                <child>
+                                  <placeholder/>
+                                </child>
+                                <child>
+                                  <placeholder/>
+                                </child>
+                                <child>
+                                  <placeholder/>
+                                </child>
+                                <child>
+                                  <placeholder/>
+                                </child>
+                                <child>
+                                  <placeholder/>
+                                </child>
+                                <child>
+                                  <placeholder/>
+                                </child>
+                                <child>
+                                  <placeholder/>
+                                </child>
+                                <child>
+                                  <placeholder/>
+                                </child>
+                                <child>
+                                  <placeholder/>
+                                </child>
                               </object>
-                              <packing>
-                                <property name="expand">False</property>
-                                <property name="fill">True</property>
-                                <property name="position">2</property>
-                              </packing>
-                            </child>
-                            <child>
-                              <placeholder/>
-                            </child>
-                            <child>
-                              <placeholder/>
-                            </child>
-                            <child>
-                              <placeholder/>
-                            </child>
-                            <child>
-                              <placeholder/>
-                            </child>
-                            <child>
-                              <placeholder/>
-                            </child>
-                            <child>
-                              <placeholder/>
-                            </child>
-                            <child>
-                              <placeholder/>
                             </child>
                           </object>
                         </child>
                       </object>
                     </child>
+                    <child type="label_item">
+                      <placeholder/>
+                    </child>
                   </object>
                   <packing>
                     <property name="left-attach">0</property>
-                    <property name="top-attach">2</property>
+                    <property name="top-attach">1</property>
                     <property name="width">8</property>
-                    <property name="height">8</property>
                   </packing>
-                </child>
-                <child>
-                  <placeholder/>
-                </child>
-                <child>
-                  <placeholder/>
-                </child>
-                <child>
-                  <placeholder/>
-                </child>
-                <child>
-                  <placeholder/>
-                </child>
-                <child>
-                  <placeholder/>
-                </child>
-                <child>
-                  <placeholder/>
-                </child>
-                <child>
-                  <placeholder/>
-                </child>
-                <child>
-                  <placeholder/>
                 </child>
               </object>
             </child>
@@ -11617,12 +11612,14 @@ By using the Crypto app, you agree to the terms outlined in this Privacy Policy.
                 </child>
                 <child>
                   <object class="GtkFrame">
+                    <property name="height-request">100</property>
                     <property name="visible">True</property>
                     <property name="can-focus">False</property>
                     <property name="margin-left">60</property>
                     <property name="margin-start">60</property>
+                    <property name="margin-top">30</property>
+                    <property name="margin-bottom">50</property>
                     <property name="label-xalign">0</property>
-                    <property name="shadow-type">none</property>
                     <child>
                       <object class="GtkScrolledWindow">
                         <property name="visible">True</property>
@@ -15444,6 +15441,8 @@ For questions or concerns about these Terms, contact us at [support@cryptonest.c
                 <property name="height-request">48</property>
                 <property name="visible">True</property>
                 <property name="can-focus">True</property>
+                <property name="has-focus">True</property>
+                <property name="is-focus">True</property>
                 <property name="valign">center</property>
                 <property name="margin-left">420</property>
                 <property name="margin-right">100</property>
@@ -15453,7 +15452,8 @@ For questions or concerns about these Terms, contact us at [support@cryptonest.c
                 <property name="primary-icon-name">edit-find-symbolic</property>
                 <property name="primary-icon-activatable">False</property>
                 <property name="primary-icon-sensitive">False</property>
-                <property name="placeholder-text" translatable="yes">Search..</property>
+                <property name="primary-icon-tooltip-text" translatable="yes">Name 2023-01-01/2023-01-02</property>
+                <property name="placeholder-text" translatable="yes">Name yyyy-mm-dd/yyyy-mm-dd</property>
                 <property name="input-hints">GTK_INPUT_HINT_SPELLCHECK | GTK_INPUT_HINT_NONE</property>
               </object>
             </child>

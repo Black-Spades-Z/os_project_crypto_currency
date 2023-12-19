@@ -167,12 +167,13 @@ using static UserWindow;
         private Button help_button_portfolio_window;
         private Button logout_button_portfolio_window;
         private Box portfolio_maxi_box;
+        private Entry search_bar_portfolio_window;
 
 
         //Window transactions
 
         private Window transactions_window;
-        private Entry search_transactions;
+
         private Box transactions_box;
         private Button dashboard_button_transaction_window;
         private Button p2p_button_transaction_window;
@@ -187,6 +188,7 @@ using static UserWindow;
         private EventBox value_event_transaction;
         private EventBox volume_event_transaction;
         private EventBox fee_event_transaction;
+        private Entry search_bar_transaction_window;
 
 
 
@@ -794,6 +796,7 @@ using static UserWindow;
             help_button_portfolio_window = (Button)builder.GetObject("help_button_portfolio_window");
             logout_button_portfolio_window = (Button)builder.GetObject("logout_button_portfolio_window");
             portfolio_maxi_box = (Box)builder.GetObject("portfolio_maxi_box");
+            search_bar_portfolio_window =  (Entry)builder.GetObject("search_bar_portfolio_window");
 
 
 
@@ -811,6 +814,8 @@ using static UserWindow;
             value_event_transaction = (EventBox)builder.GetObject("value_event_transaction");
             volume_event_transaction = (EventBox)builder.GetObject("volume_event_transaction");
             fee_event_transaction = (EventBox)builder.GetObject("fee_event_transaction");
+            search_bar_transaction_window = (Entry)builder.GetObject("search_bar_transaction_window");
+            search_bar_transaction_window.HasFocus = false;
 
             // Window p2p
 
@@ -941,6 +946,7 @@ using static UserWindow;
             settings_button_portfolio_window.Clicked += settings_button_portfolio_window_clicked;
             help_button_portfolio_window.Clicked += help_button_portfolio_window_clicked;
             logout_button_portfolio_window.Clicked += logout_button_portfolio_window_clicked;
+            search_bar_portfolio_window.Changed += search_bar_portfolio_window_changed;
 
             // Window p2p
 
@@ -987,6 +993,10 @@ using static UserWindow;
             date_event_transaction.ButtonPressEvent += date_event_transaction_clicked;
             value_event_transaction.ButtonPressEvent += value_event_transaction_clicked;
             volume_event_transaction.ButtonPressEvent += volume_event_transaction_clicked;
+            search_bar_transaction_window.Changed += search_bar_transaction_window_changed;
+
+
+
 
             // Window settings
 
@@ -1989,7 +1999,7 @@ using static UserWindow;
         decimal volumeValue = (decimal) userPortfolioCurrencyPrice;
 
         decimal priceOfCurrency = priceValue * volumeValue;
-        Label currencyPriceLabel = new Label($"{priceOfCurrency }");
+        Label currencyPriceLabel = new Label($"${priceOfCurrency }");
         currencyPriceLabel.Name = $"CurrencyPrice_{userPortfolioCurrencyName}";
         currencyPriceLabel.Visible = true;
         currencyPriceLabel.CanFocus = false;
@@ -2017,7 +2027,6 @@ using static UserWindow;
 
         alignment.Add(currencyInfoGrid);
         portfolioItemFrame.Add(alignment);
-        portfolioItemFrame.MarginStart = 20;
 
         portfolio_items_box.Add(portfolioItemFrame);
         portfolio_items_box.ShowAll();
@@ -2711,7 +2720,9 @@ using static UserWindow;
         string digitsOnly = new string(DateLabel.Where(char.IsDigit).ToArray());
         digitsOnly = digitsOnly.Trim();
         //Console.WriteLine($"{digitsOnly}");
-        if (long.TryParse(digitsOnly, out long result))
+        string paddedString = digitsOnly.PadRight(14, '0').Substring(0, 14);
+        Console.WriteLine($"{paddedString}");
+        if (long.TryParse(paddedString, out long result))
         {
        // Console.WriteLine($"Resulting Integer2: {result}");
             return result;
@@ -2838,6 +2849,271 @@ using static UserWindow;
 
 
 //-------------------------------------------------------
+
+// ---------- SEAКCH IN TRANSACTION -----------
+
+    // Search function to filter rows based on the search criteria
+    private void search_bar_transaction_window_changed(object sender, EventArgs e)
+    {
+
+        if (sender is Entry entry)
+        {
+            string searchTerm = entry.Text.Trim();
+
+            // Check if the search term is not empty before searching
+            if (!string.IsNullOrEmpty(searchTerm))
+            {
+                SearchRowsTransaction(searchTerm);
+            }
+            else
+            {
+                // Handle the case when the search term is empty
+                FillTransactionWindow();
+            }
+        }
+    }
+
+
+    private void SearchRowsTransaction(string searchTerm)
+    {
+        foreach (var child in transactions_box.Children.ToList())
+        {
+            transactions_box.Remove(child);
+        }
+        searchTerm= searchTerm.ToLower();
+        searchTerm = searchTerm.ToLower();
+
+        if (char.IsDigit(searchTerm[0]))
+        {
+            if (searchTerm.Contains('/'))
+            {
+                // Split the string into parts based on the '/' symbol
+                string[] DateParts = searchTerm.Split('/');
+                long date1 = ExtractDateFromLabel(DateParts[0]);
+                long date2 = ExtractDateFromLabel(DateParts[1]);
+
+                int index = 0;
+                bool found = false;
+                for (int i = 0; i < userTransactionsList.Count; i++)
+                {
+                    DateTime thisDateTime = userTransactionsList[i].DateTime;
+                    string readyDateTime = thisDateTime.ToString("yyyy-MM-dd HH:mm:ss");
+
+
+                   if (ExtractDateFromLabel(readyDateTime) >= date1 &&
+                        ExtractDateFromLabel(readyDateTime) <= date2)
+                    {
+
+                        index = i; // Return the index if the name is found
+                        found = true;
+                    }
+                    if (found)
+                    {
+                        // Clear existing components in the box
+                        AddFrameToTransactionWindow(index);
+                    }
+                    else
+                    {
+                        // Additional actions if not found
+                    }
+                    found = false;
+                }
+            }
+            else
+            {
+                long date1 = ExtractDateFromLabel(searchTerm);
+                int index = 0;
+                bool found = false;
+                for (int i = 0; i < userTransactionsList.Count; i++)
+                {
+                    DateTime thisDateTime = userTransactionsList[i].DateTime;
+                    string readyDateTime = thisDateTime.ToString("yyyy-MM-dd HH:mm:ss");
+
+                    if (ExtractDateFromLabel(readyDateTime) >= date1)
+                    {
+
+                        index = i; // Return the index if the name is found
+                        found = true;
+                    }
+                    if (found)
+                    {
+                        // Clear existing components in the box
+                        AddFrameToTransactionWindow(index);
+                    }
+                    else
+                    {
+                        // Additional actions if not found
+                    }
+                    found = false;
+                }
+            }
+        }
+        else
+        {
+            List<string> searchparts = new List<string>();
+            int indexOfSpace = searchTerm.IndexOf(' ');
+            if (indexOfSpace != -1)
+            {
+                searchparts.Add(searchTerm.Substring(0, indexOfSpace));
+                searchparts.Add(searchTerm.Substring(indexOfSpace + 1));
+            };
+            Console.WriteLine($"{searchparts.Count}");
+
+            if (searchparts.Count < 2)
+            {
+                //Console.WriteLine($"{searchparts.Count} ");
+                int index = 0;
+                bool found = false;
+                for (int i = 0; i < userTransactionsList.Count; i++)
+                {
+                    if ((userTransactionsList[i].CryptocurrencyName).ToLower() == searchTerm)
+                    {
+                        index = i; // Return the index if the name is found
+                        found = true;
+                    }
+                    if (found)
+                    {
+                        // Clear existing components in the box
+                        AddFrameToTransactionWindow(index);
+                    }
+                    else
+                    {
+                        // Additional actions if not found
+                    }
+                    found = false;
+                }
+            }
+            else if (searchparts.Count == 2)
+            {
+                if (searchparts[1].Contains('/'))
+                {
+                    // Split the string into parts based on the '/' symbol
+                    string[] DateParts = searchparts[1].Split('/');
+                    long date1 = ExtractDateFromLabel(DateParts[0]);
+                    long date2 = ExtractDateFromLabel(DateParts[1]);
+
+                    int index = 0;
+                    bool found = false;
+                    for (int i = 0; i < userTransactionsList.Count; i++)
+                    {
+                        DateTime thisDateTime = userTransactionsList[i].DateTime;
+                        string readyDateTime = thisDateTime.ToString("yyyy-MM-dd HH:mm:ss");
+
+                        if ((userTransactionsList[i].CryptocurrencyName).ToLower() == searchparts[0] && ExtractDateFromLabel(readyDateTime) >= date1 && ExtractDateFromLabel(readyDateTime) <= date2)
+                        {
+                            //Console.WriteLine($"It Contains and {currencyDate[i]} > {date1}");
+                            //Console.WriteLine($"It Contains and {currencyDate[i]} < {date2}");
+                            index = i; // Return the index if the name is found
+                            found = true;
+                        }
+                        if (found)
+                        {
+                            // Clear existing components in the box
+                            AddFrameToTransactionWindow(index);
+                        }
+                        else
+                        {
+                            // Additional actions if not found
+                        }
+                        found = false;
+                    }
+                }
+                else
+                {
+                    long date1 = ExtractDateFromLabel(searchparts[1]);
+
+                    int index = 0;
+                    bool found = false;
+                    for (int i = 0; i < userTransactionsList.Count; i++)
+                    {
+                        DateTime thisDateTime = userTransactionsList[i].DateTime;
+                        string readyDateTime = thisDateTime.ToString("yyyy-MM-dd HH:mm:ss");
+                        if ((userTransactionsList[i].CryptocurrencyName).ToLower() == searchparts[0] && ExtractDateFromLabel(readyDateTime) >= date1)
+                        {
+
+                            index = i; // Return the index if the name is found
+                            found = true;
+                        }
+                        if (found)
+                        {
+                            // Clear existing components in the box
+                            AddFrameToTransactionWindow(index);
+                        }
+                        else
+                        {
+                            // Additional actions if not found
+                        }
+                        found = false;
+                    }
+                }
+            }
+        }
+    }
+//---------------------------------------
+/// -------------------Search in portfolio-----------------
+
+// ------------------ Search Name ------------------
+
+    private void search_bar_portfolio_window_changed(object sender, EventArgs e)
+        {
+
+            if (sender is Entry entry)
+            {
+                string searchTerm = entry.Text.Trim();
+
+
+
+                // Check if the search term is not empty before searching
+                if (!string.IsNullOrEmpty(searchTerm))
+                {
+                    SearchRowsPortfolio(searchTerm);
+                }
+                else
+                {
+                FillPortfolioWindow();
+                }
+
+
+            }
+        }
+
+    private void SearchRowsPortfolio(string searchTerm)
+    {
+
+        searchTerm = searchTerm.ToLower();
+
+
+        int index = 0;
+        bool found =  false;
+        for (int i = 0; i < size; i++)
+            {
+                if (currencyName[i].ToLower() == searchTerm)
+                {
+                    index = i; // Return the index if the name is found
+                    found = true;
+
+                }
+            }
+
+        if (found){
+            // Clear existing components in the box
+        foreach (var child in portfolio_maxi_box.Children.ToList())
+        {
+            portfolio_maxi_box.Remove(child);
+
+        }
+       // AddFrameToPortfolioWindow(index);
+        }
+        else{
+
+
+        }
+    }
+
+
+
+    //-------------------------------------
+
 
 
 
@@ -3193,8 +3469,11 @@ using static UserWindow;
         // DateTime Label
 
         DateTime transactionDateTime = userTransactionsList[index].DateTime;
+        // Using a format specifier
+        string formattedDateTime = transactionDateTime.ToString("yyyy-MM-dd HH:mm:ss");
 
-        Label currencyDateTimeLabel = new Label($"{transactionDateTime}");
+
+        Label currencyDateTimeLabel = new Label(formattedDateTime);
         currencyDateTimeLabel.Name = $"CurrencyDateTime_{index}";
         currencyDateTimeLabel.Visible = true;
         currencyDateTimeLabel.CanFocus = false;
@@ -3299,6 +3578,12 @@ using static UserWindow;
 
     private void AddFrameToP2PWindow(int index)
     {
+
+        string addressWallet = (string)(userOffersList[index].FromAddress);
+        if (addressWallet == accountDetails.WalletAddress){
+            return;
+        }
+
         // Create a new frame
         Frame p2pFrame = new Frame("");
 
@@ -3414,7 +3699,7 @@ using static UserWindow;
         innerGrid.Attach(cashValueFrame, 2, 0, 1, 1);
 
 
-        string addressWallet = (string)(userOffersList[index].FromAddress);
+
         string shortAddress = new string(addressWallet.Take(10).ToArray());
 
 
@@ -3723,7 +4008,7 @@ using static UserWindow;
 
                         // Create a Transaction object and serialize it
                         userTransaction.Purpose = "Valid";
-                        userTransaction.MinerId = user.UserId; // this userId
+                        userTransaction.MinerId = accountDetails.UserId; // this userId
                         string validatedSerializedTransaction = userTransaction.Serialize();
 
                         // Send the serialized Transaction object to C client

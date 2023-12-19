@@ -161,11 +161,8 @@ class CSharpServer
         		break;
         		
         	case string _ when data.Contains("\"ObjectType\":\"UserOffer\"") && data.Contains("\"Purpose\":\"DeleteUserOffer\"") :
-        		Console.WriteLine("I am here bitch ");
-
-				if (HandleDeletionUserOffer(data, out message))
+        		if (HandleDeletionUserOffer(data, out message))
         		{
-
         	    		SendMessageToClient(stream, message);
         		}
         		else
