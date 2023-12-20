@@ -9,10 +9,17 @@
 #define PORT_C_SERVER 8888
 #define PORT_C_SHARP_CLIENT 8889
 
-int main() {
+int main(int argc,char *argv[]) {
+    if (argc != 2) {
+        fprintf(stderr, "Usage: %s <C server IP>\n", argv[0]);
+        exit(1);
+    }
+
+    const char *cServerIP = argv[1];
+
     int cSharpClientSocket, cServerSocket;
 
-    char buffer[16384];
+    char buffer[32768];
 
     struct sockaddr_in cSharpClientAddr, cServerAddr;
 
@@ -60,7 +67,7 @@ int main() {
     struct sockaddr_in cServerConnectAddr;
     cServerConnectAddr.sin_family = AF_INET;
     cServerConnectAddr.sin_port = htons(PORT_C_SERVER);
-    cServerConnectAddr.sin_addr.s_addr = inet_addr("127.0.0.1");
+    cServerConnectAddr.sin_addr.s_addr = inet_addr(cServerIP);
 
     // Connect to the C server
     if (connect(cServerConnectSocket, (struct sockaddr*)&cServerConnectAddr, sizeof(cServerConnectAddr)) < 0) {

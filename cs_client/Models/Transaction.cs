@@ -105,7 +105,7 @@ public class Transaction
 	{
 	    try
 	    {
-		byte[] buffer = new byte[65536];
+		byte[] buffer = new byte[32768];
 		int bytesRead = stream.Read(buffer, 0, buffer.Length);
 
 		if (bytesRead <= 0)

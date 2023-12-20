@@ -59,6 +59,11 @@ using static UserWindow;
         private string[] currencyRank =   new string[50];
         private string[] currencyIcons = new string[50];
 
+        // PortFolio Search
+
+        private string[] searchNamePortfolio = new string[50];
+        private decimal[] searchPricePortfolio = new decimal[50];
+
         // Buy from Server
 
         private decimal cashValue = 100;
@@ -232,6 +237,8 @@ using static UserWindow;
         private Button help_button_p2p_window2;
         private Button logout_button_p2p_window2;
 
+        private Entry search_bar_p2p_window1;
+
         // Window Miner
 
         private Window miner_window;
@@ -370,7 +377,7 @@ using static UserWindow;
     {
         try
         {
-            byte[] buffer = new byte[16384];
+            byte[] buffer = new byte[32768];
             int bytesRead = stream.Read(buffer, 0, buffer.Length);
 
             if (bytesRead <= 0)
@@ -802,6 +809,7 @@ using static UserWindow;
             logout_button_portfolio_window = (Button)builder.GetObject("logout_button_portfolio_window");
             portfolio_maxi_box = (Box)builder.GetObject("portfolio_maxi_box");
             search_bar_portfolio_window =  (Entry)builder.GetObject("search_bar_portfolio_window");
+            search_bar_portfolio_window.HasFocus = false;
 
 
 
@@ -835,6 +843,7 @@ using static UserWindow;
             settings_button_p2p_window1 = (Button)builder.GetObject("settings_button_p2p_window1");
             help_button_p2p_window1 = (Button)builder.GetObject("help_button_p2p_window1");
             logout_button_p2p_window1 = (Button)builder.GetObject("logout_button_p2p_window1");
+            search_bar_p2p_window1 = (Entry)builder.GetObject("search_bar_p2p_window1");
 
              // Window p2p
 
@@ -983,6 +992,7 @@ using static UserWindow;
             settings_button_p2p_window2.Clicked += settings_button_p2p_window2_clicked;
             help_button_p2p_window2.Clicked += help_button_p2p_window2_clicked;
             logout_button_p2p_window2.Clicked += logout_button_p2p_window2_clicked;
+            search_bar_p2p_window1.Changed += search_bar_p2p_window1_changed;
 
             // Window transaction
 
@@ -3094,7 +3104,7 @@ using static UserWindow;
         bool found =  false;
         for (int i = 0; i < size; i++)
             {
-                if (currencyName[i].ToLower() == searchTerm)
+                if (searchNamePortfolio[i].ToLower() == searchTerm)
                 {
                     index = i; // Return the index if the name is found
                     found = true;
@@ -3109,7 +3119,7 @@ using static UserWindow;
             portfolio_maxi_box.Remove(child);
 
         }
-       // AddFrameToPortfolioWindow(index);
+            AddFrameToPortfolioWindow(searchNamePortfolio[index], searchPricePortfolio[index]);
         }
         else{
 
@@ -3821,7 +3831,7 @@ using static UserWindow;
 
 
 
-
+        int index = 0;
         foreach (var kvp in sortedList)
         {
 
@@ -3830,6 +3840,10 @@ using static UserWindow;
                 continue;
             }
             AddFrameToPortfolioWindow(kvp.Key, kvp.Value);
+            searchNamePortfolio[index] = kvp.Key;
+            searchPricePortfolio[index] = kvp.Value;
+            index ++;
+
 
 
 
@@ -3956,6 +3970,61 @@ using static UserWindow;
         // Add the frame to the transactions_box
         portfolio_maxi_box.Add(p2pFrame);
         portfolio_maxi_box.ShowAll();
+    }
+
+
+    // #changed
+// ------------------ Search Name in P2P ------------------
+
+    private void search_bar_p2p_window1_changed(object sender, EventArgs e)
+        {
+
+            if (sender is Entry entry)
+            {
+                string searchTerm = entry.Text.Trim();
+
+
+
+                // Check if the search term is not empty before searching
+                if (!string.IsNullOrEmpty(searchTerm))
+                {
+                    SearchRowsP2P(searchTerm);
+                }
+                else
+                {
+                  FillP2PWindow();
+                }
+
+
+            }
+        }
+
+    private void SearchRowsP2P(string searchTerm)
+    {
+
+        searchTerm = searchTerm.ToLower();
+        deleteChildren(p2p_list_box);
+
+
+        int index = 0;
+        bool found =  false;
+        for (int i = 0; i < userOffersList.Count; i++)
+            {
+                if ((userOffersList[i].CryptocurrencyName).ToLower() == searchTerm)
+                {
+                    index = i; // Return the index if the name is found
+                    found = true;
+
+                }else{
+                    found = false;
+                }
+
+
+        if (found){
+            // Clear existing components in the box
+        AddFrameToP2PWindow(index);
+        }
+            }
     }
 
 
