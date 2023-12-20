@@ -3300,19 +3300,30 @@ using static UserWindow;
                 return;
             }
 
+            string message;
+
             // Validate date of birth (in the format 00/00/0000)
-            if (!IsValidDateOfBirth(registerDateOfBirth))
-            {
+            IsValidDateOfBirth(registerDateOfBirth, out message);
+
+            if (message == "Success"){
+                // Optionally, you can perform other actions, for example, submit the data or close the window
+                Console.WriteLine($"Submitted data: Phone Number: {registerPhoneNumber}, Date of Birth: {registerDateOfBirth}, Address: {registerAddress}, ComboBox Value: {registerNationality}");
+                sendUserRegisterDetails();
+            }else if (message == "InvalidDate"){
                 Console.WriteLine("Invalid date of birth. Please enter the date in the format 00/00/0000.");
                 showErrorAllert("Invalid Data of Birth");
-                // Optionally, you can show an error message or take other actions
-                return;
+            }else if (message == "YoungerThan16"){
+                Console.WriteLine("User is younget than 16");
+                showErrorAllert("Younger than 16");
+            }
+            else if (message == "FutureDateTime"){
+                Console.WriteLine("Invalid date. Future DateTime");
+                showErrorAllert("Future Date");
             }
 
 
-            // Optionally, you can perform other actions, for example, submit the data or close the window
-            Console.WriteLine($"Submitted data: Phone Number: {registerPhoneNumber}, Date of Birth: {registerDateOfBirth}, Address: {registerAddress}, ComboBox Value: {registerNationality}");
-            sendUserRegisterDetails();
+
+
 
         }
 
@@ -3346,14 +3357,34 @@ using static UserWindow;
             return phoneNumber.All(char.IsDigit);
         }
 
-        private bool IsValidDateOfBirth(string dob)
+        private void IsValidDateOfBirth(string dobString, out string message)
         {
             // Validate date of birth format (00/00/0000)
-            if (DateTime.TryParseExact(dob, "dd/MM/yyyy", null, System.Globalization.DateTimeStyles.None, out _))
+            if (DateTime.TryParseExact(dobString, "dd/MM/yyyy", null, System.Globalization.DateTimeStyles.None, out DateTime dob))
             {
-                return true;
+
+                // Check if the date is not in the future
+                if (dob <= DateTime.Now)
+                {
+                    // Check if the user is at least 16 years old
+                    DateTime minAge = DateTime.Now.AddYears(-16);
+                    if (dob <= minAge)
+                    {
+                        message = "Success";
+                    }
+                    else
+                    {
+                        message = "YoungerThan16";
+                    }
+                }
+                else
+                {
+                    message = "FutureDateTime";
+                }
+                return;
             }
-            return false;
+            message = "InvalidDate";
+            return;
         }
 
         private void back_button_login_window3_clicked(object sender, EventArgs e)
