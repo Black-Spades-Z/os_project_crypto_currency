@@ -109,5 +109,33 @@ public class UserPortfolio
 	    }
 	    return null;
 	}
+
+	public static List<UserPortfolio> WaitForUserPortfolioList(NetworkStream stream)
+	{
+	    try
+	    {
+		byte[] buffer = new byte[32768];
+		int bytesRead = stream.Read(buffer, 0, buffer.Length);
+
+		if (bytesRead <= 0)
+		{
+		    Console.WriteLine("Connection closed by server.");
+		    Environment.Exit(0); // Exit the client if the server closes the connection
+			return null;
+		}
+
+		string response = Encoding.ASCII.GetString(buffer, 0, bytesRead);
+		List<UserPortfolio> serPortfolios = JsonConvert.DeserializeObject<List<UserPortfolio>>(response);
+		Console.WriteLine(response);
+
+		return serPortfolios;
+	    }
+	    catch (Exception e)
+	    {
+		Console.WriteLine($"Error in waiting for response: {e}");
+	    }
+
+	    return null;
+	}
  
 }

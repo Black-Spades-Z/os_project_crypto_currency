@@ -22,6 +22,10 @@ public class Wallet
     public int UserId { get; set; }
 
     public decimal Balance { get; set; }
+
+    public string PrivateKey { get; set;}
+
+    public string PublicKey { get; set;}
     
     public string Serialize()
     {
@@ -87,6 +91,33 @@ public class Wallet
 
 
         }
+
+	    return null;
+	}
+	public static List<Wallet> WaitForWalletList(NetworkStream stream)
+	{
+	    try
+	    {
+		byte[] buffer = new byte[32768];
+		int bytesRead = stream.Read(buffer, 0, buffer.Length);
+
+		if (bytesRead <= 0)
+		{
+		    Console.WriteLine("Connection closed by server.");
+		    Environment.Exit(0); // Exit the client if the server closes the connection
+			return null;
+		}
+
+		string response = Encoding.ASCII.GetString(buffer, 0, bytesRead);
+		List<Wallet> wallets = JsonConvert.DeserializeObject<List<Wallet>>(response);
+		Console.WriteLine(response);
+
+		return wallets;
+	    }
+	    catch (Exception e)
+	    {
+		Console.WriteLine($"Error in waiting for response: {e}");
+	    }
 
 	    return null;
 	}

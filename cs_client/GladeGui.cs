@@ -5,6 +5,8 @@ using System.Net.Sockets;
 using System.Diagnostics;
 using System.Threading;
 using Gtk;
+
+
 using static CSharpClient;
 using static Transaction;
 using static User;
@@ -17,6 +19,7 @@ using static CustomAlertWindow;
 using static GetCPUInformation;
 using static Block;
 
+using static AdminWindow;
 using static ServerAssetsWindow;
 using static TransactionsWindow;
 using static P2PWindow;
@@ -3160,7 +3163,7 @@ using static UserWindow;
                     Logout_window = (Window)builder.GetObject("logout_window");
 
                     login_window1.Hide();
-                    Admin_main_window.ShowAll();
+                    admin_window.ShowAll();
                     return;
                 }
                 login_window1.Hide();
